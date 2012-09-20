@@ -22,7 +22,7 @@ public class DaoEstado extends AbstractDao implements CrmIDao {
     public static final String[] PKS = {"Codest"};
     
     public DaoEstado() {
-        super("dao.DaoEstado", DaoPais.PKS);
+        super("dao.DaoEstado", DaoEstado.PKS);
     }
     
     @Override

@@ -22,7 +22,7 @@ public class DaoCliente extends AbstractDao implements CrmIDao{
     public static final String[] PKS = {"Codcli"};
     
     public DaoCliente() {
-        super("dao.DaoCliente", DaoPais.PKS);
+        super("dao.DaoCliente", DaoCliente.PKS);
     }
 
     @Override

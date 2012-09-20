@@ -22,7 +22,7 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
     public static final String[] PKS = {"Codemp"};
     
     public DaoEmpresa() {
-        super("dao.DaoEmpresa", DaoPais.PKS);
+        super("dao.DaoEmpresa", DaoEmpresa.PKS);
     }
     
     

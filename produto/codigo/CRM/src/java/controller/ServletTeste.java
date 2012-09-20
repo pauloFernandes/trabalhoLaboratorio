@@ -5,6 +5,7 @@
 
 package controller;
 
+import builder.BuilderPais;
 import dao.DaoPais;
 import entity.PaisEntity;
 import java.io.IOException;
@@ -33,12 +34,16 @@ public class ServletTeste extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        Object[] pk       = {2};
-        DaoPais pais      = new DaoPais();
-        String whereClause = "Codpai = 2";
-        PaisEntity entidade = (PaisEntity) pais.obterEntidade(pk);
         
-        pais.delete(entidade);
+        BuilderPais builder = new BuilderPais();
+        builder.createDao();
+        builder.createEntity();
+        DaoPais pais      = (DaoPais) builder.getDao();
+        PaisEntity entity = (PaisEntity) builder.getEntity();
+        entity.setCodpai(3);
+        entity.setNompai("Venezuela");
+        pais.persist(entity);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

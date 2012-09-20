@@ -22,7 +22,7 @@ public class DaoContato extends AbstractDao implements CrmIDao{
     public static final String[] PKS = {"Codcon"};
     
     public DaoContato() {
-        super("dao.DaoContato", DaoPais.PKS);
+        super("dao.DaoContato", DaoContato.PKS);
     }
 
     @Override

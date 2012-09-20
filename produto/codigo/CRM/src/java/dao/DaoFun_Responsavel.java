@@ -22,14 +22,14 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
     public static final String[] PKS = {"Codcli, Codfun, Datini"};
     
     public DaoFun_Responsavel() {
-        super("dao.DaoFun_Responsavel", DaoPais.PKS);
+        super("dao.DaoFun_Responsavel", DaoFun_Responsavel.PKS);
     }
     
     @Override
     public IEntity obterEntidade(Object[] valorPks) {
         Fun_ResponsavelEntity entity = new Fun_ResponsavelEntity();
         try {
-            ResultSet resultSet = super.getEntityById(PKS, valorPks);
+            ResultSet resultSet = super.getEntityById(DaoFun_Responsavel.PKS, valorPks);
             while(resultSet.next()) {
                 entity.setCodcli(resultSet.getInt(1));
                 entity.setCodfun(resultSet.getInt(2));

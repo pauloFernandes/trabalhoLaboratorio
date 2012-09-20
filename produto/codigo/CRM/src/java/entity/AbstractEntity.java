@@ -4,12 +4,21 @@
  */
 package entity;
 
+import dao.ArquivoExterno;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author PauloHenrique
  */
 public abstract class AbstractEntity implements IEntity {
     public boolean newRegister;
+    
+    public AbstractEntity() {
+        this.newRegister = true;
+    }
 
     public boolean isNewRegister() {
         return newRegister;

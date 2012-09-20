@@ -14,7 +14,8 @@ import java.io.IOException;
 public class ArquivoExterno {
 	public static void salvar(String arquivo, String conteudo, boolean adicionar) throws IOException{
 		FileWriter writer = new FileWriter(arquivo, adicionar);		
-		writer.write(conteudo);
+		writer.write(conteudo+"\n");
+                writer.write("-----------------------------------------------------------\n");
 		writer.close();
 	}
 	

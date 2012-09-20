@@ -6,15 +6,12 @@ package dao;
 
 import db.DbStatement;
 import entity.IEntity;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.omg.CORBA.OBJECT_NOT_EXIST;
 
 /**
  *
@@ -106,6 +103,7 @@ public abstract class AbstractDao {
         }
         
         select = select.substring(0, select.length() - 4);
+        
         return DbStatement.select(select);
     }
     

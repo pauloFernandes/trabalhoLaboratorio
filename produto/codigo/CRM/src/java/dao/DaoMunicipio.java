@@ -6,6 +6,7 @@ package dao;
 
 import entity.IEntity;
 import entity.MunicipioEntity;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ public class DaoMunicipio extends AbstractDao implements CrmIDao {
     public static final String[] PKS = {"Codmun"};
     
     public DaoMunicipio() {
-        super("dao.DaoMunicipio", DaoPais.PKS);
+        super("dao.DaoMunicipio", DaoMunicipio.PKS);
     }
     
     @Override
@@ -35,6 +36,7 @@ public class DaoMunicipio extends AbstractDao implements CrmIDao {
                 entity.setCodest(resultSet.getInt(2));
                 entity.setCodpai(resultSet.getInt(3));
                 entity.setNommun(resultSet.getString(4));
+                
             }
             entity.setNewRegister(false);
         }

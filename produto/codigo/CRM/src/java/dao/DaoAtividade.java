@@ -19,10 +19,10 @@ import java.util.logging.Logger;
  */
 public class DaoAtividade extends AbstractDao implements CrmIDao{
 
-    public static final String[] PKS = {"Codativ"};
+    public static final String[] PKS = {"Codati"};
     
     public DaoAtividade() {
-        super("dao.DaoAtividade", DaoPais.PKS);
+        super("dao.DaoAtividade", DaoAtividade.PKS);
     }
 
     @Override
