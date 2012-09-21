@@ -1,0 +1,65 @@
+TELAS:
+	login:
+		-- campos de cadastro de usuario
+		nome                   (text)
+		login                  (text)
+		senha                  (password)
+		cadastrar nova empresa (botao)    -> exibe o campo text de empresa
+		empresa                (text)     -> oculto
+		associar-se à empresa  (botao)    -> exibe o campo combobox de empresa
+		empresa                (combobox) -> oculto
+		cadastre-se            (botao)
+		
+		-- campos de login de usuario;
+		usuario                (text)
+		senha                  (password)
+		entrar                 (botao)
+
+	cadasatro usuario: -- tela onde o usuario gerenciará seus dados cadastrais. Poderá tambem excluir seu usuário.
+		salvar                 (botao)
+		excluir                (botao)
+		
+	    codigo                 (oculto)
+		nome                   (text)
+		login                  (text)
+		senha                  (password)
+		
+	Gerenciamento de permissao de usuarios
+		pesquisar, aprovar vinculo, atribuir permissao
+	
+		nome do usuario      (text)
+		tipo de funcionario  (combobox)
+		solicitacao aprovada (checkbox)
+		
+	Gerenciar Empresa
+		novo, pesquisar, editar, excluir
+	
+		codigo                         (oculto)
+		tipo de inscricao juridica     (combobox) -> fisica/juridica
+		numero da inscricao juridica   (text)
+		nome fantasia                  (text)
+		razao social                   (text)
+		telefone                       (text)
+		celular                        (text)
+		endereco                       (text)
+		pais                           (combobox)
+		estado                         (combobox)
+		municipio                      (combobox)
+		
+	Gerenciar clientes
+		novo, pesquisar, editar, excluir, botao de visualizar historico de vendedores.
+	
+		codigo do cliente              (oculto)
+		codigo da empresa              (oculto)
+		inscricao juridica             (text)
+		nome fantasia                  (text)
+		razao social                   (text)
+		telefone                       (text)
+		celular                        (text)
+		endereco                       (text)
+		pais                           (combobox)
+		estado                         (combobox)
+		municipio                      (combobox)
+		
+	Gerenciar atividades
+		

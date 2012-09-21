@@ -6,6 +6,7 @@ package dao;
 
 import entity.IEntity;
 import entity.UsuarioEntity;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -31,11 +32,11 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodusu(resultSet.getInt(1));
-                entity.setNomusu(resultSet.getString(2));
-                entity.setLogusu(resultSet.getString(3));
-                entity.setSenusu(resultSet.getString(4));
-                entity.setIdusuativ(resultSet.getString(5));
+                entity.setIdusuativ(resultSet.getString(1));
+                entity.setSenusu(resultSet.getString(2));
+                entity.setCodusu(resultSet.getInt(3));
+                entity.setNomusu(resultSet.getString(4));
+                entity.setLogusu(resultSet.getString(5));
             }
             entity.setNewRegister(false);
         }
@@ -47,20 +48,24 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
     }
 
     @Override
-    public List<IEntity> obterTodasEntidades() {
+    public List<IEntity> obterTodasEntidades() {   
         List<IEntity> lista = new LinkedList<IEntity>();
         ResultSet resultSet = super.getAllEntities();
         
         try {
             while(resultSet.next()) {
                 UsuarioEntity entity = new UsuarioEntity();
-                entity.setCodusu(resultSet.getInt(1));
-                entity.setNomusu(resultSet.getString(2));
-                entity.setLogusu(resultSet.getString(3));
-                entity.setSenusu(resultSet.getString(4));
-                entity.setIdusuativ(resultSet.getString(5));
+                entity.setIdusuativ(resultSet.getString(1));
+                entity.setSenusu(resultSet.getString(2));
+                entity.setCodusu(resultSet.getInt(3));
+                entity.setNomusu(resultSet.getString(4));
+                entity.setLogusu(resultSet.getString(5));
                 entity.setNewRegister(false);
                 lista.add(entity);
+            }
+            
+            if (lista.isEmpty()) {
+                lista.add(new UsuarioEntity());
             }
         } catch (SQLException e) {
             Logger.getLogger(AbstractDao.class.getName()).log(Level.SEVERE, null, e);
@@ -77,13 +82,17 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 UsuarioEntity entity = new UsuarioEntity();
-                entity.setCodusu(resultSet.getInt(1));
-                entity.setNomusu(resultSet.getString(2));
-                entity.setLogusu(resultSet.getString(3));
-                entity.setSenusu(resultSet.getString(4));
-                entity.setIdusuativ(resultSet.getString(5));
+                entity.setSenusu(resultSet.getString(1));
+                entity.setCodusu(resultSet.getInt(2));
+                entity.setIdusuativ(resultSet.getString(3));
+                entity.setNomusu(resultSet.getString(4));
+                entity.setLogusu(resultSet.getString(5));
                 entity.setNewRegister(false);
                 lista.add(entity);
+            }
+            
+            if (lista.isEmpty()) {
+                lista.add(new UsuarioEntity());
             }
         } catch (SQLException e) {
             Logger.getLogger(AbstractDao.class.getName()).log(Level.SEVERE, null, e);

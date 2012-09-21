@@ -6,8 +6,11 @@
 package controller;
 
 import builder.BuilderPais;
+import builder.Director;
+import dao.ArquivoExterno;
 import dao.DaoPais;
 import entity.PaisEntity;
+import entity.UsuarioEntity;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,14 +38,8 @@ public class ServletTeste extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         
-        BuilderPais builder = new BuilderPais();
-        builder.createDao();
-        builder.createEntity();
-        DaoPais pais      = (DaoPais) builder.getDao();
-        PaisEntity entity = (PaisEntity) builder.getEntity();
-        entity.setCodpai(3);
-        entity.setNompai("Venezuela");
-        pais.persist(entity);
+        GerenciarUsuario.incluir("Crisaor", "Criss", "123564");
+        GerenciarUsuario.editar(2, "Albafica", "Peixes", "123123", UsuarioEntity.IDSITUATIV_INATIVO);
         
     }
 

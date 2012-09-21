@@ -4,13 +4,9 @@
  */
 package db;
 
-import dao.ArquivoExterno;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -22,22 +18,9 @@ public class DbStatement {
     public static ResultSet select(String query) throws SQLException {
         try {
             Statement statement = DbConnect.getConnection().createStatement();
-            //---------
-            try {
-                ArquivoExterno.salvar("c:\\Users\\PauloHenrique\\Desktop\\teste.txt", query, true);
-            } catch (IOException ex) {
-                Logger.getLogger(DbStatement.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //---------
             return statement.executeQuery(query);
         } catch (SQLException e) {
-            //---------
-            try {
-                ArquivoExterno.salvar("c:\\Users\\PauloHenrique\\Desktop\\teste.txt", e.getMessage(), true);
-            } catch (IOException ex) {
-                Logger.getLogger(DbStatement.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //---------
+            e.getMessage();
         }
         return null;
     }
