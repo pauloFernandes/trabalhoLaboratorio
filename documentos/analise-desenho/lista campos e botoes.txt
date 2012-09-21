@@ -6,7 +6,7 @@ TELAS:
 		senha                  (password)
 		cadastrar nova empresa (botao)    -> exibe o campo text de empresa
 		empresa                (text)     -> oculto
-		associar-se à empresa  (botao)    -> exibe o campo combobox de empresa
+		associar-se ï¿½ empresa  (botao)    -> exibe o campo combobox de empresa
 		empresa                (combobox) -> oculto
 		cadastre-se            (botao)
 		
@@ -15,7 +15,7 @@ TELAS:
 		senha                  (password)
 		entrar                 (botao)
 
-	cadasatro usuario: -- tela onde o usuario gerenciará seus dados cadastrais. Poderá tambem excluir seu usuário.
+	cadasatro usuario: -- tela onde o usuario gerenciarï¿½ seus dados cadastrais. Poderï¿½ tambem excluir seu usuï¿½rio.
 		salvar                 (botao)
 		excluir                (botao)
 		
@@ -32,7 +32,7 @@ TELAS:
 		solicitacao aprovada (checkbox)
 		
 	Gerenciar Empresa
-		novo, pesquisar, editar, excluir
+		editar, excluir
 	
 		codigo                         (oculto)
 		tipo de inscricao juridica     (combobox) -> fisica/juridica
