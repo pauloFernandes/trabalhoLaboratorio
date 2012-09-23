@@ -8,6 +8,6 @@ package model;
  *
  * @author PauloHenrique
  */
-public class Convite {
+public class Lembrete {
     
 }

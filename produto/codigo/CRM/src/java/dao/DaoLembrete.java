@@ -4,8 +4,8 @@
  */
 package dao;
 
-import entity.ConviteEntity;
 import entity.IEntity;
+import entity.LembreteEntity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -17,27 +17,24 @@ import java.util.logging.Logger;
  *
  * @author PauloHenrique
  */
-public class DaoConvite extends AbstractDao implements CrmIDao{
-
-    public static final String[] PKS = {"Codcon"};
+public class DaoLembrete extends AbstractDao implements CrmIDao {
+    public static final String[] PKS = {"Codfun", "Codati"};
     
-    public DaoConvite() {
-        super("dao.DaoConvite", DaoConvite.PKS);
+    public DaoLembrete() {
+        super("dao.Lembrete", DaoLembrete.PKS);        
     }
 
     @Override
     public IEntity obterEntidade(Object[] valorPks) {
-        ConviteEntity entity = new ConviteEntity();
+        LembreteEntity entity = new LembreteEntity();
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodcon(resultSet.getInt(1));
+                entity.setCodfun(resultSet.getInt(1));
                 entity.setCodati(resultSet.getInt(2));
-                entity.setDescon(resultSet.getString(3));
-                entity.setTipenvlem(resultSet.getString(4));
-                entity.setDatenvlem(resultSet.getDate(5));
+                entity.setIdtiplem(resultSet.getString(3));
+                entity.setDatinilem(resultSet.getDate(4));
             }
-            
             entity.setNewRegister(false);
         }
         catch (SQLException e) {
@@ -54,12 +51,11 @@ public class DaoConvite extends AbstractDao implements CrmIDao{
         
         try {
             while(resultSet.next()) {
-                ConviteEntity entity = new ConviteEntity();
-                entity.setCodcon(resultSet.getInt(1));
+                LembreteEntity entity = new LembreteEntity();
+                entity.setCodfun(resultSet.getInt(1));
                 entity.setCodati(resultSet.getInt(2));
-                entity.setDescon(resultSet.getString(3));
-                entity.setTipenvlem(resultSet.getString(4));
-                entity.setDatenvlem(resultSet.getDate(5));
+                entity.setIdtiplem(resultSet.getString(3));
+                entity.setDatinilem(resultSet.getDate(4));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -77,12 +73,11 @@ public class DaoConvite extends AbstractDao implements CrmIDao{
         
         try {
             while(resultSet.next()) {
-                ConviteEntity entity = new ConviteEntity();
-                entity.setCodcon(resultSet.getInt(1));
+                LembreteEntity entity = new LembreteEntity();
+                entity.setCodfun(resultSet.getInt(1));
                 entity.setCodati(resultSet.getInt(2));
-                entity.setDescon(resultSet.getString(3));
-                entity.setTipenvlem(resultSet.getString(4));
-                entity.setDatenvlem(resultSet.getDate(5));
+                entity.setIdtiplem(resultSet.getString(3));
+                entity.setDatinilem(resultSet.getDate(4));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -92,6 +87,5 @@ public class DaoConvite extends AbstractDao implements CrmIDao{
         
         return lista;
     }
-    
     
 }

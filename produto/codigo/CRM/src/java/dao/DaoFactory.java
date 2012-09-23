@@ -13,7 +13,7 @@ public class DaoFactory {
     public static final int CLIENTE          = 2;
     public static final int CONTATO          = 3;
     public static final int CONVIDADO        = 4;
-    public static final int CONVITE          = 5;
+    public static final int LEMBRETE         = 5;
     public static final int EMPRESA          = 6;
     public static final int ESTADO           = 7;
     public static final int FUN_RESPONSAVEL  = 8;
@@ -40,8 +40,8 @@ public class DaoFactory {
             case DaoFactory.CONVIDADO:
                 daoInstance = new DaoConvidado();
                 break;
-            case DaoFactory.CONVITE:
-                daoInstance = new DaoConvite();
+            case DaoFactory.LEMBRETE:
+                 daoInstance = new DaoLembrete();
                 break;
             case DaoFactory.EMPRESA:
                 daoInstance = new DaoEmpresa();

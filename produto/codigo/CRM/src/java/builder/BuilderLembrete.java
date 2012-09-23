@@ -5,22 +5,22 @@
 package builder;
 
 import dao.DaoFactory;
-import entity.ConviteEntity;
+import entity.LembreteEntity;
 
 /**
  *
  * @author PauloHenrique
  */
-public class BuilderConvite extends AbstractBuilder {
+public class BuilderLembrete extends AbstractBuilder {
 
     @Override
     public void createDao() {
-        this.dao = DaoFactory.getInstance(DaoFactory.CONVITE);
+        this.dao = DaoFactory.getInstance(DaoFactory.LEMBRETE);
     }
 
     @Override
     public void createEntity() {
-        this.entity = new ConviteEntity();
+        this.entity = new LembreteEntity();
     }
     
 }
