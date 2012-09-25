@@ -5,13 +5,15 @@
 
 package controller;
 
-import builder.BuilderPais;
-import builder.Director;
+import controller.command.Receptor;
 import dao.ArquivoExterno;
+import dao.DaoCliente;
 import dao.DaoPais;
+import entity.ClienteEntity;
 import entity.PaisEntity;
-import entity.UsuarioEntity;
 import java.io.IOException;
+import java.io.PrintWriter;
+import javax.enterprise.event.Reception;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ServletTeste", urlPatterns = {"/ServletTeste"})
 public class ServletTeste extends HttpServlet {
-
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -37,10 +38,24 @@ public class ServletTeste extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        Object[] valorPks = {3};
+        DaoPais dao       = new DaoPais();
+        PaisEntity entity = (PaisEntity) dao.obterEntidade(valorPks);
+        entity.setNompai("Australia");
+        Receptor receptor = new Receptor(dao);
+        receptor.call("alterar", entity);
         
-        GerenciarUsuario.incluir("Crisaor", "Criss", "123564");
-        GerenciarUsuario.editar(2, "Albafica", "Peixes", "123123", UsuarioEntity.IDSITUATIV_INATIVO);
         
+//        String teste = (String)receptor.call("incluir", cliente);
+//        String teste = (String)receptor.call("excluir", cliente);
+//        ArquivoExterno.salvar("c:\\Users\\PauloHenrique\\Desktop\\teste.txt", teste, true);
+//        response.setContentType("text/html;charset=UTF-8");
+//        PrintWriter out = response.getWriter();
+//        
+//        String login = request.getParameter("LOGIN");
+//        String senha = request.getParameter("SENHA");
+//        
+//        out.println(login + "  " + senha);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

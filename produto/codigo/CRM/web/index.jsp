@@ -15,7 +15,7 @@
         <h1>Hello World!</h1>
         <form action="ServletTeste" method="post">
             <input type="text" id="teste" />
-            <input type="submit" value="click here for test bitch" />
+            <input type="submit" value="click here to test bitch" />
             <button id="blabla">click here</button>
         </form>
     </body>
