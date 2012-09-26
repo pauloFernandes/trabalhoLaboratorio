@@ -15,10 +15,32 @@
         <script type="text/javascript" src="../js/login.js"></script>
     </head>
     <body>
-        login 
-        <input type="text" id="login"><br>
-        senha
+        Nome:
+        <input type="text" id="nome" ><br>
+        Login: 
+        <input type="text" id="login" ><br>
+        Senha:
         <input type="password" id="senha"><br>
-        <input type="button" id="acessar" value="acessar">
+        
+        <input type="radio" name="tipo-empresa" id="radio-nova-empresa" checked="checked">Cadastrar Nova Empresa<br>
+        <input type="radio" name="tipo-empresa" id="radio-associar-empresa">Associar-se a Empresa<br><br>
+        
+        <div id="nova-empresa" style="display: none">
+            <select id="empresa-selecionada">
+                <option value="1">Empresa 1</option>
+                <option value="2">Empresa 2</option>
+                <option value="3">Empresa 3</option>
+            </select>
+        </div>
+        <div id="associar-empresa" style="display: none">
+            Inscricao juridica
+            <input type="text" id="inscjur"><br>
+            nome fantasia
+            <input type="text" id="nomfan"><br>
+            razao social
+            <input type="text" id="razsoc">
+        </div>
+        
+        <input type="button" id="cadatrar" value="cadastrar">
     </body>
 </html>

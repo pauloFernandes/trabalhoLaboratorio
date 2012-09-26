@@ -6,10 +6,13 @@ package controller;
 
 import builder.BuilderEmpresa;
 import builder.Director;
+import controller.command.Receptor;
 import dao.DaoEmpresa;
+import dao.DaoUsuario;
 import entity.EmpresaEntity;
 import entity.IEntity;
 import java.util.List;
+import util.Util;
 
 /**
  *
@@ -28,8 +31,31 @@ public class GerenciarEmpresa {
         return lista;
     }
     
-    public static void incluir() {
+    public int incluir(String numinsjur, String nomfan, String razsoc) {
+        BuilderEmpresa builderEmpresa = new BuilderEmpresa();
+        Director director             = new Director(builderEmpresa);
+        director.constroiObjeto();
         
+        DaoEmpresa daoEmpresa = (DaoEmpresa) director.getDao();
+        EmpresaEntity entity  = (EmpresaEntity) director.getEntity();
+        Receptor receptor     = new Receptor(daoEmpresa);
+        
+        int codemp = Util.getNextValidKey("empresa", "codemp");
+        entity.setCodemp(codemp);
+        if (numinsjur.length() == 14) {
+            entity.setIdtipinsjur(EmpresaEntity.IDTIPINSJUR_JURIDICA);
+        } else {
+            entity.setIdtipinsjur(EmpresaEntity.IDTIPINSJUR_FISICA);
+        }
+        entity.setNuminsjur(numinsjur);
+        entity.setNomfan(nomfan);
+        entity.setRazsoc(razsoc);
+        entity.setCodmun(1);
+        entity.setCodest(1);
+        entity.setCodpai(1);
+        receptor.call("incluir", entity);
+        
+        return codemp;
     }
     
     public static void editar() {

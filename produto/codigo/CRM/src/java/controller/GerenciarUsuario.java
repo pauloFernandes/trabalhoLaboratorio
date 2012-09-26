@@ -4,8 +4,10 @@
  */
 package controller;
 
+
 import builder.BuilderUsuario;
 import builder.Director;
+import controller.command.Receptor;
 import dao.DaoUsuario;
 import entity.IEntity;
 import entity.UsuarioEntity;
@@ -17,7 +19,7 @@ import util.Util;
  * @author PauloHenrique
  */
 public class GerenciarUsuario {
-    public static boolean validarLogin(String login, String senha) {
+    public boolean validarLogin(String login, String senha) {
         String where = "LOGUSU = '" + login + "' AND SENUSU = '" + senha + "'";
         
         BuilderUsuario builderUsuario = new BuilderUsuario();
@@ -32,23 +34,27 @@ public class GerenciarUsuario {
         return usuarioEntity.getCodusu() != 0;
     }
     
-    public static void incluir(String nome, String login, String senha) {
+    public int incluir(String nome, String login, String senha) {
         BuilderUsuario builderUsuario = new BuilderUsuario();
-        Director director = new Director(builderUsuario);
+        Director director             = new Director(builderUsuario);
         director.constroiObjeto();
         
         DaoUsuario daoUsuario = (DaoUsuario) director.getDao();
-        UsuarioEntity entity = (UsuarioEntity) director.getEntity();
+        UsuarioEntity entity  = (UsuarioEntity) director.getEntity();
+        Receptor receptor     = new Receptor(daoUsuario);
         
-        entity.setCodusu(Util.getNextValidKey("USUARIO", "CODUSU"));
+        int codusu = Util.getNextValidKey("USUARIO", "CODUSU");
+        entity.setCodusu(codusu);
         entity.setNomusu(nome);
         entity.setLogusu(login);
         entity.setSenusu(senha);
         entity.setIdusuativ(UsuarioEntity.IDSITUATIV_ATIVO);
-        daoUsuario.persist(entity);
+        receptor.call("incluir", entity);
+        
+        return codusu;
     }
     
-    public static void editar(int codigo, String nome, String login, String senha, String status) {
+    public void editar(int codigo, String nome, String login, String senha, String status) {
         Object[] pks = {codigo};
         BuilderUsuario builderUsuario = new BuilderUsuario();
         Director director = new Director(builderUsuario, pks);
@@ -67,7 +73,7 @@ public class GerenciarUsuario {
         daoUsuario.persist(entity);
     }
     
-    public static void excluir(int codigo) {
+    public void excluir(int codigo) {
         Object[] pks = {codigo};
         BuilderUsuario builderUsuario = new BuilderUsuario();
         Director director = new Director(builderUsuario, pks);

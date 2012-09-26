@@ -11,6 +11,7 @@ import dao.DaoCliente;
 import dao.DaoPais;
 import entity.ClienteEntity;
 import entity.PaisEntity;
+import entity.TipoFuncionarioEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.enterprise.event.Reception;
@@ -38,24 +39,31 @@ public class ServletTeste extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        Object[] valorPks = {3};
-        DaoPais dao       = new DaoPais();
-        PaisEntity entity = (PaisEntity) dao.obterEntidade(valorPks);
-        entity.setNompai("Australia");
-        Receptor receptor = new Receptor(dao);
-        receptor.call("alterar", entity);
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
         
+        String nome               = request.getParameter("NOME");
+        String login              = request.getParameter("LOGIN");
+        String senha              = request.getParameter("SENHA");
+        int tipoCadastro          = Integer.parseInt(request.getParameter("TIPOCADASTRO"));
+        int empresaSelecionada    = Integer.parseInt(request.getParameter("EMPRESASELECIONADA"));
+        String inscjur            = request.getParameter("INSCJUR");
+        String nomfan             = request.getParameter("NOMFAN");
+        String razsoc             = request.getParameter("RAZSOC");
+        int tipoFuncioario        = TipoFuncionarioEntity.FUNCIOARIO;
         
-//        String teste = (String)receptor.call("incluir", cliente);
-//        String teste = (String)receptor.call("excluir", cliente);
-//        ArquivoExterno.salvar("c:\\Users\\PauloHenrique\\Desktop\\teste.txt", teste, true);
-//        response.setContentType("text/html;charset=UTF-8");
-//        PrintWriter out = response.getWriter();
-//        
-//        String login = request.getParameter("LOGIN");
-//        String senha = request.getParameter("SENHA");
-//        
-//        out.println(login + "  " + senha);
+        GerenciarUsuario gerenciarUsuario = new GerenciarUsuario();
+        int codusu = gerenciarUsuario.incluir(nome, login, senha);
+        if (tipoCadastro == 2) {
+            tipoFuncioario                    = TipoFuncionarioEntity.DONO;
+            GerenciarEmpresa gerenciarEmpresa = new GerenciarEmpresa();
+            empresaSelecionada                = gerenciarEmpresa.incluir(inscjur, nomfan, razsoc);
+        } 
+        
+        GerenciarFuncionario gerenciarFuncionario = new GerenciarFuncionario();
+        gerenciarFuncionario.incliur(codusu, empresaSelecionada, tipoFuncioario);
+        out.println("ok");
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

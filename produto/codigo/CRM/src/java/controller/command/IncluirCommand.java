@@ -4,8 +4,13 @@
  */
 package controller.command;
 
+import dao.ArquivoExterno;
 import dao.CrmIDao;
+import db.DbStatement;
 import entity.IEntity;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +24,6 @@ public class IncluirCommand extends Command {
     
     @Override
     public Object execute(IEntity entity) {
-//        return this.getClass().toString() + entity.getClass().toString();
         this.dao.persist(entity);
         return true;
     }

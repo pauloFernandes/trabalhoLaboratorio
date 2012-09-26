@@ -22,7 +22,7 @@ public class DaoFuncionario extends AbstractDao implements CrmIDao {
     public static final String[] PKS = {"Codfun"};
     
     public DaoFuncionario() {
-        super("dao.Funcionario", DaoFuncionario.PKS);        
+        super("dao.DaoFuncionario", DaoFuncionario.PKS);        
     }
     
     @Override

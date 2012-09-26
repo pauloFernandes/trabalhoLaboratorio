@@ -9,6 +9,10 @@ package entity;
  * @author PauloHenrique
  */
 public class TipoFuncionarioEntity extends AbstractEntity {
+    public static final int FUNCIOARIO    = 1;
+    public static final int ADMINISTRADOR = 2;
+    public static final int DONO          = 3;
+    
     private int codtipfun;
     private String nomtipfun;
 

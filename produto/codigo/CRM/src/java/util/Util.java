@@ -20,7 +20,7 @@ public class Util {
         try {
             ResultSet result = DbStatement.select(query);
             result.next();
-            return result.getInt(1);
+            return result.getInt(1) == 0? 1 : result.getInt(1);
         } catch (SQLException ex) {
             Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }

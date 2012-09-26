@@ -28,10 +28,11 @@ public class Receptor {
         this.map.put("alterar", new AlterarCommand(this.dao));
     }
     
-    public Object call(String nome, IEntity entity) {
+    public Object call(String nome, IEntity entity) {    
         Command c     = (Command) this.map.get(nome);
         Object result = c.execute(entity);
-        return result;
+//        return result;
+        return null;
     }
     
 }

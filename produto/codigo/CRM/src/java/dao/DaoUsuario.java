@@ -6,7 +6,6 @@ package dao;
 
 import entity.IEntity;
 import entity.UsuarioEntity;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;

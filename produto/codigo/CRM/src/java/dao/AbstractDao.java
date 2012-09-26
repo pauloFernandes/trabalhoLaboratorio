@@ -5,6 +5,7 @@
 package dao;
 
 import db.DbStatement;
+import entity.EmpresaEntity;
 import entity.IEntity;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -25,8 +26,7 @@ public abstract class AbstractDao {
     private Method[] m;
     
     public AbstractDao(String className, String[] primaryKeys) {
-        className = className.replace("dao.Dao", "");
-        
+        className = className.replace("dao.Dao", "");        
         try {
             this.className   = className;
             this.primaryKeys = primaryKeys;
@@ -52,7 +52,6 @@ public abstract class AbstractDao {
     protected void insert(IEntity entity) throws SQLException {
         String campos = "";
         String values = "";
-        
         for (Method meth : this.m) {
             if (meth.toString().contains("get")) {
                 //String nomeCampo = meth.toString().replace("get", "");
