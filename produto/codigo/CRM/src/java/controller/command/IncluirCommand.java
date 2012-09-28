@@ -4,13 +4,8 @@
  */
 package controller.command;
 
-import dao.ArquivoExterno;
 import dao.CrmIDao;
-import db.DbStatement;
 import entity.IEntity;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

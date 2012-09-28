@@ -8,7 +8,6 @@ import builder.BuilderEmpresa;
 import builder.Director;
 import controller.command.Receptor;
 import dao.DaoEmpresa;
-import dao.DaoUsuario;
 import entity.EmpresaEntity;
 import entity.IEntity;
 import java.util.List;

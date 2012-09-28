@@ -1,0 +1,358 @@
+﻿/* hack reset (for production, use Yahoo! reset CSS)
+*************************/
+body
+{
+    background-color: #333333;
+    font-size: .80em;
+    font-family: "Helvetica Neue" , "Lucida Grande" , "Segoe UI" , Arial, Helvetica, Verdana, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    color: #666666;
+    height: 510px;
+}
+*
+{
+	margin: 0 0 0 0px;
+	padding: 0;
+}
+
+/* links
+*************************/
+
+a:link, a:visited, a:hover, a:active
+{
+	text-decoration: none;
+}
+
+/* inline elements
+*************************/
+
+strong
+{
+	font-weight: bold;
+}
+
+/* tabs
+*************************/
+
+ul.tabs
+{
+	display: table;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+}
+
+ul.tabs li
+{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: table-cell;
+	float: left;
+	position: relative;
+}
+
+ul.tabs a
+{
+	position: relative;
+	display: block;
+}
+
+/* dropdowns
+*************************/
+
+ul.dropdown
+{
+	margin: 0;
+	padding: 0;
+	display: block;
+	position: absolute;
+	z-index: 999;
+	top: 100%;
+	width: 250px;
+	display: none;
+	left: 0;
+}
+
+ul.dropdown ul.dropdown
+{
+	top: 0;
+	left: 95%;
+}
+
+ul.dropdown li
+{
+	margin: 0;
+	padding: 0;
+	float: none;
+	position: relative;
+	list-style: none;
+	display: block;
+}
+
+ul.dropdown li a
+{
+	display: block;
+}
+
+
+/* menu-specifc
+*************************/
+
+#menu
+{
+	position: fixed;
+	z-index: 5;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #000;
+}
+
+#menu ul
+{
+	margin: 0 auto;
+}
+
+#menu ul li.hasmore
+{
+}
+
+#menu ul li h4
+{
+	margin: 0;
+}
+
+#menu ul li h4 a
+{
+	font-size: 14px;
+	color: #000;
+	font-weight: bold;
+	padding: 0 15px;
+}
+
+#menu ul li a
+{
+	padding-left: 4px;
+}
+
+#menu ul li a img
+{
+	vertical-align: middle;
+}
+
+#menu ul li a:hover
+{
+}
+
+#menu ul li a span
+{
+	display: block;
+	padding: 0 15px 0 11px;
+}
+
+#menu ul li a:hover span
+{
+}
+
+#menu ul.dropdown
+{
+	padding: 10px;
+	overflow:hidden;
+
+	width: 290px;
+}
+
+#menu ul.dropdown li a
+{
+
+	line-height: 30px;
+	overflow: hidden;
+	height: 30px;
+}
+
+#menu ul.dropdown li.last a
+{
+	border-bottom-width: 0;
+}
+
+#menu ul.dropdown li a:hover
+{
+}
+
+#menu ul li h4 a:hover
+{
+	background-image: none;
+}
+
+.rotulo,  .entrada {
+	display: block;
+	float: left;
+    width: 177px;
+}
+
+.rotuloDireita{
+	display: block;
+	float:left;
+	padding-left:2em;
+	text-align: right;
+	width:35px;
+	padding-right: 2em;
+	padding-bottom: 20px;
+}
+
+.rotuloDireita2{
+	display: block;
+	float:left;
+	padding-left:11em;
+    text-align: right;
+	width:35px;
+	padding-right: 2em;
+	padding-bottom: 20px;
+}
+
+.rotulo {	
+	text-align: right;
+	width:35px;
+	padding-right: 2em;
+	padding-bottom: 20px;
+}
+
+.rotuloGrande{
+	display: block;
+	float:left;
+    text-align: left;
+	padding-right: 2em;
+	padding-bottom: 20px;
+    width: 110px;
+}
+
+.rotuloGrandeDireita{
+	display: block;
+	float:left;
+    text-align: left;
+	padding-right: 10px;
+	padding-bottom: 20px;
+	padding-left:2em;
+}
+
+.tabelaResultado, th, td
+{
+    border: thin ridge #C0C0C0;
+}
+
+fieldset {
+	border: solid 1px #000;
+    top: 4px;
+    left: 516px;
+    height: 428px;
+    width: 586px;
+}
+
+br {
+	clear: left;
+}
+
+.header
+{
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    background: #C0C0C0;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    height: 80px;
+}
+
+
+/* TAB MENU   
+----------------------------------------------------------*/
+
+div.menu
+{
+    padding: 4px 0px 4px 8px;
+    width: 154px;
+    height: 419px;
+    background-color: #F2F2F2;
+    display: block;
+    position: relative;
+    top: 112px;
+    left: 75px;
+}
+/* FORM ELEMENTS   
+----------------------------------------------------------*/
+
+
+/* MISC  
+----------------------------------------------------------*/
+
+
+.botaoMenu
+{
+    background-color: #333333;
+    color: #FFFFFF;
+    height: 52px;
+    width: 144px;
+}
+.tela
+{
+    padding: 4px 0px 4px 8px;
+    position: relative;
+    top: -342px;
+    left: 244px;
+    height: 419px;
+    background-color: #F2F2F2;
+    display: block;
+    width: 922px;
+}
+.botao
+{
+    position: relative;
+    top: -374px;
+    left: 318px;
+    height: 28px;
+    bottom: 374px;
+    margin-right: 15px;
+    width: 117px;
+}
+.titulo
+{
+    background-color: #333333;
+    position: relative;
+    border-style: outset;
+    border-color: #C0C0C0;
+    top: -797px;
+    left: 242px;
+    width: 920px;
+    color: #FFFFFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.botaoConvite
+{
+    position: relative;
+    top: -415px; 
+    left: 1005px; 
+    width: 151px;
+    height: 27px;
+}
+
+.imgUsuario
+{
+    position: relative;
+    top: -359px; left: 143px
+}
+
+.imgCRM
+{
+    position: relative;
+    top: -468px; left: 80px;
+}
+

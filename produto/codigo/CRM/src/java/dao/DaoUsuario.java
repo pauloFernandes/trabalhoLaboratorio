@@ -81,11 +81,11 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 UsuarioEntity entity = new UsuarioEntity();
-                entity.setSenusu(resultSet.getString(1));
-                entity.setCodusu(resultSet.getInt(2));
-                entity.setIdusuativ(resultSet.getString(3));
+                entity.setIdusuativ(resultSet.getString(1));
+                entity.setLogusu(resultSet.getString(2));
+                entity.setSenusu(resultSet.getString(3));
                 entity.setNomusu(resultSet.getString(4));
-                entity.setLogusu(resultSet.getString(5));
+                entity.setCodusu(resultSet.getInt(5));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

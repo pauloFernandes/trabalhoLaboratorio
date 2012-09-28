@@ -30,11 +30,11 @@ public class DbStatement {
     }
     
     public static void insert(String query) throws SQLException {
-        try {
-            ArquivoExterno.salvar("c:\\Users\\PauloHenrique\\Desktop\\teste.txt", query, true);
-        } catch (IOException ex) {
-            Logger.getLogger(DbStatement.class.getName()).log(Level.SEVERE, null, ex);
-        }
+try {
+    ArquivoExterno.salvar("C:\\Users\\PauloHenrique\\Desktop\\teste.txt", query, true);
+} catch (IOException ex) {
+    Logger.getLogger(DbStatement.class.getName()).log(Level.SEVERE, null, ex);
+}
         Statement statement = DbConnect.getConnection().createStatement();
         statement.execute(query);
     }

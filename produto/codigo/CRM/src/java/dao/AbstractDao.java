@@ -5,9 +5,7 @@
 package dao;
 
 import db.DbStatement;
-import entity.EmpresaEntity;
 import entity.IEntity;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -103,11 +101,6 @@ public abstract class AbstractDao {
         }
         
         select = select.substring(0, select.length() - 4);
-        try {
-            ArquivoExterno.salvar("c:\\Users\\PauloHenrique\\Desktop\\teste.txt", select, true);
-        } catch (IOException ex) {
-            Logger.getLogger(AbstractDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return DbStatement.select(select);
     }
     

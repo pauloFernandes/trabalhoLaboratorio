@@ -7,9 +7,9 @@ $(document).ready(function() {
     /**
      * Método para validação de usuario no login.
      */
-    $("#acessar").click(function() {
-        login = $("#login").val();
-        senha = $("#senha").val();
+    $("#entrar").click(function() {
+        login = $("#log").val();
+        senha = $("#pass").val();
         
         $.ajax({
             type: "POST",
@@ -33,18 +33,6 @@ $(document).ready(function() {
     });
     
     
-    /**
-     * Metodos usados para intercalar os tipos de cadastro de empresa (nova empresa ou empresa existente).
-     */
-    $("#radio-nova-empresa").click(function() {
-        $("#nova-empresa").css("display", "none");
-        $("#associar-empresa").css("display", "block");
-    });
-    $("#radio-associar-empresa").click(function() {
-        $("#nova-empresa").css("display", "block");
-        $("#associar-empresa").css("display", "none");
-    });
-    
 });
 
 function cadastrarFuncionario() {
@@ -66,7 +54,7 @@ function cadastrarFuncionario() {
     if ($("#radio-nova-empresa:checked").attr("name")) {
         tipoCadastro       = 2;
         inscjur      = $("#inscjur").val();
-        nomfan       = $("#inscjur").val();
+        nomfan       = $("#nomfan").val();
         razsoc       = $("#razsoc").val();
     }
     
