@@ -6,7 +6,6 @@ package dao;
 
 import entity.IEntity;
 import entity.MunicipioEntity;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -32,10 +31,10 @@ public class DaoMunicipio extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodmun(resultSet.getInt(1));
-                entity.setCodest(resultSet.getInt(2));
-                entity.setCodpai(resultSet.getInt(3));
-                entity.setNommun(resultSet.getString(4));
+                entity.setCodmun(resultSet.getInt("codmun"));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNommun(resultSet.getString("nommun"));
                 
             }
             entity.setNewRegister(false);
@@ -55,10 +54,10 @@ public class DaoMunicipio extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 MunicipioEntity entity = new MunicipioEntity();
-                entity.setCodmun(resultSet.getInt(1));
-                entity.setCodest(resultSet.getInt(2));
-                entity.setCodpai(resultSet.getInt(3));
-                entity.setNommun(resultSet.getString(4));
+                entity.setCodmun(resultSet.getInt("codmun"));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNommun(resultSet.getString("nommun"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -77,10 +76,10 @@ public class DaoMunicipio extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 MunicipioEntity entity = new MunicipioEntity();
-                entity.setCodmun(resultSet.getInt(1));
-                entity.setCodest(resultSet.getInt(2));
-                entity.setCodpai(resultSet.getInt(3));
-                entity.setNommun(resultSet.getString(4));
+                entity.setCodmun(resultSet.getInt("codmun"));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNommun(resultSet.getString("nommun"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

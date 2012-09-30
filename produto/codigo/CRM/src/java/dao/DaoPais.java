@@ -31,8 +31,8 @@ public class DaoPais extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodpai(resultSet.getInt(1));
-                entity.setNompai(resultSet.getString(2));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNompai(resultSet.getString("nompai"));
             }
             entity.setNewRegister(false);
         }
@@ -51,8 +51,8 @@ public class DaoPais extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 PaisEntity entity = new PaisEntity();
-                entity.setCodpai(resultSet.getInt(1));
-                entity.setNompai(resultSet.getString(2));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNompai(resultSet.getString("nompai"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -71,8 +71,8 @@ public class DaoPais extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 PaisEntity entity = new PaisEntity();
-                entity.setCodpai(resultSet.getInt(1));
-                entity.setNompai(resultSet.getString(2));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNompai(resultSet.getString("nompai"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

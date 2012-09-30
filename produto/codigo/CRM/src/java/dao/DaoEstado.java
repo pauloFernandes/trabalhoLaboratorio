@@ -31,9 +31,9 @@ public class DaoEstado extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodest(resultSet.getInt(1));
-                entity.setCodpai(resultSet.getInt(2));
-                entity.setNomest(resultSet.getString(3));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNomest(resultSet.getString("nomest"));
             }
             entity.setNewRegister(false);
         }
@@ -52,9 +52,9 @@ public class DaoEstado extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 EstadoEntity entity = new EstadoEntity();
-                entity.setCodest(resultSet.getInt(1));
-                entity.setCodpai(resultSet.getInt(2));
-                entity.setNomest(resultSet.getString(3));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNomest(resultSet.getString("nomest"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -73,9 +73,9 @@ public class DaoEstado extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 EstadoEntity entity = new EstadoEntity();
-                entity.setCodest(resultSet.getInt(1));
-                entity.setCodpai(resultSet.getInt(2));
-                entity.setNomest(resultSet.getString(3));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setNomest(resultSet.getString("nomest"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

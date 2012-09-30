@@ -31,8 +31,8 @@ public class DaoTipofuncionario extends AbstractDao implements CrmIDao{
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodtipfun(resultSet.getInt(1));
-                entity.setNomtipfun(resultSet.getString(2));                
+                entity.setCodtipfun(resultSet.getInt("codtipfun"));
+                entity.setNomtipfun(resultSet.getString("nomtipfun"));
             }
             entity.setNewRegister(false);
         }
@@ -51,8 +51,8 @@ public class DaoTipofuncionario extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 TipoFuncionarioEntity entity = new TipoFuncionarioEntity();
-                entity.setCodtipfun(resultSet.getInt(1));
-                entity.setNomtipfun(resultSet.getString(2));
+                entity.setCodtipfun(resultSet.getInt("codtipfun"));
+                entity.setNomtipfun(resultSet.getString("nomtipfun"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -71,8 +71,8 @@ public class DaoTipofuncionario extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 TipoFuncionarioEntity entity = new TipoFuncionarioEntity();
-                entity.setCodtipfun(resultSet.getInt(1));
-                entity.setNomtipfun(resultSet.getString(2));
+                entity.setCodtipfun(resultSet.getInt("codtipfun"));
+                entity.setNomtipfun(resultSet.getString("nomtipfun"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

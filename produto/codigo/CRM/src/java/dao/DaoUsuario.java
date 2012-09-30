@@ -31,11 +31,11 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setIdusuativ(resultSet.getString(1));
-                entity.setSenusu(resultSet.getString(2));
-                entity.setCodusu(resultSet.getInt(3));
-                entity.setNomusu(resultSet.getString(4));
-                entity.setLogusu(resultSet.getString(5));
+                entity.setIdusuativ(resultSet.getString("idusuativ"));
+                entity.setSenusu(resultSet.getString("senusu"));
+                entity.setCodusu(resultSet.getInt("codusu"));
+                entity.setNomusu(resultSet.getString("nomusu"));
+                entity.setLogusu(resultSet.getString("logusu"));
             }
             entity.setNewRegister(false);
         }
@@ -54,11 +54,11 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 UsuarioEntity entity = new UsuarioEntity();
-                entity.setIdusuativ(resultSet.getString(1));
-                entity.setSenusu(resultSet.getString(2));
-                entity.setCodusu(resultSet.getInt(3));
-                entity.setNomusu(resultSet.getString(4));
-                entity.setLogusu(resultSet.getString(5));
+                entity.setIdusuativ(resultSet.getString("idusuativ"));
+                entity.setSenusu(resultSet.getString("senusu"));
+                entity.setCodusu(resultSet.getInt("codusu"));
+                entity.setNomusu(resultSet.getString("nomusu"));
+                entity.setLogusu(resultSet.getString("logusu"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -81,11 +81,11 @@ public class DaoUsuario extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 UsuarioEntity entity = new UsuarioEntity();
-                entity.setIdusuativ(resultSet.getString(1));
-                entity.setLogusu(resultSet.getString(2));
-                entity.setSenusu(resultSet.getString(3));
-                entity.setNomusu(resultSet.getString(4));
-                entity.setCodusu(resultSet.getInt(5));
+                entity.setIdusuativ(resultSet.getString("idusuativ"));
+                entity.setSenusu(resultSet.getString("senusu"));
+                entity.setCodusu(resultSet.getInt("codusu"));
+                entity.setNomusu(resultSet.getString("nomusu"));
+                entity.setLogusu(resultSet.getString("logusu"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

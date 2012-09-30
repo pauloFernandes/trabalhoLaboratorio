@@ -31,8 +31,8 @@ public class DaoConvidado extends AbstractDao implements CrmIDao{
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodcon(resultSet.getInt(1));
-                entity.setCodfun(resultSet.getInt(2));
+                entity.setCodcon(resultSet.getInt("codcon"));
+                entity.setCodfun(resultSet.getInt("codfun"));
             }
             entity.setNewRegister(false);
         }
@@ -51,8 +51,8 @@ public class DaoConvidado extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 ConvidadoEntity entity = new ConvidadoEntity();
-                entity.setCodcon(resultSet.getInt(1));
-                entity.setCodfun(resultSet.getInt(2));
+                entity.setCodcon(resultSet.getInt("codcon"));
+                entity.setCodfun(resultSet.getInt("codfun"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -71,8 +71,8 @@ public class DaoConvidado extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 ConvidadoEntity entity = new ConvidadoEntity();
-                entity.setCodcon(resultSet.getInt(1));
-                entity.setCodfun(resultSet.getInt(2));
+                entity.setCodcon(resultSet.getInt("codcon"));
+                entity.setCodfun(resultSet.getInt("codfun"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

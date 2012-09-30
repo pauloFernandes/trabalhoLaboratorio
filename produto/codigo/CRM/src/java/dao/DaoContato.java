@@ -31,13 +31,13 @@ public class DaoContato extends AbstractDao implements CrmIDao{
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodcon(resultSet.getInt(1));
-                entity.setCodcli(resultSet.getInt(2));
-                entity.setNomcon(resultSet.getString(3));
-                entity.setDatnas(resultSet.getDate(4));
-                entity.setTelcon(resultSet.getString(5));
-                entity.setCelcon(resultSet.getString(6));
-                entity.setMailcon(resultSet.getString(7));
+                entity.setCodcon(resultSet.getInt("codcon"));
+                entity.setCodcli(resultSet.getInt("codcli"));
+                entity.setNomcon(resultSet.getString("nomcon"));
+                entity.setDatnas(resultSet.getDate("datnas"));
+                entity.setTelcon(resultSet.getString("telcon"));
+                entity.setCelcon(resultSet.getString("celcon"));
+                entity.setMailcon(resultSet.getString("mailcon"));
                 
             }
             entity.setNewRegister(false);
@@ -57,13 +57,13 @@ public class DaoContato extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 ContatoEntity entity = new ContatoEntity();
-                entity.setCodcon(resultSet.getInt(1));
-                entity.setCodcli(resultSet.getInt(2));
-                entity.setNomcon(resultSet.getString(3));
-                entity.setDatnas(resultSet.getDate(4));
-                entity.setTelcon(resultSet.getString(5));
-                entity.setCelcon(resultSet.getString(6));
-                entity.setMailcon(resultSet.getString(7));
+                entity.setCodcon(resultSet.getInt("codcon"));
+                entity.setCodcli(resultSet.getInt("codcli"));
+                entity.setNomcon(resultSet.getString("nomcon"));
+                entity.setDatnas(resultSet.getDate("datnas"));
+                entity.setTelcon(resultSet.getString("telcon"));
+                entity.setCelcon(resultSet.getString("celcon"));
+                entity.setMailcon(resultSet.getString("mailcon"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -82,13 +82,13 @@ public class DaoContato extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 ContatoEntity entity = new ContatoEntity();
-                entity.setCodcon(resultSet.getInt(1));
-                entity.setCodcli(resultSet.getInt(2));
-                entity.setNomcon(resultSet.getString(3));
-                entity.setDatnas(resultSet.getDate(4));
-                entity.setTelcon(resultSet.getString(5));
-                entity.setCelcon(resultSet.getString(6));
-                entity.setMailcon(resultSet.getString(7));
+                entity.setCodcon(resultSet.getInt("codcon"));
+                entity.setCodcli(resultSet.getInt("codcli"));
+                entity.setNomcon(resultSet.getString("nomcon"));
+                entity.setDatnas(resultSet.getDate("datnas"));
+                entity.setTelcon(resultSet.getString("telcon"));
+                entity.setCelcon(resultSet.getString("celcon"));
+                entity.setMailcon(resultSet.getString("mailcon"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

@@ -31,12 +31,12 @@ public class DaoFuncionario extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodfun(resultSet.getInt(1));
-                entity.setCodusu(resultSet.getInt(2));
-                entity.setCodemp(resultSet.getInt(3));
-                entity.setCodtipfun(resultSet.getInt(4));
-                entity.setDatini(resultSet.getDate(5));
-                entity.setDatfim(resultSet.getDate(6));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodusu(resultSet.getInt("codusu"));
+                entity.setCodemp(resultSet.getInt("codemp"));
+                entity.setCodtipfun(resultSet.getInt("codtipfun"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfim(resultSet.getDate("datfim"));
             }
             entity.setNewRegister(false);
         }
@@ -55,12 +55,12 @@ public class DaoFuncionario extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 FuncionarioEntity entity = new FuncionarioEntity();
-                entity.setCodfun(resultSet.getInt(1));
-                entity.setCodusu(resultSet.getInt(2));
-                entity.setCodemp(resultSet.getInt(3));
-                entity.setCodtipfun(resultSet.getInt(4));
-                entity.setDatini(resultSet.getDate(5));
-                entity.setDatfim(resultSet.getDate(6));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodusu(resultSet.getInt("codusu"));
+                entity.setCodemp(resultSet.getInt("codemp"));
+                entity.setCodtipfun(resultSet.getInt("codtipfun"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfim(resultSet.getDate("datfim"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -79,12 +79,12 @@ public class DaoFuncionario extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 FuncionarioEntity entity = new FuncionarioEntity();
-                entity.setCodfun(resultSet.getInt(1));
-                entity.setCodusu(resultSet.getInt(2));
-                entity.setCodemp(resultSet.getInt(3));
-                entity.setCodtipfun(resultSet.getInt(4));
-                entity.setDatini(resultSet.getDate(5));
-                entity.setDatfim(resultSet.getDate(6));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodusu(resultSet.getInt("codusu"));
+                entity.setCodemp(resultSet.getInt("codemp"));
+                entity.setCodtipfun(resultSet.getInt("codtipfun"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfim(resultSet.getDate("datfim"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

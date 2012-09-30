@@ -32,17 +32,17 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setIdtipinsjur(resultSet.getString(1));
-                entity.setCodmun(resultSet.getInt(2));
-                entity.setCodest(resultSet.getInt(3));
-                entity.setNuminsjur(resultSet.getString(4));
-                entity.setNomfan(resultSet.getString(5));
-                entity.setRazsoc(resultSet.getString(6));
-                entity.setTelemp(resultSet.getString(7));
-                entity.setCodpai(resultSet.getInt(8));
-                entity.setCodemp(resultSet.getInt(9));
-                entity.setCelemp(resultSet.getString(10));
-                entity.setDesend(resultSet.getString(11));
+                entity.setIdtipinsjur(resultSet.getString("idtipinsjur"));
+                entity.setCodmun(resultSet.getInt("codmun"));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setNuminsjur(resultSet.getString("numinsjur"));
+                entity.setNomfan(resultSet.getString("nomfan"));
+                entity.setRazsoc(resultSet.getString("razsoc"));
+                entity.setTelemp(resultSet.getString("telemp"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setCodemp(resultSet.getInt("codemp"));
+                entity.setCelemp(resultSet.getString("celemp"));
+                entity.setDesend(resultSet.getString("desend"));
             }
             
             entity.setNewRegister(false);
@@ -62,17 +62,17 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 EmpresaEntity entity = new EmpresaEntity();
-                entity.setCodemp(resultSet.getInt(1));
-                entity.setIdtipinsjur(resultSet.getString(2));
-                entity.setNuminsjur(resultSet.getString(3));
-                entity.setNomfan(resultSet.getString(4));
-                entity.setRazsoc(resultSet.getString(5));
-                entity.setTelemp(resultSet.getString(6));
-                entity.setCelemp(resultSet.getString(7));
-                entity.setDesend(resultSet.getString(8));
-                entity.setCodmun(resultSet.getInt(9));
-                entity.setCodest(resultSet.getInt(10));
-                entity.setCodpai(resultSet.getInt(11));
+                entity.setIdtipinsjur(resultSet.getString("idtipinsjur"));
+                entity.setCodmun(resultSet.getInt("codmun"));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setNuminsjur(resultSet.getString("numinsjur"));
+                entity.setNomfan(resultSet.getString("nomfan"));
+                entity.setRazsoc(resultSet.getString("razsoc"));
+                entity.setTelemp(resultSet.getString("telemp"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setCodemp(resultSet.getInt("codemp"));
+                entity.setCelemp(resultSet.getString("celemp"));
+                entity.setDesend(resultSet.getString("desend"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -91,17 +91,17 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 EmpresaEntity entity = new EmpresaEntity();
-                entity.setCodemp(resultSet.getInt(1));
-                entity.setIdtipinsjur(resultSet.getString(2));
-                entity.setNuminsjur(resultSet.getString(3));
-                entity.setNomfan(resultSet.getString(4));
-                entity.setRazsoc(resultSet.getString(5));
-                entity.setTelemp(resultSet.getString(6));
-                entity.setCelemp(resultSet.getString(7));
-                entity.setDesend(resultSet.getString(8));
-                entity.setCodmun(resultSet.getInt(9));
-                entity.setCodest(resultSet.getInt(10));
-                entity.setCodpai(resultSet.getInt(11));
+                entity.setIdtipinsjur(resultSet.getString("idtipinsjur"));
+                entity.setCodmun(resultSet.getInt("codmun"));
+                entity.setCodest(resultSet.getInt("codest"));
+                entity.setNuminsjur(resultSet.getString("numinsjur"));
+                entity.setNomfan(resultSet.getString("nomfan"));
+                entity.setRazsoc(resultSet.getString("razsoc"));
+                entity.setTelemp(resultSet.getString("telemp"));
+                entity.setCodpai(resultSet.getInt("codpai"));
+                entity.setCodemp(resultSet.getInt("codemp"));
+                entity.setCelemp(resultSet.getString("celemp"));
+                entity.setDesend(resultSet.getString("desend"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

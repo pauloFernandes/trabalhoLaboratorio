@@ -31,10 +31,10 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(DaoFun_Responsavel.PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodcli(resultSet.getInt(1));
-                entity.setCodfun(resultSet.getInt(2));
-                entity.setDatini(resultSet.getDate(3));
-                entity.setDatfim(resultSet.getDate(4));
+                entity.setCodcli(resultSet.getInt("codcli"));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfim(resultSet.getDate("datfim"));
             }
             entity.setNewRegister(false);
         }
@@ -53,10 +53,10 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 Fun_ResponsavelEntity entity = new Fun_ResponsavelEntity();
-                entity.setCodcli(resultSet.getInt(1));
-                entity.setCodfun(resultSet.getInt(2));
-                entity.setDatini(resultSet.getDate(3));
-                entity.setDatfim(resultSet.getDate(4));
+                entity.setCodcli(resultSet.getInt("codcli"));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfim(resultSet.getDate("datfim"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -75,10 +75,10 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 Fun_ResponsavelEntity entity = new Fun_ResponsavelEntity();
-                entity.setCodcli(resultSet.getInt(1));
-                entity.setCodfun(resultSet.getInt(2));
-                entity.setDatini(resultSet.getDate(3));
-                entity.setDatfim(resultSet.getDate(4));
+                entity.setCodcli(resultSet.getInt("codcli"));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfim(resultSet.getDate("datfim"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

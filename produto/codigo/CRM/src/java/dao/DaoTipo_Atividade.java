@@ -31,8 +31,8 @@ public class DaoTipo_Atividade extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodtipati(resultSet.getInt(1));
-                entity.setNomtipati(resultSet.getString(2));
+                entity.setCodtipati(resultSet.getInt("codtipati"));
+                entity.setNomtipati(resultSet.getString("nomtipati"));
             }
             entity.setNewRegister(false);
         }
@@ -51,8 +51,8 @@ public class DaoTipo_Atividade extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 Tipo_AtividadeEntity entity = new Tipo_AtividadeEntity();
-                entity.setCodtipati(resultSet.getInt(1));
-                entity.setNomtipati(resultSet.getString(2));
+                entity.setCodtipati(resultSet.getInt("codtipati"));
+                entity.setNomtipati(resultSet.getString("nomtipati"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -71,8 +71,8 @@ public class DaoTipo_Atividade extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 Tipo_AtividadeEntity entity = new Tipo_AtividadeEntity();
-                entity.setCodtipati(resultSet.getInt(1));
-                entity.setNomtipati(resultSet.getString(2));
+                entity.setCodtipati(resultSet.getInt("codtipati"));
+                entity.setNomtipati(resultSet.getString("nomtipati"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

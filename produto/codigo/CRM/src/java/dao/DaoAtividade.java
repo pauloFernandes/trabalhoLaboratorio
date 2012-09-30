@@ -31,15 +31,15 @@ public class DaoAtividade extends AbstractDao implements CrmIDao{
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodati(resultSet.getInt(1));
-                entity.setNomati(resultSet.getString(2));
-                entity.setDesati(resultSet.getString(3));
-                entity.setDatini(resultSet.getDate(4));
-                entity.setDatfin(resultSet.getDate(5));
-                entity.setCodtipati(resultSet.getInt(6));
-                entity.setObsandati(resultSet.getString(7));
-                entity.setStatus(resultSet.getString(8));
-                entity.setCodfunres(resultSet.getInt(9));
+                entity.setCodati(resultSet.getInt("codati"));
+                entity.setNomati(resultSet.getString("nomati"));
+                entity.setDesati(resultSet.getString("desati"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfin(resultSet.getDate("datfin"));
+                entity.setCodtipati(resultSet.getInt("codtipati"));
+                entity.setObsandati(resultSet.getString("obsandati"));
+                entity.setStatus(resultSet.getString("status"));
+                entity.setCodfunres(resultSet.getInt("codfunres"));
             }
             entity.setNewRegister(false);
         }
@@ -58,15 +58,15 @@ public class DaoAtividade extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 AtividadeEntity entity = new AtividadeEntity();
-                entity.setCodati(resultSet.getInt(1));
-                entity.setNomati(resultSet.getString(2));
-                entity.setDesati(resultSet.getString(3));
-                entity.setDatini(resultSet.getDate(4));
-                entity.setDatfin(resultSet.getDate(5));
-                entity.setCodtipati(resultSet.getInt(6));
-                entity.setObsandati(resultSet.getString(7));
-                entity.setStatus(resultSet.getString(8));
-                entity.setCodfunres(resultSet.getInt(9));
+                entity.setCodati(resultSet.getInt("codati"));
+                entity.setNomati(resultSet.getString("nomati"));
+                entity.setDesati(resultSet.getString("desati"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfin(resultSet.getDate("datfin"));
+                entity.setCodtipati(resultSet.getInt("codtipati"));
+                entity.setObsandati(resultSet.getString("obsandati"));
+                entity.setStatus(resultSet.getString("status"));
+                entity.setCodfunres(resultSet.getInt("codfunres"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -85,15 +85,15 @@ public class DaoAtividade extends AbstractDao implements CrmIDao{
         try {
             while(resultSet.next()) {
                 AtividadeEntity entity = new AtividadeEntity();
-                entity.setCodati(resultSet.getInt(1));
-                entity.setNomati(resultSet.getString(2));
-                entity.setDesati(resultSet.getString(3));
-                entity.setDatini(resultSet.getDate(4));
-                entity.setDatfin(resultSet.getDate(5));
-                entity.setCodtipati(resultSet.getInt(6));
-                entity.setObsandati(resultSet.getString(7));
-                entity.setStatus(resultSet.getString(8));
-                entity.setCodfunres(resultSet.getInt(9));
+                entity.setCodati(resultSet.getInt("codati"));
+                entity.setNomati(resultSet.getString("nomati"));
+                entity.setDesati(resultSet.getString("desati"));
+                entity.setDatini(resultSet.getDate("datini"));
+                entity.setDatfin(resultSet.getDate("datfin"));
+                entity.setCodtipati(resultSet.getInt("codtipati"));
+                entity.setObsandati(resultSet.getString("obsandati"));
+                entity.setStatus(resultSet.getString("status"));
+                entity.setCodfunres(resultSet.getInt("codfunres"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

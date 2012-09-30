@@ -30,10 +30,10 @@ public class DaoLembrete extends AbstractDao implements CrmIDao {
         try {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
-                entity.setCodfun(resultSet.getInt(1));
-                entity.setCodati(resultSet.getInt(2));
-                entity.setIdtiplem(resultSet.getString(3));
-                entity.setDatinilem(resultSet.getDate(4));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodati(resultSet.getInt("codati"));
+                entity.setIdtiplem(resultSet.getString("idtiplem"));
+                entity.setDatinilem(resultSet.getDate("datinilem"));
             }
             entity.setNewRegister(false);
         }
@@ -52,10 +52,10 @@ public class DaoLembrete extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 LembreteEntity entity = new LembreteEntity();
-                entity.setCodfun(resultSet.getInt(1));
-                entity.setCodati(resultSet.getInt(2));
-                entity.setIdtiplem(resultSet.getString(3));
-                entity.setDatinilem(resultSet.getDate(4));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodati(resultSet.getInt("codati"));
+                entity.setIdtiplem(resultSet.getString("idtiplem"));
+                entity.setDatinilem(resultSet.getDate("datinilem"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -74,10 +74,10 @@ public class DaoLembrete extends AbstractDao implements CrmIDao {
         try {
             while(resultSet.next()) {
                 LembreteEntity entity = new LembreteEntity();
-                entity.setCodfun(resultSet.getInt(1));
-                entity.setCodati(resultSet.getInt(2));
-                entity.setIdtiplem(resultSet.getString(3));
-                entity.setDatinilem(resultSet.getDate(4));
+                entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodati(resultSet.getInt("codati"));
+                entity.setIdtiplem(resultSet.getString("idtiplem"));
+                entity.setDatinilem(resultSet.getDate("datinilem"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
