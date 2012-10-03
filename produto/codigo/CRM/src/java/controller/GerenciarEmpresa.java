@@ -18,6 +18,10 @@ import util.Util;
  * @author PauloHenrique
  */
 public class GerenciarEmpresa {
+    
+    private static final String SEPARADOR_INTERNO = "__#__";
+    private static final String SEPARADOR_EMPRESA = "####";
+    
     public List<IEntity> pesquisar(String InscricaoJuridica, String nomeFantasia, String razaoSocial) {
         BuilderEmpresa builderEmpresa = new BuilderEmpresa();
         Director director             = new Director(builderEmpresa);
@@ -67,6 +71,24 @@ public class GerenciarEmpresa {
     
     public static void alterarVendedor() {
         
+    }
+    
+    public String stringListaEmpresas() {
+        BuilderEmpresa builderEmpresa = new BuilderEmpresa();
+        Director director             = new Director(builderEmpresa);
+        director.constroiObjeto();
+        
+        DaoEmpresa daoEmpresa = (DaoEmpresa) director.getDao();
+        List<IEntity> entities  = daoEmpresa.obterTodasEntidades();
+        
+        String stringEntities = "";
+        
+        for (IEntity entity : entities) {
+            EmpresaEntity e = (EmpresaEntity) entity;
+            stringEntities += e.getCodemp() + SEPARADOR_INTERNO + e.getRazsoc() + SEPARADOR_EMPRESA;
+        }
+        
+        return stringEntities;
     }
     
     private static String montaClausulaWhere(String InscricaoJuridica, String nomeFantasia, String razaoSocial) {

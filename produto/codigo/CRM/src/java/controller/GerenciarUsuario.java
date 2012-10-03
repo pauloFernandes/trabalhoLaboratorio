@@ -30,8 +30,12 @@ public class GerenciarUsuario {
         UsuarioEntity usuarioEntity   = null;
         List<IEntity> list            = daoUsuario.obterEntidadeCondicaoWhere(where);
         usuarioEntity                 = (UsuarioEntity) list.get(0); 
+        boolean usuarioValido         = usuarioEntity.getCodusu() != 0;
+        if (usuarioValido) {
+            Ambiente.getInstance().inicializar(usuarioEntity);
+        }
         
-        return usuarioEntity.getCodusu() != 0;
+        return usuarioValido;
     }
     
     public int incluir(String nome, String login, String senha) {

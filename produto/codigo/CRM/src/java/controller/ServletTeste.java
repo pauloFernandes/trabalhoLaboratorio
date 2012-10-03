@@ -4,14 +4,18 @@
  */
 package controller;
 
-import entity.TipoFuncionarioEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import util.org.json.JSONArray;
+import util.org.json.JSONException;
+import util.org.json.JSONObject;
 
 /**
  *
@@ -34,31 +38,17 @@ public class ServletTeste extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
-        String nome = request.getParameter("NOME");
-        String login = request.getParameter("LOGIN");
-        String senha = request.getParameter("SENHA");
-        int tipoCadastro = Integer.parseInt(request.getParameter("TIPOCADASTRO"));
-        int empresaSelecionada = Integer.parseInt(request.getParameter("EMPRESASELECIONADA"));
-        String inscjur = request.getParameter("INSCJUR");
-        String nomfan = request.getParameter("NOMFAN");
-        String razsoc = request.getParameter("RAZSOC");
-        int tipoFuncioario = TipoFuncionarioEntity.FUNCIOARIO;
-
-        GerenciarUsuario gerenciarUsuario = new GerenciarUsuario();
-        int codusu = gerenciarUsuario.incluir(nome, login, senha);
-        if (tipoCadastro == 2) {
-            tipoFuncioario = TipoFuncionarioEntity.DONO;
-            GerenciarEmpresa gerenciarEmpresa = new GerenciarEmpresa();
-            // numinsjur, nomfan, razsoc
-            empresaSelecionada = gerenciarEmpresa.incluir(inscjur, nomfan, razsoc);
+        
+        JSONObject json = new JSONObject();
+        try {
+            json.put("matricula", "415823");
+            json.put("nome", "paulo henrique");
+            json.put("telefone", "33368257");
+            out.println(json);
+        } catch (JSONException ex) {
+            Logger.getLogger(ServletTeste.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        GerenciarFuncionario gerenciarFuncionario = new GerenciarFuncionario();
-        gerenciarFuncionario.incliur(codusu, empresaSelecionada, tipoFuncioario);
-        out.println("ok");
-        //----------------------------------------------------------------------
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

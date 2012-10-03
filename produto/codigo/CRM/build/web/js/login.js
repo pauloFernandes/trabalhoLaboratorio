@@ -2,36 +2,31 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-$(document).ready(function() {
+$(document).ready(function() {    
+    listaEmpresas();
     
     /**
      * Método para validação de usuario no login.
      */
     $("#entrar").click(function() {
-        login = $("#log").val();
-        senha = $("#pass").val();
-        
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/CRM/ServletTeste",
-            data: {
-                LOGIN: login,
-                SENHA: senha
-            },
-            success: function(data) {
-                alert(data);
-            }
-        });
+        login();
     });
     
-    
+    $("#radio-nova-empresa").click(function(){
+        $("#nova-empresa").css("display", "block");
+        $("#associar-empresa").css("display", "none");
+    });
+    $("#radio-associar-empresa").click(function(){
+        $("#associar-empresa").css("display", "block");
+        $("#nova-empresa").css("display", "none");
+    });
+        
     /**
      * Função para criação de novos usuários no sistema.
      */
     $("#cadatrar").click(function() {
         cadastrarFuncionario();
     });
-    
     
 });
 
@@ -52,16 +47,18 @@ function cadastrarFuncionario() {
     }
 
     if ($("#radio-nova-empresa:checked").attr("name")) {
-        tipoCadastro       = 2;
+        tipoCadastro = 2;
         inscjur      = $("#inscjur").val();
         nomfan       = $("#nomfan").val();
         razsoc       = $("#razsoc").val();
     }
     
+    
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/CRM/ServletTeste",
+        url: "http://localhost:8080/CRM/LoginServlet",
         data: {
+            TIPO_REQUISICAO: "2",
             NOME: nome,
             LOGIN: login,
             SENHA: senha,
@@ -75,5 +72,46 @@ function cadastrarFuncionario() {
             alert(data);
         }
     });
+}
+
+function listaEmpresas() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/LoginServlet",
+        data: {
+            TIPO_REQUISICAO: "3"
+        },
+        success: function(data) {
+            setListaEmpresas(data);
+        }
+    });
+}
+
+function setListaEmpresas(data) {
+    var select = $("#empresa-selecionada");
     
+    var empresas = data.split("####");
+    
+    for (var i = 0; i < empresas.length - 1; i++) {
+        var values = empresas[i].   split("__#__");
+        $(select).append("<option value='" + values[0] + "'>"+values[1]+"</option>");
+    }
+}
+
+function login() {
+    var login = $("#log").val();
+    var senha = $("#pass").val();
+        
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/LoginServlet",
+        data: {
+            TIPO_REQUISICAO: "1",
+            LOGIN: login,
+            SENHA: senha
+        },
+        success: function(data) {
+            console.log(Boolean(data));
+        }
+    });
 }

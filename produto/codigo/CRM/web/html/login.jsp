@@ -34,13 +34,24 @@
         <input type="text" class="entrada" id="login" /><br />
         <label class="rotuloGrande">Senha:</label>
         <input type="password" class="entrada" id="senha" /><br />
+        
         <input type="radio" name="radio" id="radio-nova-empresa" value="nova" checked/>
         <label for="nova">Cadastrar nova empresa:</label>
-        <input type="text" /><br />
+        <div id="nova-empresa" style="display: block">
+            <label for="inscjur" class="rotuloGrande">Inscrição Jurídica</label>
+            <input type="text" id="inscjur" class="entrada" /><br />
+            <label for="razsoc" class="rotuloGrande">Razão Social</label>
+            <input type="text" id="razsoc" class="entrada" /><br />
+            <label for="nomfan" class="rotuloGrande">Nome Fantasia</label>
+            <input type="text" id="nomfan" class="entrada" /><br />
+        </div><br />
         <input type="radio" name="radio" id="radio-associar-empresa" value="ass" />
         <label for="ass">Associar-se a empresa existente:</label>
-        <select></select><br />
-        <input type="submit" value="Cadastrar" id="cadatrar" />
+        <div id="associar-empresa" style="display: none">
+            <select id="empresa-selecionada">
+            </select>
+        </div><br />
+        <input type="button" value="Cadastrar" id="cadatrar" />
         </form>
     </div>
 

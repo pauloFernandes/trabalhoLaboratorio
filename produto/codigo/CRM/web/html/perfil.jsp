@@ -22,11 +22,11 @@
     <img alt="" class="imgUsuario" src="" />
     <img alt="" class="imgCRM" src="" />
     <input id="Button8" class="botao" type="button" value="Salvar" />
-    <input id="Button10" class="botao" type="button" value="Excluir" />
+    <!--<input id="Button10" class="botao" type="button" value="Excluir" />-->
         
     <div class="tela">
         <label class="rotuloGrande">Código:</label>
-        <input type="text" class="entrada" /><br />
+        <input type="text" class="entrada" disabled /><br />
         <label class="rotuloGrande">Nome:</label>
         <input type="text" class="entrada" /><br />
         <label class="rotuloGrande">Login:</label>
@@ -34,9 +34,7 @@
         <label class="rotuloGrande">Senha:</label>
         <input type="password" class="entrada" /><br />
         <label class="rotuloGrande">Empresa:</label>
-        <input type="text" class="entrada" />
-        <input type="button" value="Buscar" /><br />
-        <input type="text" style="width: 314px" />
+        <select id="lista-empresa" class="entrada"></select>
     </div>
 
     <div class="titulo">
