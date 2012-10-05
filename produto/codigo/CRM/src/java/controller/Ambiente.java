@@ -21,7 +21,7 @@ public class Ambiente {
     private FuncionarioEntity funcionarioEntity;
     private EmpresaEntity     empresaEntity;
     
-    public static Ambiente instance;
+    private static Ambiente instance;
     
     private Ambiente() {
     }

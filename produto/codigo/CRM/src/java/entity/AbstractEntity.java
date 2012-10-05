@@ -4,10 +4,6 @@
  */
 package entity;
 
-import dao.ArquivoExterno;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

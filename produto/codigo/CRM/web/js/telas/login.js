@@ -28,19 +28,6 @@ $(document).ready(function() {
         cadastrarFuncionario();
     });
     
-    $("#teste").click(function() {
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8080/CRM/ServletTeste",
-            data: {
-                TIPO_REQUISICAO: 1
-            },
-            success: function(data) {
-                console.log(data)
-            }
-        });
-    });
-    
 });
 
 function cadastrarFuncionario() {

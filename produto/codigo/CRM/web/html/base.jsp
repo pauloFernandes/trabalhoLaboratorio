@@ -12,6 +12,8 @@
     <script type="text/javascript" src="../js/jquery/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="../js/jquery/jquery-ui-1.8.23.custom.min.js"></script>
     <script type="text/javascript" src="../js/telas/controleTela.js"></script>
+    <script type="text/javascript" src="../js/telas/grid.js"></script>
+    <script type="text/javascript" src="../js/telas/popup.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/Site.css" />
 </head>
 <body>
@@ -31,6 +33,7 @@
     <div class="tela" id="tela"></div>
     <div class="botoes" id="botoes"></div>    
     <div class="titulo" id="titulo"></div>
+    <div id="shadow" style="display: none"></div>
     <div id="scripts-temporarios" style="display: none;"></div>
 </body>
 </html>

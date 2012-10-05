@@ -20,7 +20,7 @@ import util.Util;
  */
 public class GerenciarUsuario {
     public boolean validarLogin(String login, String senha) {
-        String where = "LOGUSU = '" + login + "' AND SENUSU = '" + senha + "'";
+        String where = "LOGUSU = '" + login + "' AND SENUSU = '" + senha + "' AND IDUSUATIV = 'A'";
         
         BuilderUsuario builderUsuario = new BuilderUsuario();
         Director director             = new Director(builderUsuario);
@@ -69,7 +69,9 @@ public class GerenciarUsuario {
         
         entity.setNomusu(nome);
         entity.setLogusu(login);
-        entity.setSenusu(senha);
+        if (!senha.isEmpty()) {
+            entity.setSenusu(senha);
+        }
         if (status.equals(UsuarioEntity.IDSITUATIV_ATIVO) || status.equals(UsuarioEntity.IDSITUATIV_INATIVO)) {
             entity.setIdusuativ(status);
         }
@@ -86,7 +88,8 @@ public class GerenciarUsuario {
         DaoUsuario daoUsuario = (DaoUsuario) director.getDao();
         UsuarioEntity entity  = (UsuarioEntity) director.getEntity();
         
-        daoUsuario.delete(entity);
+        entity.setIdusuativ(UsuarioEntity.IDSITUATIV_INATIVO);
+        daoUsuario.persist(entity);
     }
     
 }

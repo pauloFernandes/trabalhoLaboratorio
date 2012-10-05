@@ -5,9 +5,15 @@
 package controller.servlets;
 
 import controller.Ambiente;
+import controller.GerenciarEmpresa;
+import controller.GerenciarFuncionario;
+import controller.GerenciarUsuario;
 import dao.DaoEmpresa;
+import dao.DaoUsuario;
 import entity.EmpresaEntity;
+import entity.FuncionarioEntity;
 import entity.IEntity;
+import entity.TipoFuncionarioEntity;
 import entity.UsuarioEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +36,9 @@ import util.org.json.JSONObject;
 @WebServlet(name = "PerfilServlet", urlPatterns = {"/PerfilServlet"})
 public class PerfilServlet extends HttpServlet {
 
-    private static final int CARREGAR_TELA = 1;
+    private static final int CARREGAR_TELA  = 1;
+    private static final int SALVAR_PERFIL  = 2;
+    private static final int EXCLUIR_PERFIL = 3;
     
     /**
      * Processes requests for both HTTP
@@ -45,15 +53,27 @@ public class PerfilServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        PrintWriter out    = response.getWriter();
         int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
         if (tipoRequisicao == CARREGAR_TELA) {
             out.print(this.carregarTela());
+        } else if (tipoRequisicao == SALVAR_PERFIL) {
+            int codigo            = Integer.parseInt(request.getParameter("CODIGO"));
+            String nome           = request.getParameter("NOME");
+            String login          = request.getParameter("LOGIN");
+            String senha          = request.getParameter("SENHA");
+            String confirmarSenha = request.getParameter("CONFIRMAR_SENHA");
+            int empresa           = Integer.parseInt(request.getParameter("EMPRESA"));
+            
+            out.println(this.salvarPerfil(codigo, nome, login, senha, confirmarSenha, empresa));
+        } else if (tipoRequisicao == EXCLUIR_PERFIL) {
+            int codigo            = Integer.parseInt(request.getParameter("CODIGO"));
+            this.excluirPerfil(codigo);
         }
     }
     
-    public JSONObject carregarTela() {        
+    private JSONObject carregarTela() {        
         UsuarioEntity usuarioEntity = Ambiente.getInstance().getUsuarioEntity();
         EmpresaEntity empresaEntity = null;
         JSONObject jSONObject       = new JSONObject();
@@ -79,7 +99,9 @@ public class PerfilServlet extends HttpServlet {
             jSONObject.put("logusu", usuarioEntity.getLogusu());
             jSONObject.put("empresas", array);
             if (empresaEntity != null) {
-                jSONObject.put("empusu", empresaEntity.getRazsoc());
+                jSONObject.put("empusu", empresaEntity.getCodemp());
+            } else {
+                jSONObject.put("empusu", "0");
             }
         } catch (JSONException ex) {
             Logger.getLogger(PerfilServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,6 +110,47 @@ public class PerfilServlet extends HttpServlet {
         return jSONObject;
     }
 
+    private String salvarPerfil(int codigo, String nome, String login, String senha, String confirmarSenha, int empresa) {
+        UsuarioEntity usuarioEntity         = Ambiente.getInstance().getUsuarioEntity();
+        FuncionarioEntity funcionarioEntity = Ambiente.getInstance().getFuncionarioEntity();
+        
+        GerenciarUsuario gerenciarUsuario = new GerenciarUsuario();
+        String validacao = this.validaSalvarPerfil(login, senha, confirmarSenha);
+        if (validacao == null) {
+            gerenciarUsuario.editar(codigo, nome, login, senha, UsuarioEntity.IDSITUATIV_ATIVO);
+            if (funcionarioEntity == null || empresa != funcionarioEntity.getCodemp()) {
+                GerenciarFuncionario gerenciarFuncionario = new GerenciarFuncionario();
+                gerenciarFuncionario.incliur(usuarioEntity.getCodusu(), empresa, TipoFuncionarioEntity.FUNCIOARIO);
+            }
+            
+            validacao = "Usuário salvo com sucesso";
+        }
+        
+        return validacao;
+    }
+    
+    private String validaSalvarPerfil(String login, String senha, String confirmarSenha) {
+        if (!senha.equals(confirmarSenha)) {
+            return "As senhas digitadas não coincidem.";
+        }
+        
+        // Validacao de login de usuário: garante que dois usuários não tenham o mesmo login.
+        DaoUsuario daoUsuario = new DaoUsuario();
+        List<IEntity> lista = daoUsuario.obterEntidadeCondicaoWhere(" LOGUSU = '" + login +"'");
+        UsuarioEntity usuario = (UsuarioEntity) lista.get(0);
+        if (usuario.getLogusu() != null && !Ambiente.getInstance().getUsuarioEntity().getLogusu().equals(login)) {
+            return "Login já existente. Tente outro.";
+        }
+        
+        return null;
+    } 
+    
+    private void excluirPerfil(int codigo) {
+        GerenciarUsuario gerenciarUsuario = new GerenciarUsuario();
+        gerenciarUsuario.excluir(codigo);
+    }
+        
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP

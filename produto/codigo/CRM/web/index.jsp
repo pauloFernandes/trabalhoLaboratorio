@@ -54,7 +54,5 @@
                 <input type="button" value="Cadastrar" id="cadatrar" />
             </form>
         </div>
-        
-        <button id="teste">teste</button>
     </body>
 </html>

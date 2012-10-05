@@ -372,3 +372,87 @@ div.botoes {
 div.campos {
     padding-left: 30px;
 }
+
+
+#shadow {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.2;
+    filter: alpha(opacity-20);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+/*Sobre o grid*/
+table, td, th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 3px;
+        text-align: center;
+}
+
+tr {
+        background-color: #E0E0E0;
+}
+
+tr.odd {
+        background-color: #F8F8F8 ;
+}
+
+tr.table_header {
+        background-color: #888888;
+}
+
+tr.selected {
+        background-color: #B8B8B8;
+}
+
+/*Sobre os popups*/
+div.popup {
+    border: 1px solid black;
+    width: 450px;
+    height: 250px;
+    border-radius: 8px;
+    z-index: 10000;
+    left: 25%;
+    top: -20%;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+div.cabecalho-popup {
+    font-weight: bold;
+    background-color: #BEBEBE;
+    border-radius: 4px;
+    color: #696969;
+    padding: 2px;
+    position: absolute;	
+    width: 99%;
+    left: 0.8px;
+    z-index: 2;
+}
+
+div.titulo-popup {
+    float: left;	
+    width: 90%;
+}
+
+div.botao-fechar{
+    float: right;
+    padding-right: 4px;
+}
+
+div.corpo-popup {
+    position: absolute;
+    width: 97.8%;
+    height: 88%;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: #F9F9F9;
+    top: 8%;
+    border-radius: 6px;
+    z-index: 1;
+}
