@@ -2,8 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-$("exibir-historico").click(function() {
-    alert("exibir-historico");
+$("exibir-historico").live("click", function() {
+    alert("exibir historico");
 });
 
 $("#novo").click(function() {

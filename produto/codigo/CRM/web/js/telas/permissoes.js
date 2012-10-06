@@ -6,7 +6,6 @@ $("#pesquisar").click(function() {
 $("#aprovar-vinculo").click(function() {
     var codusu   = $("tr.selected").find("td.nome").attr("id");
     var confirma = confirm("Confirma Aprovação de Vínculo?");
-    
     if (confirma) {
         $.ajax({
             type: "POST",
@@ -25,11 +24,35 @@ $("#aprovar-vinculo").click(function() {
 });
 
 $("#reprovar-vinculo").click(function() {
-    alert("reprovar-vinculo");
+    var codusu   = $("tr.selected").find("td.nome").attr("id");
+    var confirma = confirm("Reprovar de Vínculo?");
+    
+    if (confirma) {
+        
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/CRM/PermissoesServlet",
+            data: {
+                CODUSU: codusu,
+                TIPO_REQUISICAO: 4
+            },
+            success: function() {
+                alert("Permissão recusada.");
+                $("tbody").html("");
+                inicializaGridPermissao();
+            }
+        });
+    }
 });
 
 $("#atribuir-permissao").click(function() {
-    alert("atribuir-permissao");
+    var datini   = $("tr.selected").find("td.datini").html();  
+    
+    if (datini == " - ") {
+        alert("Somente é possível atribuir permissões a funcionários aprovados.");
+    } else {
+        $("#popup-atribuir-permissao").css("display", "block");
+    }
 });
 
 $("#popup-pesquisar").click(function() {
@@ -69,6 +92,37 @@ $("#popup-pesquisar").click(function() {
             
             $("#shadow").css("display", "none");
             $("div.popup").css("display", "none");
+        }
+    });
+});
+
+/*
+ * @todo verificar o metodo de verificacao do tipo de funciario.
+ **/
+$("#popup-pesquisar").live("click", function() {
+    var codusu   = $("tr.selected").find("td.nome").attr("id");
+    var tipoFuncionario = 0;
+    
+    if ($("#popup-opcao-funcionario").attr("checked")) {
+        console.log("funcionario");
+        tipoFuncionario = 1;
+    } else {
+        tipoFuncionario = 2;
+    }
+    
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/PermissoesServlet",
+        data: {
+            TIPO_REQUISICAO: 5,
+            CODUSU: codusu,
+            TIPO_FUNCIONARIO: tipoFuncionario
+        },
+        success: function() {
+            alert("Registro salvo com sucesso.");
+            $("#popup-atribuir-permissao").css("display", "none");
+            $("tbody").html("");
+            inicializaGridPermissao();
         }
     });
 });

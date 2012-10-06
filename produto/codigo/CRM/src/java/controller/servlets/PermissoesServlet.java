@@ -5,11 +5,9 @@
 package controller.servlets;
 
 import controller.Ambiente;
-import controller.GerenciarFuncionario;
 import dao.DaoFuncionario;
 import entity.FuncionarioEntity;
 import entity.IEntity;
-import entity.TipoFuncionarioEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -36,9 +34,11 @@ import util.org.json.JSONObject;
 @WebServlet(name = "PermissoesServlet", urlPatterns = {"/PermissoesServlet"})
 public class PermissoesServlet extends HttpServlet {
 
-    private static final int INICIALIZA_TELA = 1;
-    private static final int FILTRAR_TELA    = 2;
-    private static final int APROVAR_VINCULO = 3;
+    private static final int INICIALIZA_TELA    = 1;
+    private static final int FILTRAR_TELA       = 2;
+    private static final int APROVAR_VINCULO    = 3;
+    private static final int REPROVAR_VINCULO   = 4;
+    private static final int ATRIBUIR_PERMISSAO = 5;
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -53,24 +53,29 @@ public class PermissoesServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        int TIPO_REQUISICAO = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
+        int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
-        if (TIPO_REQUISICAO == INICIALIZA_TELA) {
+        if (tipoRequisicao == INICIALIZA_TELA) {
             out.print(this.obterTodosItensPermissao());
-        } else if (TIPO_REQUISICAO == FILTRAR_TELA) {
+        } else if (tipoRequisicao == FILTRAR_TELA) {
             String nome         = request.getParameter("NOME");
             String datini       = request.getParameter("DATINI");
             String datfim       = request.getParameter("DATFIM");
             String solicitante  = request.getParameter("SOLICITANTE");
             
             out.print(this.obterTodosItensPermissao(nome, datini, datfim, solicitante));
-        } else if (TIPO_REQUISICAO == APROVAR_VINCULO) {
+        } else if (tipoRequisicao == APROVAR_VINCULO) {
             int codusu = Integer.parseInt(request.getParameter("CODUSU"));
             this.aprovarVinculo(codusu);
+        } else if (tipoRequisicao == REPROVAR_VINCULO) {
+            int codusu = Integer.parseInt(request.getParameter("CODUSU"));
+            this.reporvarVinculo(codusu);
+        } else if (tipoRequisicao == ATRIBUIR_PERMISSAO) {
+            int codusu          = Integer.parseInt(request.getParameter("CODUSU"));
+            int tipoFuncionario = Integer.parseInt(request.getParameter("TIPO_FUNCIONARIO"));
+            this.atribuirPermissao(codusu, tipoFuncionario);
         }
     }
-    
-    
     
     private JSONObject obterTodosItensPermissao() {
         ResultSet resultSet = Funcionario.obterTodosItensPermissao();
@@ -130,6 +135,22 @@ public class PermissoesServlet extends HttpServlet {
         sql = "CODUSU = " + codusu + " AND CODEMP = " + Ambiente.getInstance().getEmpresaEntity().getCodemp();
         FuncionarioEntity funcionarioEntity = (FuncionarioEntity) daoFuncionario.obterEntidadeCondicaoWhere(sql).get(0);
         funcionarioEntity.setDatini(new Date());
+        daoFuncionario.persist(funcionarioEntity);
+    }
+    
+    private void reporvarVinculo(int codusu) {
+        DaoFuncionario daoFuncionario = new DaoFuncionario();
+        String sql = "CODUSU = " + codusu + " AND CODEMP = " + Ambiente.getInstance().getEmpresaEntity().getCodemp();
+        FuncionarioEntity funcionarioEntity = (FuncionarioEntity) daoFuncionario.obterEntidadeCondicaoWhere(sql).get(0);
+        daoFuncionario.delete(funcionarioEntity);
+    }
+    
+    private void atribuirPermissao(int codusu, int tipoFuncioario) {
+        String where = "CODUSU = " + codusu + " AND CODEMP = " + Ambiente.getInstance().getEmpresaEntity().getCodemp() ;
+        DaoFuncionario daoFuncionario = new DaoFuncionario();
+        FuncionarioEntity funcionarioEntity = (FuncionarioEntity) daoFuncionario.obterEntidadeCondicaoWhere(where).get(0);
+        
+        funcionarioEntity.setCodtipfun(tipoFuncioario);
         daoFuncionario.persist(funcionarioEntity);
     }
     

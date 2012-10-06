@@ -78,6 +78,19 @@ TelaPermissoes = {
             "		<input type='checkbox' id='popup-solicitante'><br><br>" + 
             "		<input type='button' id='popup-pesquisar' value='pesquisar'>" + 
             "	</div>" + 
+            " </div>" + 
+            " <div class='popup' id='popup-atribuir-permissao' style='display: none'>" + 
+            " 	<div class='cabecalho-popup'>" + 
+            " 		<div class='titulo-popup'>Atribuir Permissão</div>" + 
+            "		<div class='botao-fechar'><img src='../imagens/close.png'></div>" + 
+            "	</div>" + 
+            "	<div class='corpo-popup'>" + 
+            "	    <input type='radio' name='tipo-funcionario' id='popup-opcao-funcionario' checked>" + 
+            "	    <label for='popup-opcao-funcionario'>Funcionário</label><br>" + 
+            "	    <input type='radio' name='tipo-funcionario' id='popup-opcao-administrador'>" + 
+            "	    <label for='popup-opcao-administrador'>Administrador</label><br><br>" + 
+            "	    <input type='button' id='popup-pesquisar' value='pesquisar'>" + 
+            "	</div>" + 
             "</div>"
 };
 
@@ -86,25 +99,23 @@ TelaEmpresa = {
 	botoes: "<input id='salvar' class='botao' type='button' value='Salvar'> " +
 		"<input id='excluir' class='botao' type='button' value='Excluir'>",
 	titulo: "EMPRESA",
-	tela: "<label class='rotuloGrande'>Código do cliente:</label> " + 
-			"<input type='text' class='entrada'> " + 
-			"<label class='rotuloGrandeDireita'>Código da empresa:</label> " + 
-			"<input type='text' class='entrada'><br> " + 
-			"<label class='rotuloGrande'>Inscrição Jurídica:</label> " + 
-			"<input type='text' class='entrada'><br> " + 
-			"<label class='rotuloGrande'>Nome Fantasia:</label> " + 
-			"<input type='text' class='entrada'> " + 
-			"<label class='rotuloGrandeDireita'>Razão Social:</label> " + 
-			"<input type='text' class='entrada'><br> " + 
-			"<label class='rotuloGrande'>Telefone:</label> " + 
-			"<input type='text' class='entrada'> " + 
-			"<label class='rotuloGrandeDireita'>Celular:</label> " + 
-			"<input type='text' class='entrada'>" 
+	tela: "<label class='rotuloGrandeDireita'>Código da empresa:</label> " + 
+            "<input type='text' class='entrada' id='codemp' disabled><br> " + 
+            "<label class='rotuloGrande'>Inscrição Jurídica:</label> " + 
+            "<input type='text' class='entrada' id='insjur' disabled><br> " + 
+            "<label class='rotuloGrande'>Nome Fantasia:</label> " + 
+            "<input type='text' class='entrada' id='nomfan'> " + 
+            "<label class='rotuloGrandeDireita'>Razão Social:</label> " + 
+            "<input type='text' class='entrada' id='razsoc'><br> " + 
+            "<label class='rotuloGrande'>Telefone:</label> " + 
+            "<input type='text' class='entrada' id='telemp'> " + 
+            "<label class='rotuloGrandeDireita'>Celular:</label> " + 
+            "<input type='text' class='entrada' id='celemp'>" 
 };
 
 TelaClienteGrid = {
         scripts: "<script type='text/javascript' src='../js/telas/cliente.js'></script>",
-	botoes: "<input id='exibir-historico' class='botao' type='button' value='Histórico de vendedores'>" + 
+	botoes: "<input id='exibir-historico' class='botaoConvite' type='button' value='Histórico de vendedores'>" + 
 		"<input id='novo' class='botao' type='button' value='Novo'>" + 
 		"<input id='pesquisar' class='botao' type='button' value='Pesquisar'>" + 
 		"<input id='salvar' class='botao' type='button' value='Salvar'>" + 
@@ -201,35 +212,37 @@ TelaAtividadeForm = {
 
 $(document).ready(function() {
 	$("#perfil").click(function() {	
-		controlador = new ControleTela();
-		esquema     = controlador.getEsquemaTela(1);
-		setEsquema(esquema);
-                InicializaPerfil();
+            controlador = new ControleTela();
+            esquema     = controlador.getEsquemaTela(1);
+            setEsquema(esquema);
+            InicializaPerfil();
 	});
 	
 	$("#permissao").click(function() {
-		controlador = new ControleTela();
-		esquema     = controlador.getEsquemaTela(2);
-		setEsquema(esquema);
-                inicializaGridPermissao();
+            controlador = new ControleTela();
+            esquema     = controlador.getEsquemaTela(2);
+            setEsquema(esquema);
+            inicializaGridPermissao();
 	});
 	
 	$("#empresa").click(function() {
-		controlador = new ControleTela();
-		esquema     = controlador.getEsquemaTela(3);
-		setEsquema(esquema);
+            controlador = new ControleTela();
+            esquema     = controlador.getEsquemaTela(3);
+            setEsquema(esquema);
+            inicializarEmpresa();
 	});
 	
 	$("#cliente").click(function() {
-		controlador = new ControleTela();
-		esquema     = controlador.getEsquemaTela(4);
-		setEsquema(esquema);
+            controlador = new ControleTela();
+            esquema     = controlador.getEsquemaTela(4);
+            setEsquema(esquema);
+            inicializaClienteGrid();
 	});
 	
 	$("#atividade").click(function() {
-		controlador = new ControleTela();
-		esquema     = controlador.getEsquemaTela(5);
-		setEsquema(esquema);
+            controlador = new ControleTela();
+            esquema     = controlador.getEsquemaTela(5);
+            setEsquema(esquema);
 	});	
 });
 
@@ -292,6 +305,54 @@ function inicializaGridPermissao() {
                 linha = linha.replace("undefined", " - ");
                 $("tbody").append(linha);
             }
+        }
+    });
+}
+
+function inicializarEmpresa() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarEmpresa",
+        data: {
+            TIPO_REQUISICAO: 1
+        },
+        success: function(data) {
+            data = JSON.parse(data);     
+            $("#codemp").val(data.codemp);
+            $("#insjur").val(data.insjur);
+            $("#nomfan").val(data.nomfan);
+            $("#razsoc").val(data.razsoc);
+            $("#telemp").val(data.telemp);
+            $("#celemp").val(data.celemp);
+        }
+    });
+}
+
+function inicializaClienteGrid() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarClientes",
+        data: {
+            TIPO_REQUISICAO: 1
+        },
+        success: function(data) {
+            data = JSON.parse(data);
+            console.log(data);
+//            for (var i = 0; i < data.permissoes.length; i++) {
+//                var linhaId    = i+1;
+//                var linhaClass = ((i+1)%2==1) ? "odd" : null;
+//                if (i === 0) linhaClass += " selected";
+//                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
+//                            "   <td class='nome' id='" + data.permissoes[i].codusu + "'>" + data.permissoes[i].nome + "</td>" + 
+//                            "   <td class='tipo'>" + data.permissoes[i].tipo + "</td>" + 
+//                            "   <td class='solicitante'>" + data.permissoes[i].solicitante + "</td>" + 
+//                            "   <td class='datini'>" + data.permissoes[i].datini + "</td>" + 
+//                            "   <td class='datfim'>" + data.permissoes[i].datfim + "</td>" + 
+//                            "</tr>";
+//                linha = linha.replace("undefined", " - ");
+//                linha = linha.replace("undefined", " - ");
+//                $("tbody").append(linha);
+//            }
         }
     });
 }
