@@ -82,4 +82,20 @@ public class Funcionario {
         
         return null;        
     }
+    
+    public static ResultSet obterTodosVendedores(int codemp) {
+        String sql = "SELECT F.CODFUN, U.NOMUSU " + 
+                        " FROM FUNCIONARIO F, USUARIO U " + 
+                        " WHERE F.CODUSU = U.CODUSU " + 
+                          " AND F.CODEMP =  " + codemp +  
+                          " AND F.DATINI IS NOT NULL " + 
+                          " AND F.DATFIM IS NULL";
+        try {
+            return DbStatement.select(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
 }

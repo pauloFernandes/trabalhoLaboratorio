@@ -30,6 +30,7 @@
     <img alt="" class="imgUsuario" src="" />
     <img alt="" class="imgCRM" src="" />
     
+    <div id="identificador-tela" style="display: none"></div>
     <div class="tela" id="tela"></div>
     <div class="botoes" id="botoes"></div>    
     <div class="titulo" id="titulo"></div>

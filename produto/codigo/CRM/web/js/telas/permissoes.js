@@ -99,7 +99,7 @@ $("#popup-pesquisar").click(function() {
 /*
  * @todo verificar o metodo de verificacao do tipo de funciario.
  **/
-$("#popup-pesquisar").live("click", function() {
+$("#popup-ok").live("click", function() {
     var codusu   = $("tr.selected").find("td.nome").attr("id");
     var tipoFuncionario = 0;
     
@@ -118,7 +118,7 @@ $("#popup-pesquisar").live("click", function() {
             CODUSU: codusu,
             TIPO_FUNCIONARIO: tipoFuncionario
         },
-        success: function() {
+        success: function(data) {
             alert("Registro salvo com sucesso.");
             $("#popup-atribuir-permissao").css("display", "none");
             $("tbody").html("");

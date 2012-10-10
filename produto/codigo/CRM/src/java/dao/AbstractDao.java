@@ -43,7 +43,7 @@ public abstract class AbstractDao {
                 this.update(entidade);
             }
         } catch (SQLException e) {
-            Logger.getLogger(DaoPais.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(DaoAtividade.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     

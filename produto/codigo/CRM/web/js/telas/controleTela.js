@@ -1,4 +1,6 @@
-    ControleTela = function() {
+/*@todo verificar quais botoes nao sao necessarios em determinadas telas.*/
+
+ControleTela = function() {
     this.getEsquemaTela = function(esquema) {
         switch (esquema) {
             case 1: 
@@ -21,6 +23,7 @@
 }
 
 TelaPerfil = {
+    idTela: "tela-perfil",
     scripts: "<script type='text/javascript' src='../js/telas/perfil.js'></script>",
     botoes: "<input id='salvar' class='botao' type='button' value='Salvar'>" + 
 	        "<input id='excluir' class='botao' type='button' value='Excluir'>",
@@ -39,10 +42,8 @@ TelaPerfil = {
           "<select id='lista-empresa' class='entrada' id='empresas'></select>"
 };
 
-/*
- * @todo: no campo de tela devem ser feitos os popups de pesquisa e atribuicao de permissão.
- */
 TelaPermissoes = {
+        idTela: "tela-permissoes",
         scripts: "<script type='text/javascript' src='../js/telas/permissoes.js'></script>",
 	botoes: "<input id='pesquisar' class='botao' type='button' value='Pesquisar'> " +
 			 "<input id='aprovar-vinculo' class='botao' type='button' value='Aprovar Vínculo'> " +
@@ -89,12 +90,13 @@ TelaPermissoes = {
             "	    <label for='popup-opcao-funcionario'>Funcionário</label><br>" + 
             "	    <input type='radio' name='tipo-funcionario' id='popup-opcao-administrador'>" + 
             "	    <label for='popup-opcao-administrador'>Administrador</label><br><br>" + 
-            "	    <input type='button' id='popup-pesquisar' value='pesquisar'>" + 
+            "	    <input type='button' id='popup-ok' value='Ok'>" + 
             "	</div>" + 
             "</div>"
 };
 
 TelaEmpresa = {
+        idTela: "tela-empresa",
         scripts: "<script type='text/javascript' src='../js/telas/empresa.js'></script>",
 	botoes: "<input id='salvar' class='botao' type='button' value='Salvar'> " +
 		"<input id='excluir' class='botao' type='button' value='Excluir'>",
@@ -113,7 +115,46 @@ TelaEmpresa = {
             "<input type='text' class='entrada' id='celemp'>" 
 };
 
+popupHistoricoVendedores = " <div class='popup' id='popup-historico-vendedores' style='display: none'>" + 
+            " 	<div class='cabecalho-popup'>" + 
+            " 		<div class='titulo-popup'>Histórico de Vendedores</div>" + 
+            "		<div class='botao-fechar'><img src='../imagens/close.png'></div>" + 
+            "	</div>" + 
+            "	<div class='corpo-popup'>" + 
+            "		<table class='tabelaResultado'> " + 
+            "               <thead> " + 
+            "                   <tr> " + 
+            "                       <th>Vendedor</th> " + 
+            "                       <th>Início de vigência</th> " + 
+            "                       <th>Fim de vigência</th> " + 
+            "                   </tr> " +
+            "               </thead> " + 
+            "               <tbody id='body-historico-vendedores'> " + 
+            "               </tbody> " + 
+            "           </table> " + 
+            "	</div>" + 
+            " </div>";
+        
+popupPesquisaVendedores = " <div class='popup' id='popup-pesquisa' style='display: none'>" + 
+            " 	<div class='cabecalho-popup'>" + 
+            " 		<div class='titulo-popup'>Pesquisar</div>" + 
+            "		<div class='botao-fechar'><img src='../imagens/close.png'></div>" + 
+            "	</div>" + 
+            "	<div class='corpo-popup'>" + 
+            "		<label for='popup-nomfan'>Nome Fantasia</label><br>" + 
+            "		<input type='text' id='popup-nomfan'><br>" + 
+            "		<label for='popup-razsoc'>Razão Social</label><br>" + 
+            "		<input type='text' id='popup-razsoc'><br>" + 
+            "		<label for='popup-inscjur'>Inscrição Jurídica</label><br>" + 
+            "		<input type='text' id='popup-inscjur'><br>" + 
+            "		<label for='popup-nomven'>Vendedor</label><br>" + 
+            "		<input type='text' id='popup-nomven'><br>" + 
+            "		<input type='button' id='popup-botao-pesquisar' value='Pesquisar'><br>" + 
+            "	</div>" + 
+            " </div>";
+
 TelaClienteGrid = {
+        idTela: "tela-cliente-grid",
         scripts: "<script type='text/javascript' src='../js/telas/cliente.js'></script>",
 	botoes: "<input id='exibir-historico' class='botaoConvite' type='button' value='Histórico de vendedores'>" + 
 		"<input id='novo' class='botao' type='button' value='Novo'>" + 
@@ -129,35 +170,45 @@ TelaClienteGrid = {
 			"		<th>Razão social</th> " + 
 			"		<th>Inscrição Jurídica</th> " + 
 			"		<th>Vendedor atual</th> " + 
+                        "		<th>Telefone</th> " + 
+                        "		<th>Celular</th> " + 
 			"	</tr> " + 
 			"</thead> " + 
 			"<tbody> " + 
 			"</tbody> " + 
-		"</table>"
+		"</table>" + popupHistoricoVendedores + popupPesquisaVendedores
 };
 
 TelaClienteForm = {
+        idTela: "tela-cliente-form",
         scripts: "<script type='text/javascript' src='../js/telas/cliente.js'></script>",
-	botoes: "<input id='exibir-historico' class='botao' type='button' value='Histórico de vendedores'>" + 
+	botoes: "<input id='exibir-historico' class='botaoConvite' type='button' value='Histórico de vendedores'>" + 
 		"<input id='novo' class='botao' type='button' value='Novo'>" + 
 		"<input id='pesquisar' class='botao' type='button' value='Pesquisar'>" + 
 		"<input id='salvar' class='botao' type='button' value='Salvar'>" + 
 		"<input id='editar' class='botao' type='button' value='Editar'>" + 
 		"<input id='excluir' class='botao' type='button' value='Excluir'>",
 	titulo: "CLIENTE",
-	tela: "<label class='rotuloGrande'>Código:</label> " + 
-		  "<input type='text' class='entrada' disabled=''><br> " + 
-		  "<label class='rotuloGrande'>Nome:</label> " + 
-		  "<input type='text' class='entrada'><br> " + 
-		  "<label class='rotuloGrande'>Login:</label> " + 
-		  "<input type='text' class='entrada'><br> " + 
-		  "<label class='rotuloGrande'>Senha:</label> " + 
-		  "<input type='password' class='entrada'><br> " + 
-		  "<label class='rotuloGrande'>Empresa:</label> " + 
-		  "<select id='lista-empresa' class='entrada'></select>"
+	tela: "<label for='codcli' class='rotuloGrande'>Código:</label> " + 
+              "<input type='text' class='entrada' id='codcli' disabled=''><br> " + 
+              "<label  for='nomfan' class='rotuloGrande'>Nome Fantasia:</label> " + 
+              "<input type='text' class='entrada' id='nomfan'><br> " + 
+              "<label  for='razsoc' class='rotuloGrande'>Razão Social:</label> " + 
+              "<input type='text' class='entrada' id='razsoc'><br> " + 
+              "<label  for='insjur' class='rotuloGrande'>Inscrição Jurídica:</label> " + 
+              "<input type='text' class='entrada' id='insjur'><br> " + 
+              "<label  for='telemp' class='rotuloGrande'>Telefone:</label> " + 
+              "<input type='text' class='entrada' id='telemp'><br> " + 
+              "<label  for='celemp' class='rotuloGrande'>Celular:</label> " + 
+              "<input type='text' class='entrada' id='celemp'><br> " + 
+              "<label  for='lista-vendedores' class='rotuloGrande'>Vendedor Responsável:</label> " + 
+              "<select id='lista-vendedores'></select> " + 
+                  popupHistoricoVendedores + 
+                  popupPesquisaVendedores
 };
 
 TelaAtividadeGrid = {
+        idTela: "tela-atividade-grid",
         scripts: "<script type='text/javascript' src='../js/telas/atividade.js'></script>",
 	botoes: "<input id='cadastrar-convite' class='botaoConvite' type='button' value='Cadastrar Convites'> " +
                 "<input id='novo' class='botao' type='button' value='Novo'> " +
@@ -182,6 +233,7 @@ TelaAtividadeGrid = {
 };
 
 TelaAtividadeForm = {
+        idTela: "tela-atividade-form",
         scripts: "<script type='text/javascript' src='../js/telas/atividade.js'></script>",
 	botoes: "<input id='cadastrar-convite' class='botaoConvite' type='button' value='Cadastrar Convites'> " +
 			"<input id='novo' class='botao' type='button' value='Novo'> " +
@@ -247,10 +299,11 @@ $(document).ready(function() {
 });
 
 function setEsquema(esquema) {
-	$("#titulo").html(esquema.titulo);
-	$("#botoes").html(esquema.botoes);
-	$("#tela").html(esquema.tela);
-        $("#scripts-temporarios").html(esquema.scripts);
+    $("#identificador-tela").html(esquema.idTela);
+    $("#titulo").html(esquema.titulo);
+    $("#botoes").html(esquema.botoes);
+    $("#tela").html(esquema.tela);
+    $("#scripts-temporarios").html(esquema.scripts);
 }
 
 function InicializaPerfil() {
@@ -261,7 +314,7 @@ function InicializaPerfil() {
             TIPO_REQUISICAO: 1
         },
         success: function(data) {
-            data = JSON.parse(data);     
+            data = JSON.parse(data);
             // Insersao dos dados do usuario.
             $("#codigo").val(data.codusu);
             $("#nome").val(data.nomusu);
@@ -337,22 +390,22 @@ function inicializaClienteGrid() {
         },
         success: function(data) {
             data = JSON.parse(data);
-            console.log(data);
-//            for (var i = 0; i < data.permissoes.length; i++) {
-//                var linhaId    = i+1;
-//                var linhaClass = ((i+1)%2==1) ? "odd" : null;
-//                if (i === 0) linhaClass += " selected";
-//                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
-//                            "   <td class='nome' id='" + data.permissoes[i].codusu + "'>" + data.permissoes[i].nome + "</td>" + 
-//                            "   <td class='tipo'>" + data.permissoes[i].tipo + "</td>" + 
-//                            "   <td class='solicitante'>" + data.permissoes[i].solicitante + "</td>" + 
-//                            "   <td class='datini'>" + data.permissoes[i].datini + "</td>" + 
-//                            "   <td class='datfim'>" + data.permissoes[i].datfim + "</td>" + 
-//                            "</tr>";
-//                linha = linha.replace("undefined", " - ");
-//                linha = linha.replace("undefined", " - ");
-//                $("tbody").append(linha);
-//            }
+            for (var i = 0; i < data.clientes.length; i++) {
+                var linhaId    = i+1;
+                var linhaClass = ((i+1)%2==1) ? "odd" : null;
+                if (i === 0) linhaClass += " selected";
+                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
+                            "   <td class='nomfan' id='" + data.clientes[i].codcli + "'>" + data.clientes[i].nomfan + "</td>" + 
+                            "   <td class='razsoc'>" + data.clientes[i].razsoc + "</td>" + 
+                            "   <td class='numinsjur'>" + data.clientes[i].numinsjur + "</td>" + 
+                            "   <td class='nomven' codven='" + data.clientes[i].codven  + "'>" + data.clientes[i].nomven + "</td>" + 
+                            "   <td class='telemp'>" + data.clientes[i].telemp + "</td>" + 
+                            "   <td class='celemp'>" + data.clientes[i].celemp + "</td>" + 
+                            "</tr>";
+                linha = linha.replace("undefined", " - ");
+                linha = linha.replace("undefined", " - ");
+                $("tbody").append(linha);
+            }
         }
     });
 }

@@ -33,13 +33,10 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
             ResultSet resultSet = super.getEntityById(PKS, valorPks);
             while(resultSet.next()) {
                 entity.setIdtipinsjur(resultSet.getString("idtipinsjur"));
-                entity.setCodmun(resultSet.getInt("codmun"));
-                entity.setCodest(resultSet.getInt("codest"));
                 entity.setNuminsjur(resultSet.getString("numinsjur"));
                 entity.setNomfan(resultSet.getString("nomfan"));
                 entity.setRazsoc(resultSet.getString("razsoc"));
                 entity.setTelemp(resultSet.getString("telemp"));
-                entity.setCodpai(resultSet.getInt("codpai"));
                 entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setCelemp(resultSet.getString("celemp"));
                 entity.setDesend(resultSet.getString("desend"));
@@ -63,13 +60,10 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
             while(resultSet.next()) {
                 EmpresaEntity entity = new EmpresaEntity();
                 entity.setIdtipinsjur(resultSet.getString("idtipinsjur"));
-                entity.setCodmun(resultSet.getInt("codmun"));
-                entity.setCodest(resultSet.getInt("codest"));
                 entity.setNuminsjur(resultSet.getString("numinsjur"));
                 entity.setNomfan(resultSet.getString("nomfan"));
                 entity.setRazsoc(resultSet.getString("razsoc"));
                 entity.setTelemp(resultSet.getString("telemp"));
-                entity.setCodpai(resultSet.getInt("codpai"));
                 entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setCelemp(resultSet.getString("celemp"));
                 entity.setDesend(resultSet.getString("desend"));
@@ -92,13 +86,10 @@ public class DaoEmpresa extends AbstractDao implements CrmIDao {
             while(resultSet.next()) {
                 EmpresaEntity entity = new EmpresaEntity();
                 entity.setIdtipinsjur(resultSet.getString("idtipinsjur"));
-                entity.setCodmun(resultSet.getInt("codmun"));
-                entity.setCodest(resultSet.getInt("codest"));
                 entity.setNuminsjur(resultSet.getString("numinsjur"));
                 entity.setNomfan(resultSet.getString("nomfan"));
                 entity.setRazsoc(resultSet.getString("razsoc"));
                 entity.setTelemp(resultSet.getString("telemp"));
-                entity.setCodpai(resultSet.getInt("codpai"));
                 entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setCelemp(resultSet.getString("celemp"));
                 entity.setDesend(resultSet.getString("desend"));

@@ -17,9 +17,6 @@ public class EmpresaEntity extends AbstractEntity {
     private String telemp;
     private String celemp;
     private String desend;
-    private int codmun;
-    private int codest;
-    private int codpai;
 
     public static final String IDTIPINSJUR_FISICA   = "F";
     public static final String IDTIPINSJUR_JURIDICA = "J";
@@ -87,30 +84,5 @@ public class EmpresaEntity extends AbstractEntity {
     public void setDesend(String desend) {
         this.desend = desend;
     }
-
-    public int getCodmun() {
-        return codmun;
-    }
-
-    public void setCodmun(int codmun) {
-        this.codmun = codmun;
-    }
-
-    public int getCodest() {
-        return codest;
-    }
-
-    public void setCodest(int codest) {
-        this.codest = codest;
-    }
-
-    public int getCodpai() {
-        return codpai;
-    }
-
-    public void setCodpai(int codpai) {
-        this.codpai = codpai;
-    }
-    
     
 }

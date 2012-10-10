@@ -53,9 +53,6 @@ public class GerenciarEmpresa {
         entity.setNuminsjur(numinsjur);
         entity.setNomfan(nomfan);
         entity.setRazsoc(razsoc);
-        entity.setCodmun(1);
-        entity.setCodest(1);
-        entity.setCodpai(1);
         receptor.call("incluir", entity);
         
         return codemp;

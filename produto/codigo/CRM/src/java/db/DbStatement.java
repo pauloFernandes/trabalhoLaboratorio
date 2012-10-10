@@ -4,12 +4,9 @@
  */
 package db;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -23,7 +20,8 @@ public class DbStatement {
             Statement statement = DbConnect.getConnection().createStatement();
             return statement.executeQuery(query);
         } catch (SQLException e) {
-            e.getMessage();
+            String error = e.getMessage();
+            error = "";
         }
         return null;
     }

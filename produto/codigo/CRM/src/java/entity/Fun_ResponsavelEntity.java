@@ -13,6 +13,7 @@ import java.util.Date;
 public class Fun_ResponsavelEntity extends AbstractEntity {
     private int codcli;
     private int codfun;
+    private int codemp;
     private Date datini;
     private Date datfim;
 
@@ -36,6 +37,14 @@ public class Fun_ResponsavelEntity extends AbstractEntity {
         return datini;
     }
 
+    public int getCodemp() {
+        return codemp;
+    }
+
+    public void setCodemp(int codemp) {
+        this.codemp = codemp;
+    }
+
     public void setDatini(Date datini) {
         this.datini = datini;
     }
@@ -47,6 +56,5 @@ public class Fun_ResponsavelEntity extends AbstractEntity {
     public void setDatfim(Date datfim) {
         this.datfim = datfim;
     }
-    
     
 }

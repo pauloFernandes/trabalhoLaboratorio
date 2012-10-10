@@ -46,20 +46,11 @@ public class DaoFactory {
             case DaoFactory.EMPRESA:
                 daoInstance = new DaoEmpresa();
                 break;
-            case DaoFactory.ESTADO:
-                daoInstance = new DaoEstado();
-                break;
             case DaoFactory.FUNCIONARIO:
                 daoInstance = new DaoFuncionario();
                 break;
             case DaoFactory.FUN_RESPONSAVEL:
                 daoInstance = new DaoFun_Responsavel();
-                break;
-            case DaoFactory.MUNICIPIO:
-                daoInstance = new DaoMunicipio();
-                break;
-            case DaoFactory.PAIS:
-                daoInstance = new DaoPais();
                 break;
             case DaoFactory.TIPO_ATIVIDADE:
                 daoInstance = new DaoTipo_Atividade();

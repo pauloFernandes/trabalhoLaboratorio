@@ -39,9 +39,6 @@ public class DaoCliente extends AbstractDao implements CrmIDao{
                 entity.setTelemp(resultSet.getString("telemp"));
                 entity.setCelemp(resultSet.getString("celemp"));
                 entity.setDesend(resultSet.getString("desend"));
-                entity.setCodmun(resultSet.getInt("codmun"));
-                entity.setCodest(resultSet.getInt("codest"));
-                entity.setCodpai(resultSet.getInt("codpai"));
             }
             entity.setNewRegister(false);
         }
@@ -68,9 +65,6 @@ public class DaoCliente extends AbstractDao implements CrmIDao{
                 entity.setTelemp(resultSet.getString("telemp"));
                 entity.setCelemp(resultSet.getString("celemp"));
                 entity.setDesend(resultSet.getString("desend"));
-                entity.setCodmun(resultSet.getInt("codmun"));
-                entity.setCodest(resultSet.getInt("codest"));
-                entity.setCodpai(resultSet.getInt("codpai"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }
@@ -97,9 +91,6 @@ public class DaoCliente extends AbstractDao implements CrmIDao{
                 entity.setTelemp(resultSet.getString("telemp"));
                 entity.setCelemp(resultSet.getString("celemp"));
                 entity.setDesend(resultSet.getString("desend"));
-                entity.setCodmun(resultSet.getInt("codmun"));
-                entity.setCodest(resultSet.getInt("codest"));
-                entity.setCodpai(resultSet.getInt("codpai"));
                 entity.setNewRegister(false);
                 lista.add(entity);
             }

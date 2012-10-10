@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
 
-    public static final String[] PKS = {"Codcli, Codfun, Datini"};
+    public static final String[] PKS = {"Codcli", "Codfun", "Codemp", "Datini"};
     
     public DaoFun_Responsavel() {
         super("dao.DaoFun_Responsavel", DaoFun_Responsavel.PKS);
@@ -33,6 +33,7 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
             while(resultSet.next()) {
                 entity.setCodcli(resultSet.getInt("codcli"));
                 entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setDatini(resultSet.getDate("datini"));
                 entity.setDatfim(resultSet.getDate("datfim"));
             }
@@ -55,6 +56,7 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
                 Fun_ResponsavelEntity entity = new Fun_ResponsavelEntity();
                 entity.setCodcli(resultSet.getInt("codcli"));
                 entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setDatini(resultSet.getDate("datini"));
                 entity.setDatfim(resultSet.getDate("datfim"));
                 entity.setNewRegister(false);
@@ -77,6 +79,7 @@ public class DaoFun_Responsavel extends AbstractDao implements CrmIDao {
                 Fun_ResponsavelEntity entity = new Fun_ResponsavelEntity();
                 entity.setCodcli(resultSet.getInt("codcli"));
                 entity.setCodfun(resultSet.getInt("codfun"));
+                entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setDatini(resultSet.getDate("datini"));
                 entity.setDatfim(resultSet.getDate("datfim"));
                 entity.setNewRegister(false);

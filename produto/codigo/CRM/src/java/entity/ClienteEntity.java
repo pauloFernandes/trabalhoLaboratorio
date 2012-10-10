@@ -17,9 +17,6 @@ public class ClienteEntity extends AbstractEntity {
     private String telemp;
     private String celemp;
     private String desend;
-    private int codmun;
-    private int codest;
-    private int codpai;
 
     public int getCodcli() {
         return codcli;
@@ -85,28 +82,4 @@ public class ClienteEntity extends AbstractEntity {
         this.desend = desend;
     }
 
-    public int getCodmun() {
-        return codmun;
-    }
-
-    public void setCodmun(int codmun) {
-        this.codmun = codmun;
-    }
-
-    public int getCodest() {
-        return codest;
-    }
-
-    public void setCodest(int codest) {
-        this.codest = codest;
-    }
-
-    public int getCodpai() {
-        return codpai;
-    }
-
-    public void setCodpai(int codpai) {
-        this.codpai = codpai;
-    }
-    
 }
