@@ -34,11 +34,14 @@ public class DaoAtividade extends AbstractDao implements CrmIDao{
                 entity.setCodati(resultSet.getInt("codati"));
                 entity.setNomati(resultSet.getString("nomati"));
                 entity.setDesati(resultSet.getString("desati"));
+                entity.setCodemp(Integer.parseInt(resultSet.getString("codemp")));
+                entity.setCodcli(Integer.parseInt(resultSet.getString("codcli")));
                 entity.setDatini(resultSet.getDate("datini"));
                 entity.setDatfin(resultSet.getDate("datfin"));
                 entity.setCodtipati(resultSet.getInt("codtipati"));
                 entity.setObsandati(resultSet.getString("obsandati"));
                 entity.setStatus(resultSet.getString("status"));
+                entity.setDescon(resultSet.getString("descon"));
                 entity.setCodfunres(resultSet.getInt("codfunres"));
             }
             entity.setNewRegister(false);
@@ -61,10 +64,13 @@ public class DaoAtividade extends AbstractDao implements CrmIDao{
                 entity.setCodati(resultSet.getInt("codati"));
                 entity.setNomati(resultSet.getString("nomati"));
                 entity.setDesati(resultSet.getString("desati"));
+                entity.setCodemp(Integer.parseInt(resultSet.getString("codemp")));
+                entity.setCodcli(Integer.parseInt(resultSet.getString("codcli")));
                 entity.setDatini(resultSet.getDate("datini"));
                 entity.setDatfin(resultSet.getDate("datfin"));
                 entity.setCodtipati(resultSet.getInt("codtipati"));
                 entity.setObsandati(resultSet.getString("obsandati"));
+                entity.setDescon(resultSet.getString("descon"));
                 entity.setStatus(resultSet.getString("status"));
                 entity.setCodfunres(resultSet.getInt("codfunres"));
                 entity.setNewRegister(false);
@@ -88,11 +94,14 @@ public class DaoAtividade extends AbstractDao implements CrmIDao{
                 entity.setCodati(resultSet.getInt("codati"));
                 entity.setNomati(resultSet.getString("nomati"));
                 entity.setDesati(resultSet.getString("desati"));
+                entity.setCodemp(Integer.parseInt(resultSet.getString("codemp")));
+                entity.setCodcli(Integer.parseInt(resultSet.getString("codcli")));
                 entity.setDatini(resultSet.getDate("datini"));
                 entity.setDatfin(resultSet.getDate("datfin"));
                 entity.setCodtipati(resultSet.getInt("codtipati"));
                 entity.setObsandati(resultSet.getString("obsandati"));
                 entity.setStatus(resultSet.getString("status"));
+                entity.setDescon(resultSet.getString("descon"));
                 entity.setCodfunres(resultSet.getInt("codfunres"));
                 entity.setNewRegister(false);
                 lista.add(entity);

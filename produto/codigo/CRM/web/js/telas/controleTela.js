@@ -1,5 +1,13 @@
 /*@todo verificar quais botoes nao sao necessarios em determinadas telas.*/
 
+function setEsquema(esquema) {
+    $("#identificador-tela").html(esquema.idTela);
+    $("#titulo").html(esquema.titulo);
+    $("#botoes").html(esquema.botoes);
+    $("#tela").html(esquema.tela);
+    $("#scripts-temporarios").html(esquema.scripts);
+}
+
 ControleTela = function() {
     this.getEsquemaTela = function(esquema) {
         switch (esquema) {
@@ -207,6 +215,49 @@ TelaClienteForm = {
                   popupPesquisaVendedores
 };
 
+popupPesquisaAtividades = " <div class='popup-convite' id='popup-convite' style='display: none'>" + 
+            " 	<div class='cabecalho-popup-convite'>" + 
+            " 	    <div class='titulo-popup'>Cadastrar Convite</div>" + 
+            "	    <div class='botao-fechar'><img src='../imagens/close.png'></div>" + 
+            "	</div>" + 
+            "	<div class='corpo-popup-convite'>" + 
+            "       <div class='campos-convite'> " + 
+            "           <label for='descon'>Convite</label><br> " + 
+            "           <textarea id='descon' cols='70' rows='4'></textarea><br>" + 
+            "           <input type='radio' name='idtiplem' id='tiplem-1' checked> " + 
+            "           <label for='tiplem-1'>Enviar lembrete no dia</label><br> " + 
+            "           <input type='radio' name='idtiplem' id='tiplem-2'> " + 
+            "           <label for='tiplem-2'>Enviar Lembrete todos os dias</label><br><br> " + 
+            "           <label for='datinilem'>Data para envio de convite</label> " + 
+            "           <input type='text' id='datinilem'><br><br> " +
+            "           <label for='convidados'>Funcionários Convidados</label><br> " + 
+            "           <select multiple='multiple' id='convidados'> " + 
+            "           </select> <br><br>" + 
+            "           <button id='enviar-convites'>Enviar Convites</button>"
+            "       </div> " + 
+            "	</div>" + 
+            " </div>";
+
+popupCadastrarConvites = " <div class='popup' id='popup-pesquisa' style='display: none'>" + 
+            " 	<div class='cabecalho-popup'>" + 
+            " 		<div class='titulo-popup'>Pesquisar</div>" + 
+            "		<div class='botao-fechar'><img src='../imagens/close.png'></div>" + 
+            "	</div>" + 
+            "	<div class='corpo-popup'>" + 
+            "       <label for='pesquisa-codati'>Código: </label><br>" + 
+            "       <input type='text' id='pesquisa-codati'><br>" + 
+            "       <label for='pesquisa-nomati'>Atividade: </label><br>" + 
+            "       <input type='text' id='pesquisa-nomati'><br>" + 
+            "       <label for='pesquisa-status'>Concluída: </label>" + 
+            "       <input type='checkbox' id='pesquisa-status'><br>" + 
+            "       <label for='pesquisa-datini'>Data início: </label><br>" + 
+            "       <input type='text' id='pesquisa-datini'><br>" + 
+            "       <label for='pesquisa-datfin'>Data fim: </label><br>" + 
+            "       <input type='text' id='pesquisa-datfin'><br><br>" + 
+            "       <button id='button-pesquisar'>Pesquisar</button>" + 
+            "	</div>" + 
+            " </div>";
+
 TelaAtividadeGrid = {
         idTela: "tela-atividade-grid",
         scripts: "<script type='text/javascript' src='../js/telas/atividade.js'></script>",
@@ -220,16 +271,18 @@ TelaAtividadeGrid = {
 	tela: "<table class='tabelaResultado'> " + 
 		"	<thead> " + 
 		"		<tr> " + 
-		"			<th>Tipo</th> " + 
-		"			<th>Status</th> " + 
 		"			<th>Cod Atividade</th> " + 
-		"			<th>Nome Func</th> " + 
 		"			<th>Atividade</th> " + 
+		"			<th>Tipo</th> " + 
+                "			<th>Cliente</th> " + 
+		"			<th>Status</th> " + 
 		"			<th>Data Fim</th> " + 
 		"			<th>Data Inicio</th> " + 
 		"		</tr> " + 
 		"	</thead> " + 
-		"</table>"
+                "	<tbody id='grid-atividades'> " + 
+                "	</tbody> " + 
+		"</table>" + popupPesquisaAtividades + popupCadastrarConvites
 };
 
 TelaAtividadeForm = {
@@ -241,25 +294,25 @@ TelaAtividadeForm = {
 			"<input id='salvar' class='botao' type='button' value='Salvar'> " +
 			"<input id='editar' class='botao' type='button' value='Editar'> " +
 			"<input id='excluir' class='botao' type='button' value='Excluir'>",
-	titulo: "CLIENTE",
-	tela: "<label for='tipo' class='rotuloGrande'>Tipo de atividade:</label> " +
-			"<select id='tipo' name='T' class='entrada'></select> " +
-			"<label for='status' class='rotuloDireita'>Status:</label> " +
-			"<input type='text' class='entrada' id='status'><br> " +
-			"<label for='codA' class='rotuloGrande'>Código de atividade:</label> " +
-			"<input type='text' class='entrada'> " +
-			"<label for='codF' class='rotuloGrandeDireita'>Código de funcionario:</label> " +
-			"<input type='text' class='entrada'><br> " +
-			"<label for='ativ' class='rotuloGrande'>Atividade:</label> " +
-			"<input type='text' class='entrada'><br> " +
-			"<label for='desc' class='rotuloGrande'>Descrição:</label> " +
-			"<textarea id='desc' cols='20' rows='2' class='entrada'></textarea><br> " +
-			"<label for='datIni' class='rotuloGrande'>Data Inicio:</label> " +
-			"<input type='text' id='datIni' class='entrada'> " +
-			"<label for='datFim' class='rotuloGrandeDireita'>Data Fim:</label> " +
-			"<input type='text' id='datFim' class='entrada'><br> " +
-			"<label for='obs' class='rotuloGrande'>Observações:</label> " +
-			"<textarea id='obs' cols='20' rows='2' class='entrada'></textarea><br> "
+	titulo: "ATIVIDADE",
+	tela: "<label for='codati' class='rotuloGrande'>Código de atividade:</label> " +
+	      "<input type='text' id='codati' class='entrada' disabled><br> " +
+              "<label for='nomati' class='rotuloGrande'>Atividade:</label> " +
+	      "<input type='text' id='nomati' class='entrada'><br> " +
+              "<label for='codtipati' class='rotuloGrande'>Tipo de atividade:</label> " +
+	      "<select id='codtipati' name='T' class='entrada'></select><br> " +
+              "<label for='codcli' class='rotuloGrande'>Cliente:</label> " +
+	      "<select id='codcli' name='T' class='entrada'></select><br> " +
+	      "<label for='status' class='rotuloGrande'>Concluido:</label> " +
+	      "<input type='checkbox' class='entrada' id='status'><br> " +
+	      "<label for='desati' class='rotuloGrande'>Descrição:</label> " +
+	      "<textarea id='desati' cols='60' rows='5' ></textarea><br><br> " +
+	      "<label for='datini' class='rotuloGrande'>Data Inicio:</label> " +
+	      "<input type='text' id='datini' class='entrada'><br> " +
+	      "<label for='datfin' class='rotuloGrande'>Data Fim:</label> " +
+	      "<input type='text' id='datfin' class='entrada'><br> " +
+	      "<label for='obsandati' class='rotuloGrande'>Observações:</label> " +
+	      "<textarea id='obsandati' cols='60' rows='5'></textarea><br> " + popupCadastrarConvites
 };
 
 $(document).ready(function() {
@@ -295,17 +348,14 @@ $(document).ready(function() {
             controlador = new ControleTela();
             esquema     = controlador.getEsquemaTela(5);
             setEsquema(esquema);
+            inicializaAtividadeGrid();
 	});	
 });
 
-function setEsquema(esquema) {
-    $("#identificador-tela").html(esquema.idTela);
-    $("#titulo").html(esquema.titulo);
-    $("#botoes").html(esquema.botoes);
-    $("#tela").html(esquema.tela);
-    $("#scripts-temporarios").html(esquema.scripts);
-}
 
+/**
+ * Metodos para inicialização dos grids.
+ */
 function InicializaPerfil() {
     $.ajax({
         type: "POST",
@@ -406,6 +456,41 @@ function inicializaClienteGrid() {
                 linha = linha.replace("undefined", " - ");
                 $("tbody").append(linha);
             }
+        }
+    });
+}
+
+function inicializaAtividadeGrid() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarAtividade",
+        data: {
+            TIPO_REQUISICAO: 2,
+            CODATI: 0,
+            CODCLI: 0
+        },
+        success: function(data) {
+            data = JSON.parse(data);
+            $("#grid-atividades").html("");
+            for (var i = 0; i < data.atividades.length; i++) {
+                var linhaId    = i+1;
+                var linhaClass = ((i+1)%2==1) ? "odd" : null;
+                if (i === 0) linhaClass += " selected";
+                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"' desati='" + data.atividades[i].desati+ "' obsandati='" + data.atividades[i].obsandati + "'>" + 
+                            "    <td class='codati'>" + data.atividades[i].codati + "</td>" + 
+                            "    <td class='nomati'>" + data.atividades[i].nomati + "</td>" + 
+                            "    <td class='codtipati' id='" + data.atividades[i].codtipati + "'>" + data.atividades[i].nomtipati + "</td>" + 
+                            "    <td class='codcli' id='" + data.atividades[i].codcli+ "'>" + data.atividades[i].nomcli + "</td>" + 
+                            "    <td class='status'>" + ((data.atividades[i].status === "S") ? "Concluído" : "Em andamento")  + "</td>" + 
+                            "    <td class='datini'>" + data.atividades[i].datini + "</td>" + 
+                            "    <td class='datfin'>" + data.atividades[i].datfin + "</td>" + 
+                            "</tr>";
+                
+                linha = linha.replace("undefined", " - ");
+                linha = linha.replace("undefined", " - ");
+                $("#grid-atividades").append(linha);
+            }
+            
         }
     });
 }

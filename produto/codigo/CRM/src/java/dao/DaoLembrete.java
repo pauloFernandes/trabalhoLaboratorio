@@ -21,7 +21,7 @@ public class DaoLembrete extends AbstractDao implements CrmIDao {
     public static final String[] PKS = {"Codfun", "Codati"};
     
     public DaoLembrete() {
-        super("dao.Lembrete", DaoLembrete.PKS);        
+        super("dao.DaoLembrete", DaoLembrete.PKS);        
     }
 
     @Override

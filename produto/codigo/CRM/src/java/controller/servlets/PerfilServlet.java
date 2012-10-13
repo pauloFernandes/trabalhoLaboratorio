@@ -5,7 +5,6 @@
 package controller.servlets;
 
 import controller.Ambiente;
-import controller.GerenciarEmpresa;
 import controller.GerenciarFuncionario;
 import controller.GerenciarUsuario;
 import dao.DaoEmpresa;

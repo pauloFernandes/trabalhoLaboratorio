@@ -14,11 +14,14 @@ public class AtividadeEntity extends AbstractEntity {
     private int codati;
     private String nomati;
     private String desati;
+    private int codemp;
+    private int codcli;
     private Date datini;
     private Date datfin;
     private int codtipati;
     private String obsandati;
     private String status;
+    private String descon;
     private int codfunres;
 
     public int getCodati() {
@@ -92,7 +95,29 @@ public class AtividadeEntity extends AbstractEntity {
     public void setCodfunres(int codfunres) {
         this.codfunres = codfunres;
     }
-    
-    
-    
+
+    public int getCodemp() {
+        return codemp;
+    }
+
+    public void setCodemp(int codemp) {
+        this.codemp = codemp;
+    }
+
+    public int getCodcli() {
+        return codcli;
+    }
+
+    public void setCodcli(int codcli) {
+        this.codcli = codcli;
+    }
+
+    public String getDescon() {
+        return descon;
+    }
+
+    public void setDescon(String descon) {
+        this.descon = descon;
+    }
+   
 }

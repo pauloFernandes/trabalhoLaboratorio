@@ -11,6 +11,27 @@ package entity;
 public class ConvidadoEntity extends AbstractEntity {
     private int codcon;
     private int codfun;
+    private int codati;
+    private String idconace;
+
+    public static final String CONVITE_ACEITO     = "S";
+    public static final String CONVITE_NAO_ACEITO = "N";
+    
+    public int getCodati() {
+        return codati;
+    }
+
+    public void setCodati(int codati) {
+        this.codati = codati;
+    }
+
+    public String getIdconace() {
+        return idconace;
+    }
+
+    public void setIdconace(String idconace) {
+        this.idconace = idconace;
+    }
 
     public int getCodcon() {
         return codcon;

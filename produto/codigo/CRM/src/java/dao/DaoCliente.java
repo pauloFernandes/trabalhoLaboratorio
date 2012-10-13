@@ -58,7 +58,6 @@ public class DaoCliente extends AbstractDao implements CrmIDao{
             while(resultSet.next()) {
                 ClienteEntity entity = new ClienteEntity();
                 entity.setCodcli(resultSet.getInt("codcli"));
-                entity.setCodemp(resultSet.getInt("codemp"));
                 entity.setNuminsjur(resultSet.getString("numinsjur"));
                 entity.setNomfan(resultSet.getString("nomfan"));
                 entity.setRazsoc(resultSet.getString("razsoc"));
