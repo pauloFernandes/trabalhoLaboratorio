@@ -56,19 +56,25 @@ public class PerfilServlet extends HttpServlet {
         int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
         if (tipoRequisicao == CARREGAR_TELA) {
-            out.print(this.carregarTela());
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_USUARIO)) {
+                out.print(this.carregarTela());
+            }
         } else if (tipoRequisicao == SALVAR_PERFIL) {
-            int codigo            = Integer.parseInt(request.getParameter("CODIGO"));
-            String nome           = request.getParameter("NOME");
-            String login          = request.getParameter("LOGIN");
-            String senha          = request.getParameter("SENHA");
-            String confirmarSenha = request.getParameter("CONFIRMAR_SENHA");
-            int empresa           = Integer.parseInt(request.getParameter("EMPRESA"));
-            
-            out.println(this.salvarPerfil(codigo, nome, login, senha, confirmarSenha, empresa));
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_USUARIO)) {
+                int codigo            = Integer.parseInt(request.getParameter("CODIGO"));
+                String nome           = request.getParameter("NOME");
+                String login          = request.getParameter("LOGIN");
+                String senha          = request.getParameter("SENHA");
+                String confirmarSenha = request.getParameter("CONFIRMAR_SENHA");
+                int empresa           = Integer.parseInt(request.getParameter("EMPRESA"));
+
+                out.println(this.salvarPerfil(codigo, nome, login, senha, confirmarSenha, empresa));
+            }
         } else if (tipoRequisicao == EXCLUIR_PERFIL) {
-            int codigo            = Integer.parseInt(request.getParameter("CODIGO"));
-            this.excluirPerfil(codigo);
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_USUARIO)) {
+                int codigo            = Integer.parseInt(request.getParameter("CODIGO"));
+                this.excluirPerfil(codigo);
+            }
         }
     }
     

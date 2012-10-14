@@ -21,10 +21,10 @@
     <div class="header">
     </div>
     <div class="menu">
-        <input id="perfil" class="botaoMenu" type="button" value="Meu Perfil" /><br><br>
-        <input id="permissao" class="botaoMenu" type="button" value="Permissões" /><br><br>
-        <input id="empresa" class="botaoMenu" type="button" value="Empresa" /><br><br>
-        <input id="cliente" class="botaoMenu" type="button" value="Cliente" /><br><br>
+        <input id="perfil" class="botaoMenu" type="button" value="Meu Perfil" />
+        <input id="permissao" class="botaoMenu" type="button" value="Permissões" />
+        <input id="empresa" class="botaoMenu" type="button" value="Empresa" />
+        <input id="cliente" class="botaoMenu" type="button" value="Cliente" />
         <input id="atividade" class="botaoMenu" type="button" value="Atividade" />
     </div>
     <img alt="" class="imgUsuario" src="" />

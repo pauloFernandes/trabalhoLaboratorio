@@ -61,42 +61,44 @@ public class GerenciarAtividade extends HttpServlet {
         PrintWriter out = response.getWriter();
         int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
-        if (tipoRequisicao == CARREGAR_TIPO_ATIVIDADE) {
-            out.print(this.obterTipoAtividade());
-        } else if (tipoRequisicao == CARREGAR_ATIVIDADES) {
-            int codemp    = Ambiente.getInstance().getEmpresaEntity().getCodemp();
-            int codfunres = Ambiente.getInstance().getFuncionarioEntity().getCodfun();
-            int codati    = Integer.parseInt(request.getParameter("CODATI"));
-            int codcli    = Integer.parseInt(request.getParameter("CODCLI"));
-            String nomati = request.getParameter("NOMATI");
-            String status = request.getParameter("STATUS");
-            String datini = request.getParameter("DATINI");
-            String datfim = request.getParameter("DATFIM");
+        if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_FUNCIONARIO)) {
+            if (tipoRequisicao == CARREGAR_TIPO_ATIVIDADE) {
+                out.print(this.obterTipoAtividade());
+            } else if (tipoRequisicao == CARREGAR_ATIVIDADES) {
+                int codemp    = Ambiente.getInstance().getEmpresaEntity().getCodemp();
+                int codfunres = Ambiente.getInstance().getFuncionarioEntity().getCodfun();
+                int codati    = Integer.parseInt(request.getParameter("CODATI"));
+                int codcli    = Integer.parseInt(request.getParameter("CODCLI"));
+                String nomati = request.getParameter("NOMATI");
+                String status = request.getParameter("STATUS");
+                String datini = request.getParameter("DATINI");
+                String datfim = request.getParameter("DATFIM");
 
-            out.print(this.obterAtividades(codemp, codfunres, codati, codcli, nomati, status, datini, datfim));
-        } else if (tipoRequisicao == SALVAR_ATIVIDADE) {
-            int codati       = Integer.parseInt(request.getParameter("CODATI"));
-            String nomati    = request.getParameter("NOMATI");
-            int codtipati    = Integer.parseInt(request.getParameter("CODTIPATI"));
-            int codcli       = Integer.parseInt(request.getParameter("CODCLI"));
-            String status    = request.getParameter("STATUS");
-            String desati    = request.getParameter("DESATI");
-            String datini    = request.getParameter("DATINI");
-            String datfin    = request.getParameter("DATFIN");
-            String obsandati = request.getParameter("OBSANDATI");
-            
-            this.salvarAtividade(codati, nomati, codtipati, codcli, status, desati, datini, datfin, obsandati);
-        } else if (tipoRequisicao == CARREGAR_CLIENTES) {
-             out.print(this.obterClientes());
-        } else if (tipoRequisicao == SALVAR_CONVITES) {
-            int codati        = Integer.parseInt(request.getParameter("CODATI"));
-            String descon     = request.getParameter("DESCON");
-            String idtiplem   = request.getParameter("IDTIPLEM");
-            String datinilem  = request.getParameter("DATINILEM");
-            String convidados = request.getParameter("CONVIDADOS");
-            String[] split    = convidados.split(",");
-            
-            this.enviarConvites(codati, descon, idtiplem, datinilem, split);
+                out.print(this.obterAtividades(codemp, codfunres, codati, codcli, nomati, status, datini, datfim));
+            } else if (tipoRequisicao == SALVAR_ATIVIDADE) {
+                int codati       = Integer.parseInt(request.getParameter("CODATI"));
+                String nomati    = request.getParameter("NOMATI");
+                int codtipati    = Integer.parseInt(request.getParameter("CODTIPATI"));
+                int codcli       = Integer.parseInt(request.getParameter("CODCLI"));
+                String status    = request.getParameter("STATUS");
+                String desati    = request.getParameter("DESATI");
+                String datini    = request.getParameter("DATINI");
+                String datfin    = request.getParameter("DATFIN");
+                String obsandati = request.getParameter("OBSANDATI");
+
+                this.salvarAtividade(codati, nomati, codtipati, codcli, status, desati, datini, datfin, obsandati);
+            } else if (tipoRequisicao == CARREGAR_CLIENTES) {
+                 out.print(this.obterClientes());
+            } else if (tipoRequisicao == SALVAR_CONVITES) {
+                int codati        = Integer.parseInt(request.getParameter("CODATI"));
+                String descon     = request.getParameter("DESCON");
+                String idtiplem   = request.getParameter("IDTIPLEM");
+                String datinilem  = request.getParameter("DATINILEM");
+                String convidados = request.getParameter("CONVIDADOS");
+                String[] split    = convidados.split(",");
+
+                this.enviarConvites(codati, descon, idtiplem, datinilem, split);
+            }
         }
     }
     

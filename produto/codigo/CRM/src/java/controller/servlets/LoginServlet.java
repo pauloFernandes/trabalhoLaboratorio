@@ -4,6 +4,7 @@
  */
 package controller.servlets;
 
+import controller.Ambiente;
 import controller.GerenciarEmpresa;
 import controller.GerenciarUsuario;
 import java.io.IOException;
@@ -21,9 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
-    private static final int LOGIN         = 1;
-    private static final int CADASTRO      = 2;
-    private static final int LISTA_EMPRESA = 3;
+    private static final int LOGIN           = 1;
+    private static final int CADASTRO        = 2;
+    private static final int LISTA_EMPRESA   = 3;
+    private static final int CONTROLE_ACESSO = 4;
     
     /**
      * Processes requests for both HTTP
@@ -54,6 +56,8 @@ public class LoginServlet extends HttpServlet {
         } else if (tipoRequisicao == LISTA_EMPRESA) {
             GerenciarEmpresa gerenciarEmpresa = new GerenciarEmpresa();
             out.println(gerenciarEmpresa.stringListaEmpresas());
+        } else if (tipoRequisicao == CONTROLE_ACESSO) {
+            out.print(Ambiente.getTipoPermissao());
         }
     }
     

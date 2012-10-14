@@ -61,31 +61,33 @@ public class GerenciarClientes extends HttpServlet {
         
         int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
-        if (tipoRequisicao == INICIALIZAR_CLIENTE_GRID) {
-            out.print(this.obterTodosClientes());
-        } else if (tipoRequisicao == HISTORICO_VENDEDORES) {
-            int codcli = Integer.parseInt(request.getParameter("CODCLI"));
-            out.print(this.obterHistoricoVendedores(codcli));
-        } else if (tipoRequisicao == PESQUISAR_CLIENTES) {
-            String nomfan  = (request.getParameter("NOMFAN"));
-            String razsoc  = (request.getParameter("RAZSOC"));
-            String  insjur = (request.getParameter("INSJUR"));
-            String nomven  = (request.getParameter("NOMVEN"));
-            
-             out.print(this.obterClientes(nomfan, razsoc, insjur, nomven));
-        } else if (tipoRequisicao == LISTA_VENDEDORES) {
-            out.print(this.listaVendedores());
-        } else if (tipoRequisicao == SALVAR_CLIENTE) {
-            int codcli    = Integer.parseInt(request.getParameter("CODCLI"));
-            int codemp    = Ambiente.getInstance().getEmpresaEntity().getCodemp();
-            String nomfan = request.getParameter("NOMFAN");
-            String razsoc = request.getParameter("RAZSOC");
-            String insjur = request.getParameter("INSJUR");
-            String telemp = request.getParameter("TELEMP");
-            String celemp = request.getParameter("CELEMP");
-            int vendedor  = Integer.parseInt(request.getParameter("VENDEDOR"));
-            
-            this.salvar(codcli, codemp, nomfan, razsoc, insjur, telemp, celemp, vendedor);
+        if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_FUNCIONARIO)) {
+            if (tipoRequisicao == INICIALIZAR_CLIENTE_GRID) {
+                    out.print(this.obterTodosClientes());
+            } else if (tipoRequisicao == HISTORICO_VENDEDORES) {
+                int codcli = Integer.parseInt(request.getParameter("CODCLI"));
+                out.print(this.obterHistoricoVendedores(codcli));
+            } else if (tipoRequisicao == PESQUISAR_CLIENTES) {
+                String nomfan  = (request.getParameter("NOMFAN"));
+                String razsoc  = (request.getParameter("RAZSOC"));
+                String  insjur = (request.getParameter("INSJUR"));
+                String nomven  = (request.getParameter("NOMVEN"));
+
+                 out.print(this.obterClientes(nomfan, razsoc, insjur, nomven));
+            } else if (tipoRequisicao == LISTA_VENDEDORES) {
+                out.print(this.listaVendedores());
+            } else if (tipoRequisicao == SALVAR_CLIENTE) {
+                int codcli    = Integer.parseInt(request.getParameter("CODCLI"));
+                int codemp    = Ambiente.getInstance().getEmpresaEntity().getCodemp();
+                String nomfan = request.getParameter("NOMFAN");
+                String razsoc = request.getParameter("RAZSOC");
+                String insjur = request.getParameter("INSJUR");
+                String telemp = request.getParameter("TELEMP");
+                String celemp = request.getParameter("CELEMP");
+                int vendedor  = Integer.parseInt(request.getParameter("VENDEDOR"));
+
+                this.salvar(codcli, codemp, nomfan, razsoc, insjur, telemp, celemp, vendedor);
+            }
         }
     }
     

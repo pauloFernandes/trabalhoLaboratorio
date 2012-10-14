@@ -56,24 +56,34 @@ public class PermissoesServlet extends HttpServlet {
         int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
         if (tipoRequisicao == INICIALIZA_TELA) {
-            out.print(this.obterTodosItensPermissao());
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_ADMINISTRADOR)) {
+                out.print(this.obterTodosItensPermissao());
+            }
         } else if (tipoRequisicao == FILTRAR_TELA) {
-            String nome         = request.getParameter("NOME");
-            String datini       = request.getParameter("DATINI");
-            String datfim       = request.getParameter("DATFIM");
-            String solicitante  = request.getParameter("SOLICITANTE");
-            
-            out.print(this.obterTodosItensPermissao(nome, datini, datfim, solicitante));
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_ADMINISTRADOR)) {
+                String nome         = request.getParameter("NOME");
+                String datini       = request.getParameter("DATINI");
+                String datfim       = request.getParameter("DATFIM");
+                String solicitante  = request.getParameter("SOLICITANTE");
+
+                out.print(this.obterTodosItensPermissao(nome, datini, datfim, solicitante));
+            }
         } else if (tipoRequisicao == APROVAR_VINCULO) {
-            int codusu = Integer.parseInt(request.getParameter("CODUSU"));
-            this.aprovarVinculo(codusu);
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_ADMINISTRADOR)) {
+                int codusu = Integer.parseInt(request.getParameter("CODUSU"));
+                this.aprovarVinculo(codusu);
+            }
         } else if (tipoRequisicao == REPROVAR_VINCULO) {
-            int codusu = Integer.parseInt(request.getParameter("CODUSU"));
-            this.reporvarVinculo(codusu);
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_ADMINISTRADOR)) {
+                int codusu = Integer.parseInt(request.getParameter("CODUSU"));
+                this.reporvarVinculo(codusu);
+            }
         } else if (tipoRequisicao == ATRIBUIR_PERMISSAO) {
-            int codusu          = Integer.parseInt(request.getParameter("CODUSU"));
-            int tipoFuncionario = Integer.parseInt(request.getParameter("TIPO_FUNCIONARIO"));
-            this.atribuirPermissao(codusu, tipoFuncionario);
+            if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_GERENTE)) {
+                int codusu          = Integer.parseInt(request.getParameter("CODUSU"));
+                int tipoFuncionario = Integer.parseInt(request.getParameter("TIPO_FUNCIONARIO"));
+                this.atribuirPermissao(codusu, tipoFuncionario);
+            }
         }
     }
     

@@ -46,17 +46,19 @@ public class GerenciarEmpresa extends HttpServlet {
         PrintWriter out = response.getWriter();
         int tipoRequisicao = Integer.parseInt(request.getParameter("TIPO_REQUISICAO"));
         
-        if (tipoRequisicao == INICIALIZA_EMRPESA) {
-            out.print(this.obterEmpresa());
-        } else if (tipoRequisicao == SALVAR_EMPRESA) {
-            String nomfan = (request.getParameter("NOMFAN"));
-            String razsoc = (request.getParameter("RAZSOC"));
-            String telemp = (request.getParameter("TELEMP"));
-            String celemp = (request.getParameter("CELEMP"));
-            
-            this.salvarEmpresa(nomfan, razsoc, telemp, celemp);
-        } else if (tipoRequisicao == REMOVER_EMPRESA) {
-            /*@todo metodo de exclusao de empresa*/
+        if (Ambiente.validaPermissaoUsuario(Ambiente.PERMISSAO_GERENTE)) {
+            if (tipoRequisicao == INICIALIZA_EMRPESA) {
+                out.print(this.obterEmpresa());
+            } else if (tipoRequisicao == SALVAR_EMPRESA) {
+                String nomfan = (request.getParameter("NOMFAN"));
+                String razsoc = (request.getParameter("RAZSOC"));
+                String telemp = (request.getParameter("TELEMP"));
+                String celemp = (request.getParameter("CELEMP"));
+
+                this.salvarEmpresa(nomfan, razsoc, telemp, celemp);
+            } else if (tipoRequisicao == REMOVER_EMPRESA) {
+                /*@todo metodo de exclusao de empresa*/
+            }
         }
             
     }

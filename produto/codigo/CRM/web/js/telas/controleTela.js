@@ -1,5 +1,3 @@
-/*@todo verificar quais botoes nao sao necessarios em determinadas telas.*/
-
 function setEsquema(esquema) {
     $("#identificador-tela").html(esquema.idTela);
     $("#titulo").html(esquema.titulo);
@@ -30,6 +28,358 @@ ControleTela = function() {
     }
 }
 
+/**
+ * Metodos para inicialização dos grids.
+ */
+function InicializaPerfil() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/PerfilServlet",
+        data: {
+            TIPO_REQUISICAO: 1
+        },
+        success: function(data) {
+            data = JSON.parse(data);
+            // Insersao dos dados do usuario.
+            $("#codigo").val(data.codusu);
+            $("#nome").val(data.nomusu);
+            $("#login").val(data.logusu);
+            
+            // Construcao da lista de empresas que o usuário dispoe.
+            var empresas = "<option id='0' value='0'>Nenhum Selecionado</option>";
+            for (var i = 0; i < data.empresas.length; i++) {
+                var aux = data.empresas;
+                empresas += "<option id='" + aux[i].codemp + "' value='" + aux[i].codemp +"'>" + aux[i].razsoc + "</option>";
+            }
+            
+            // Settando a lista no combobox da empresa e selecionando a empresa do funcionario, caso esta exista.
+            $("#lista-empresa").html(empresas);
+            $("#lista-empresa").val(data.empusu);
+            
+            // Verifica quais botoes estarao disponiveis para o usuario, de acordo com seu nível de permissão.
+            controlePermissoesBotoes("perfil");
+        }
+    });
+}
+
+function inicializaGridPermissao() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/PermissoesServlet",
+        data: {
+            TIPO_REQUISICAO: 1
+        },
+        success: function(data) {
+            data = JSON.parse(data);
+            for (var i = 0; i < data.permissoes.length; i++) {
+                var linhaId    = i+1;
+                var linhaClass = ((i+1)%2==1) ? "odd" : null;
+                if (i === 0) linhaClass += " selected";
+                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
+                            "   <td class='nome' id='" + data.permissoes[i].codusu + "'>" + data.permissoes[i].nome + "</td>" + 
+                            "   <td class='tipo'>" + data.permissoes[i].tipo + "</td>" + 
+                            "   <td class='solicitante'>" + data.permissoes[i].solicitante + "</td>" + 
+                            "   <td class='datini'>" + data.permissoes[i].datini + "</td>" + 
+                            "   <td class='datfim'>" + data.permissoes[i].datfim + "</td>" + 
+                            "</tr>";
+                linha = linha.replace("undefined", " - ");
+                linha = linha.replace("undefined", " - ");
+                $("tbody").append(linha);
+            }
+            
+            // Verifica quais botoes estarao disponiveis para o usuario, de acordo com seu nível de permissão.
+            controlePermissoesBotoes("permissao");
+        }
+    });
+}
+
+function inicializarEmpresa() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarEmpresa",
+        data: {
+            TIPO_REQUISICAO: 1
+        },
+        success: function(data) {
+            data = JSON.parse(data);     
+            $("#codemp").val(data.codemp);
+            $("#insjur").val(data.insjur);
+            $("#nomfan").val(data.nomfan);
+            $("#razsoc").val(data.razsoc);
+            $("#telemp").val(data.telemp);
+            $("#celemp").val(data.celemp);
+            
+            // Verifica quais botoes estarao disponiveis para o usuario, de acordo com seu nível de permissão.
+            controlePermissoesBotoes("empresa");
+        }
+    });
+}
+
+function inicializaClienteGrid() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarClientes",
+        data: {
+            TIPO_REQUISICAO: 1
+        },
+        success: function(data) {
+            data = JSON.parse(data);
+            for (var i = 0; i < data.clientes.length; i++) {
+                var linhaId    = i+1;
+                var linhaClass = ((i+1)%2==1) ? "odd" : null;
+                if (i === 0) linhaClass += " selected";
+                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
+                            "   <td class='nomfan' id='" + data.clientes[i].codcli + "'>" + data.clientes[i].nomfan + "</td>" + 
+                            "   <td class='razsoc'>" + data.clientes[i].razsoc + "</td>" + 
+                            "   <td class='numinsjur'>" + data.clientes[i].numinsjur + "</td>" + 
+                            "   <td class='nomven' codven='" + data.clientes[i].codven  + "'>" + data.clientes[i].nomven + "</td>" + 
+                            "   <td class='telemp'>" + data.clientes[i].telemp + "</td>" + 
+                            "   <td class='celemp'>" + data.clientes[i].celemp + "</td>" + 
+                            "</tr>";
+                linha = linha.replace("undefined", " - ");
+                linha = linha.replace("undefined", " - ");
+                $("tbody").append(linha);
+            }
+            
+            // Verifica quais botoes estarao disponiveis para o usuario, de acordo com seu nível de permissão.
+            controlePermissoesBotoes("cliente");
+        }
+    });
+}
+
+function inicializaAtividadeGrid() {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarAtividade",
+        data: {
+            TIPO_REQUISICAO: 2,
+            CODATI: 0,
+            CODCLI: 0
+        },
+        success: function(data) {
+            data = JSON.parse(data);
+            $("#grid-atividades").html("");
+            for (var i = 0; i < data.atividades.length; i++) {
+                var linhaId    = i+1;
+                var linhaClass = ((i+1)%2==1) ? "odd" : null;
+                if (i === 0) linhaClass += " selected";
+                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"' desati='" + data.atividades[i].desati+ "' obsandati='" + data.atividades[i].obsandati + "'>" + 
+                            "    <td class='codati'>" + data.atividades[i].codati + "</td>" + 
+                            "    <td class='nomati'>" + data.atividades[i].nomati + "</td>" + 
+                            "    <td class='codtipati' id='" + data.atividades[i].codtipati + "'>" + data.atividades[i].nomtipati + "</td>" + 
+                            "    <td class='codcli' id='" + data.atividades[i].codcli+ "'>" + data.atividades[i].nomcli + "</td>" + 
+                            "    <td class='status'>" + ((data.atividades[i].status === "S") ? "Concluído" : "Em andamento")  + "</td>" + 
+                            "    <td class='datini'>" + data.atividades[i].datini + "</td>" + 
+                            "    <td class='datfin'>" + data.atividades[i].datfin + "</td>" + 
+                            "</tr>";
+                
+                linha = linha.replace("undefined", " - ");
+                linha = linha.replace("undefined", " - ");
+                $("#grid-atividades").append(linha);
+            }
+            
+            // Verifica quais botoes estarao disponiveis para o usuario, de acordo com seu nível de permissão.
+            controlePermissoesBotoes("atividade");
+        }
+    });
+}
+
+
+/**
+ * Métodos usados para o controle de permissão de tela.
+ **/
+function controleDePermissoes() {
+	var telas              = ["perfil", "permissao", "empresa", "cliente", "atividade"];
+        var telasUsuario       = ["perfil"];
+	var telasFuncionario   = ["perfil", "cliente", "atividade"];
+	var telasAdministrador = ["perfil", "permissao", "cliente", "atividade"];
+	var telasGerente       = ["perfil", "permissao", "empresa", "cliente", "atividade"];
+        
+	$.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/LoginServlet",
+        data: {
+            TIPO_REQUISICAO: 4
+        },
+        success: function(data) {
+            permissao = null;
+            if (data == "0") {
+                permissao = telasUsuario;
+            } else if (data == "1") {
+                permissao = telasFuncionario;
+            } else if (data == "2") {
+                permissao = telasAdministrador;
+            } else if (data == "3") {
+                permissao = telasGerente;
+            }
+            for (var i = 0; i < telas.length; i++) {
+                if (permissao.indexOf(telas[i]) === -1) {
+                        $("#"+telas[i]).remove();
+                }
+            }
+        }
+    });
+}
+
+function controlePermissoesBotoes(tela) {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/LoginServlet",
+        data: {
+            TIPO_REQUISICAO: 4
+        },
+        success: function(data) {
+            var permissoes = retornaTipoFuncionario(data);
+            var botoesFunc = retornaBotoesTela(tela, permissoes);
+            // Conjunto de botoes usado para comparar: É usado o perfil do gerente por este possuir todos 
+            // os privilégios.
+            var botoesTela = retornaBotoesTela(tela, PermissoesGerente);
+
+            for (var i = 0; i < botoesTela.length; i++) {
+                if (botoesFunc.indexOf(botoesTela[i]) == -1) {
+                    $("#"+botoesTela[i]).remove();
+                }
+            }
+        }
+    });
+}
+
+function retornaTipoFuncionario(tipoFuncionario) {
+    if (tipoFuncionario == 0) {
+        return PermissoesUsuario;
+    } else if (tipoFuncionario == 1) {
+        return PermissoesFuncionario;
+    } else if (tipoFuncionario == 2) {
+        return PermissoesAdministrador;
+    } else if (tipoFuncionario == 3) {
+        return PermissoesGerente;
+    }
+    
+    return null;
+}
+
+function retornaBotoesTela(tela, permissoes) {
+    if (tela == "perfil") {
+        return permissoes.perfil;
+    } else if (tela == "permissao") {
+        return permissoes.permissao;
+    } else if (tela == "empresa") {
+        return permissoes.empresa;
+    } else if (tela == "cliente") {
+        return permissoes.cliente;
+    } else if (tela == "atividade") {
+        return permissoes.atividade;
+    }
+    
+    return null;
+}
+
+
+$(document).ready(function() {
+    /*
+     *Inicializa a tela de Perfil do usuário assim que o sistema é aberto.
+     **/
+    controleDePermissoes();
+    controlador = new ControleTela();
+    esquema     = controlador.getEsquemaTela(1);
+    setEsquema(esquema);
+    InicializaPerfil();
+    
+    /*
+     *Controlador do botao de perfil.
+     **/
+    $("#perfil").click(function() {	
+        controlador = new ControleTela();
+        esquema     = controlador.getEsquemaTela(1);
+        setEsquema(esquema);
+        InicializaPerfil();
+    });
+
+    /*
+     *Controlador do botao de permissoes.
+     **/
+    $("#permissao").click(function() {
+        controlador = new ControleTela();
+        esquema     = controlador.getEsquemaTela(2);
+        setEsquema(esquema);
+        inicializaGridPermissao();
+    });
+
+    /*
+     * Controlador do botao de empresas.
+     **/
+    $("#empresa").click(function() {
+        controlador = new ControleTela();
+        esquema     = controlador.getEsquemaTela(3);
+        setEsquema(esquema);
+        inicializarEmpresa();
+    });
+
+    /*
+     * Controlador do botao de clientes.
+     **/
+    $("#cliente").click(function() {
+        controlador = new ControleTela();
+        esquema     = controlador.getEsquemaTela(4);
+        setEsquema(esquema);
+        inicializaClienteGrid();
+    });
+
+    /*
+     * Controlador do botao de atividades.
+     **/
+    $("#atividade").click(function() {
+        controlador = new ControleTela();
+        esquema     = controlador.getEsquemaTela(5);
+        setEsquema(esquema);
+        inicializaAtividadeGrid();
+    });	
+});
+
+
+
+
+/*
+ * Objeto contendo os botoes de acesso permitido aos usuários de nível de acesso de usuário.
+ **/
+PermissoesUsuario = {
+    perfil: ["salvar", "excluir"]
+};
+
+/*
+ * Objeto contendo os botoes de acesso permitido aos usuários de nível de acesso de funcionário.
+ **/
+PermissoesFuncionario = {
+    perfil: ["salvar", "excluir"],
+    cliente: ["exibir-historico", "novo", "pesquisar", "editar", "excluir"],
+    atividade: ["cadastrar-convite", "novo", "pesquisa", "editar", "excluir"]
+};
+
+/*
+ * Objeto contendo os botoes de acesso permitido aos usuários de nível de acesso de administrador.
+ **/
+PermissoesAdministrador = {
+    perfil: ["salvar", "excluir"],
+    permissao: ["pesquisar", "aprovar-vinculo", "reprovar-vinculo"], 
+    cliente: ["exibir-historico", "novo", "pesquisar", "editar", "excluir"],
+    atividade: ["cadastrar-convite", "novo", "pesquisa", "editar", "excluir"]
+};
+
+/*
+ * Objeto contendo os botoes de acesso permitido aos usuários de nível de acesso de Gerente.
+ **/
+PermissoesGerente = {
+    perfil: ["salvar", "excluir"],
+    permissao: ["pesquisar", "aprovar-vinculo", "reprovar-vinculo", "atribuir-permissao"], 
+    empresa: ["salvar", "excluir"],
+    cliente: ["exibir-historico", "novo", "pesquisar", "editar", "excluir"],
+    atividade: ["cadastrar-convite", "novo", "pesquisa", "editar", "excluir"]
+};
+
+/*
+ * Esquema das telas. Os objetos abaixo sao usados para que apenas um arquivo de HTML sirva de base para toda 
+ * a aplicacao.
+ **/
 TelaPerfil = {
     idTela: "tela-perfil",
     scripts: "<script type='text/javascript' src='../js/telas/perfil.js'></script>",
@@ -49,6 +399,7 @@ TelaPerfil = {
           "<label class='rotuloGrande'>Empresa:</label>"        +
           "<select id='lista-empresa' class='entrada' id='empresas'></select>"
 };
+
 
 TelaPermissoes = {
         idTela: "tela-permissoes",
@@ -102,6 +453,7 @@ TelaPermissoes = {
             "	</div>" + 
             "</div>"
 };
+
 
 TelaEmpresa = {
         idTela: "tela-empresa",
@@ -167,7 +519,6 @@ TelaClienteGrid = {
 	botoes: "<input id='exibir-historico' class='botaoConvite' type='button' value='Histórico de vendedores'>" + 
 		"<input id='novo' class='botao' type='button' value='Novo'>" + 
 		"<input id='pesquisar' class='botao' type='button' value='Pesquisar'>" + 
-		"<input id='salvar' class='botao' type='button' value='Salvar'>" + 
 		"<input id='editar' class='botao' type='button' value='Editar'>" + 
 		"<input id='excluir' class='botao' type='button' value='Excluir'>",
 	titulo: "CLIENTE",
@@ -190,12 +541,9 @@ TelaClienteGrid = {
 TelaClienteForm = {
         idTela: "tela-cliente-form",
         scripts: "<script type='text/javascript' src='../js/telas/cliente.js'></script>",
-	botoes: "<input id='exibir-historico' class='botaoConvite' type='button' value='Histórico de vendedores'>" + 
-		"<input id='novo' class='botao' type='button' value='Novo'>" + 
-		"<input id='pesquisar' class='botao' type='button' value='Pesquisar'>" + 
+	botoes: "<input id='novo' class='botao' type='button' value='Novo'>" + 
 		"<input id='salvar' class='botao' type='button' value='Salvar'>" + 
-		"<input id='editar' class='botao' type='button' value='Editar'>" + 
-		"<input id='excluir' class='botao' type='button' value='Excluir'>",
+		"<input id='editar' class='botao' type='button' value='Grid'>",
 	titulo: "CLIENTE",
 	tela: "<label for='codcli' class='rotuloGrande'>Código:</label> " + 
               "<input type='text' class='entrada' id='codcli' disabled=''><br> " + 
@@ -264,7 +612,6 @@ TelaAtividadeGrid = {
 	botoes: "<input id='cadastrar-convite' class='botaoConvite' type='button' value='Cadastrar Convites'> " +
                 "<input id='novo' class='botao' type='button' value='Novo'> " +
                 "<input id='pesquisa' class='botao' type='button' value='Pesquisar'> " +
-                "<input id='salvar' class='botao' type='button' value='Salvar'> " +
                 "<input id='editar' class='botao' type='button' value='Editar'> " +
                 "<input id='excluir' class='botao' type='button' value='Excluir'>",
 	titulo: "ATIVIDADE",
@@ -288,12 +635,9 @@ TelaAtividadeGrid = {
 TelaAtividadeForm = {
         idTela: "tela-atividade-form",
         scripts: "<script type='text/javascript' src='../js/telas/atividade.js'></script>",
-	botoes: "<input id='cadastrar-convite' class='botaoConvite' type='button' value='Cadastrar Convites'> " +
-			"<input id='novo' class='botao' type='button' value='Novo'> " +
-			"<input id='pesquisa' class='botao' type='button' value='Pesquisar'> " +
+	botoes: "<input id='novo' class='botao' type='button' value='Novo'> " +
 			"<input id='salvar' class='botao' type='button' value='Salvar'> " +
-			"<input id='editar' class='botao' type='button' value='Editar'> " +
-			"<input id='excluir' class='botao' type='button' value='Excluir'>",
+			"<input id='editar' class='botao' type='button' value='Grid'> ",
 	titulo: "ATIVIDADE",
 	tela: "<label for='codati' class='rotuloGrande'>Código de atividade:</label> " +
 	      "<input type='text' id='codati' class='entrada' disabled><br> " +
@@ -314,183 +658,3 @@ TelaAtividadeForm = {
 	      "<label for='obsandati' class='rotuloGrande'>Observações:</label> " +
 	      "<textarea id='obsandati' cols='60' rows='5'></textarea><br> " + popupCadastrarConvites
 };
-
-$(document).ready(function() {
-	$("#perfil").click(function() {	
-            controlador = new ControleTela();
-            esquema     = controlador.getEsquemaTela(1);
-            setEsquema(esquema);
-            InicializaPerfil();
-	});
-	
-	$("#permissao").click(function() {
-            controlador = new ControleTela();
-            esquema     = controlador.getEsquemaTela(2);
-            setEsquema(esquema);
-            inicializaGridPermissao();
-	});
-	
-	$("#empresa").click(function() {
-            controlador = new ControleTela();
-            esquema     = controlador.getEsquemaTela(3);
-            setEsquema(esquema);
-            inicializarEmpresa();
-	});
-	
-	$("#cliente").click(function() {
-            controlador = new ControleTela();
-            esquema     = controlador.getEsquemaTela(4);
-            setEsquema(esquema);
-            inicializaClienteGrid();
-	});
-	
-	$("#atividade").click(function() {
-            controlador = new ControleTela();
-            esquema     = controlador.getEsquemaTela(5);
-            setEsquema(esquema);
-            inicializaAtividadeGrid();
-	});	
-});
-
-
-/**
- * Metodos para inicialização dos grids.
- */
-function InicializaPerfil() {
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/CRM/PerfilServlet",
-        data: {
-            TIPO_REQUISICAO: 1
-        },
-        success: function(data) {
-            data = JSON.parse(data);
-            // Insersao dos dados do usuario.
-            $("#codigo").val(data.codusu);
-            $("#nome").val(data.nomusu);
-            $("#login").val(data.logusu);
-            
-            // construcao da lista de empresas que o usuário dispoe.
-            var empresas = "<option id='0' value='0'>Nenhum Selecionado</option>";
-            for (var i = 0; i < data.empresas.length; i++) {
-                var aux = data.empresas;
-                empresas += "<option id='" + aux[i].codemp + "' value='" + aux[i].codemp +"'>" + aux[i].razsoc + "</option>";
-            }
-            
-            // settando a lista no combobox da empresa e selecionando a empresa do funcionario, caso esta exista.
-            $("#lista-empresa").html(empresas);
-            $("#lista-empresa").val(data.empusu);
-        }
-    });
-}
-
-function inicializaGridPermissao() {
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/CRM/PermissoesServlet",
-        data: {
-            TIPO_REQUISICAO: 1
-        },
-        success: function(data) {
-            data = JSON.parse(data);
-            for (var i = 0; i < data.permissoes.length; i++) {
-                var linhaId    = i+1;
-                var linhaClass = ((i+1)%2==1) ? "odd" : null;
-                if (i === 0) linhaClass += " selected";
-                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
-                            "   <td class='nome' id='" + data.permissoes[i].codusu + "'>" + data.permissoes[i].nome + "</td>" + 
-                            "   <td class='tipo'>" + data.permissoes[i].tipo + "</td>" + 
-                            "   <td class='solicitante'>" + data.permissoes[i].solicitante + "</td>" + 
-                            "   <td class='datini'>" + data.permissoes[i].datini + "</td>" + 
-                            "   <td class='datfim'>" + data.permissoes[i].datfim + "</td>" + 
-                            "</tr>";
-                linha = linha.replace("undefined", " - ");
-                linha = linha.replace("undefined", " - ");
-                $("tbody").append(linha);
-            }
-        }
-    });
-}
-
-function inicializarEmpresa() {
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/CRM/GerenciarEmpresa",
-        data: {
-            TIPO_REQUISICAO: 1
-        },
-        success: function(data) {
-            data = JSON.parse(data);     
-            $("#codemp").val(data.codemp);
-            $("#insjur").val(data.insjur);
-            $("#nomfan").val(data.nomfan);
-            $("#razsoc").val(data.razsoc);
-            $("#telemp").val(data.telemp);
-            $("#celemp").val(data.celemp);
-        }
-    });
-}
-
-function inicializaClienteGrid() {
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/CRM/GerenciarClientes",
-        data: {
-            TIPO_REQUISICAO: 1
-        },
-        success: function(data) {
-            data = JSON.parse(data);
-            for (var i = 0; i < data.clientes.length; i++) {
-                var linhaId    = i+1;
-                var linhaClass = ((i+1)%2==1) ? "odd" : null;
-                if (i === 0) linhaClass += " selected";
-                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"'>" + 
-                            "   <td class='nomfan' id='" + data.clientes[i].codcli + "'>" + data.clientes[i].nomfan + "</td>" + 
-                            "   <td class='razsoc'>" + data.clientes[i].razsoc + "</td>" + 
-                            "   <td class='numinsjur'>" + data.clientes[i].numinsjur + "</td>" + 
-                            "   <td class='nomven' codven='" + data.clientes[i].codven  + "'>" + data.clientes[i].nomven + "</td>" + 
-                            "   <td class='telemp'>" + data.clientes[i].telemp + "</td>" + 
-                            "   <td class='celemp'>" + data.clientes[i].celemp + "</td>" + 
-                            "</tr>";
-                linha = linha.replace("undefined", " - ");
-                linha = linha.replace("undefined", " - ");
-                $("tbody").append(linha);
-            }
-        }
-    });
-}
-
-function inicializaAtividadeGrid() {
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/CRM/GerenciarAtividade",
-        data: {
-            TIPO_REQUISICAO: 2,
-            CODATI: 0,
-            CODCLI: 0
-        },
-        success: function(data) {
-            data = JSON.parse(data);
-            $("#grid-atividades").html("");
-            for (var i = 0; i < data.atividades.length; i++) {
-                var linhaId    = i+1;
-                var linhaClass = ((i+1)%2==1) ? "odd" : null;
-                if (i === 0) linhaClass += " selected";
-                var linha = "<tr id='"+linhaId+"' class='"+linhaClass+"' desati='" + data.atividades[i].desati+ "' obsandati='" + data.atividades[i].obsandati + "'>" + 
-                            "    <td class='codati'>" + data.atividades[i].codati + "</td>" + 
-                            "    <td class='nomati'>" + data.atividades[i].nomati + "</td>" + 
-                            "    <td class='codtipati' id='" + data.atividades[i].codtipati + "'>" + data.atividades[i].nomtipati + "</td>" + 
-                            "    <td class='codcli' id='" + data.atividades[i].codcli+ "'>" + data.atividades[i].nomcli + "</td>" + 
-                            "    <td class='status'>" + ((data.atividades[i].status === "S") ? "Concluído" : "Em andamento")  + "</td>" + 
-                            "    <td class='datini'>" + data.atividades[i].datini + "</td>" + 
-                            "    <td class='datfin'>" + data.atividades[i].datfin + "</td>" + 
-                            "</tr>";
-                
-                linha = linha.replace("undefined", " - ");
-                linha = linha.replace("undefined", " - ");
-                $("#grid-atividades").append(linha);
-            }
-            
-        }
-    });
-}
