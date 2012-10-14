@@ -7,8 +7,16 @@ package controller.servlets;
 import controller.Ambiente;
 import controller.GerenciarEmpresa;
 import controller.GerenciarUsuario;
+import dao.DaoEmpresa;
+import dao.DaoFuncionario;
+import dao.DaoUsuario;
+import entity.EmpresaEntity;
+import entity.FuncionarioEntity;
+import entity.TipoFuncionarioEntity;
+import entity.UsuarioEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,7 +60,17 @@ public class LoginServlet extends HttpServlet {
                 out.println(result);
             }
         } else if (tipoRequisicao == CADASTRO){
-            out.println("cadastro");
+            String nome            = request.getParameter("NOME");
+            String login           = request.getParameter("LOGIN");
+            String senha           = request.getParameter("SENHA");
+            String tipoCadastro    = request.getParameter("TIPOCADASTRO");
+            int empresaSelecionada = Integer.parseInt(request.getParameter("EMPRESASELECIONADA"));
+            String inscjur         = request.getParameter("INSCJUR");
+            String nomfan          = request.getParameter("NOMFAN");
+            String razsoc          = request.getParameter("RAZSOC");
+            
+            this.salvarDadosUsuario(nome, login, senha, tipoCadastro, empresaSelecionada, inscjur, nomfan, razsoc);
+            out.print("Cadastro efetuado com sucesso.");
         } else if (tipoRequisicao == LISTA_EMPRESA) {
             GerenciarEmpresa gerenciarEmpresa = new GerenciarEmpresa();
             out.println(gerenciarEmpresa.stringListaEmpresas());
@@ -61,6 +79,58 @@ public class LoginServlet extends HttpServlet {
         }
     }
     
+    private void salvarDadosUsuario(String nomusu, String logusu, String senusu, String tipoCadastro, 
+                                    int codemp, String inscjur, String nomfan, String razsoc) {
+        DaoUsuario daoUsuario       = new DaoUsuario();
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        
+        int codusu = util.Util.getNextValidKey("USUARIO", "CODUSU");
+        usuarioEntity.setCodusu(codusu);
+        usuarioEntity.setNomusu(nomusu);
+        usuarioEntity.setLogusu(logusu);
+        usuarioEntity.setSenusu(senusu);
+        usuarioEntity.setIdusuativ(UsuarioEntity.IDSITUATIV_ATIVO);
+        daoUsuario.persist(usuarioEntity);
+        
+        if (tipoCadastro.equals("1")) {
+            // associar-se a empreja ja existente.
+            this.associarEmpresa(codusu, codemp, TipoFuncionarioEntity.FUNCIOARIO);
+        } else {
+            // criar uma nova empresa.
+            this.criarNovaEmpresa(codusu, inscjur, nomfan, razsoc);
+        }
+    }
+    
+    public void associarEmpresa(int codusu, int codemp, int tipoPermissao) {
+        DaoFuncionario daoFuncionario       = new DaoFuncionario();
+        FuncionarioEntity funcionarioEntity = new FuncionarioEntity();
+        
+        funcionarioEntity.setCodfun(util.Util.getNextValidKey("FUNCIONARIO", "CODFUN"));
+        funcionarioEntity.setCodusu(codusu);
+        funcionarioEntity.setCodemp(codemp);
+        funcionarioEntity.setCodtipfun(TipoFuncionarioEntity.FUNCIOARIO);
+        
+        if (tipoPermissao == TipoFuncionarioEntity.DONO) {
+            funcionarioEntity.setCodtipfun(TipoFuncionarioEntity.DONO);
+            funcionarioEntity.setDatini(new Date());
+        }
+        daoFuncionario.persist(funcionarioEntity);
+    }
+    
+    public void criarNovaEmpresa(int codusu, String inscjur, String nomfan, String razsoc) {
+        DaoEmpresa daoEmpresa       = new DaoEmpresa();
+        EmpresaEntity empresaEntity = new EmpresaEntity();
+        
+        int codemp = util.Util.getNextValidKey("EMPRESA", "CODEMP");
+        empresaEntity.setCodemp(codemp);
+        empresaEntity.setIdtipinsjur("J");
+        empresaEntity.setNuminsjur(inscjur);
+        empresaEntity.setNomfan(nomfan);
+        empresaEntity.setRazsoc(razsoc);
+        daoEmpresa.persist(empresaEntity);
+        
+        this.associarEmpresa(codusu, codemp, TipoFuncionarioEntity.DONO);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
