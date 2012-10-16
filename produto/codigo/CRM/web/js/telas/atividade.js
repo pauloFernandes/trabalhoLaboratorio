@@ -140,6 +140,21 @@ $("#enviar-convites").click(function() {
     })        
 });
 
+$("#aceitar-convite").click(function() {
+    var atividade = $("tr.selected").find("td.codati").html();
+    
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/CRM/GerenciarAtividade",
+        data: {
+            TIPO_REQUISICAO: 6,
+            CODATI: atividade
+        },
+        success: function(data) {
+            alert("Convite aceito com sucesso.");
+        }
+});
+
 function requisicaoPesquisa(codati, codcli, nomati, status, datini, datfim) {
 	$.ajax({
         type: "POST",

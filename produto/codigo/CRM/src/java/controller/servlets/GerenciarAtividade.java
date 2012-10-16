@@ -10,6 +10,7 @@ import dao.DaoConvidado;
 import dao.DaoLembrete;
 import entity.AtividadeEntity;
 import entity.ConvidadoEntity;
+import entity.IEntity;
 import entity.LembreteEntity;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -44,6 +46,7 @@ public class GerenciarAtividade extends HttpServlet {
     private static final int SALVAR_ATIVIDADE        = 3;
     private static final int CARREGAR_CLIENTES       = 4;
     private static final int SALVAR_CONVITES         = 5;
+    private static final int ACEITAR_CONVITE         = 6;
     
     /**
      * Processes requests for both HTTP
@@ -98,6 +101,10 @@ public class GerenciarAtividade extends HttpServlet {
                 String[] split    = convidados.split(",");
 
                 this.enviarConvites(codati, descon, idtiplem, datinilem, split);
+            } else if (tipoRequisicao == ACEITAR_CONVITE) {
+                int codati = Integer.parseInt(request.getParameter("CODATI"));
+                int codfun = Ambiente.getInstance().getFuncionarioEntity().getCodfun();
+                this.aceitarConvite(codati, codfun);
             }
         }
     }
@@ -140,6 +147,7 @@ public class GerenciarAtividade extends HttpServlet {
                 aux.put("nomati", rs.getString("NOMATI"));
                 aux.put("codtipati", rs.getString("CODTIPATI"));
                 aux.put("nomtipati", rs.getString("NOMTIPATI"));
+                aux.put("convite_aceito", rs.getString("CONVITE_ACEITO"));
                 aux.put("status", rs.getString("STATUS"));
                 aux.put("codfunres", rs.getString("CODFUNRES"));
                 aux.put("nomusu", rs.getString("NOMUSU"));
@@ -264,6 +272,19 @@ public class GerenciarAtividade extends HttpServlet {
         }
         
         daoLembrete.persist(lembreteEntity);
+    }
+    
+    private void aceitarConvite(int codati, int codfun) {
+        DaoConvidado daoConvidado = new DaoConvidado();
+        List<IEntity> lista = daoConvidado.obterEntidadeCondicaoWhere(
+            " CODATI = " + codati + " AND CODFUN = " + codfun
+        );
+        
+        if (!lista.isEmpty()) {
+            ConvidadoEntity convidadoEntity = new ConvidadoEntity();
+            convidadoEntity.setIdconace(ConvidadoEntity.CONVITE_ACEITO);
+            daoConvidado.persist(convidadoEntity);
+        }
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

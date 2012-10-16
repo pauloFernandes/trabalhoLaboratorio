@@ -169,6 +169,7 @@ function inicializaAtividadeGrid() {
                             "    <td class='codtipati' id='" + data.atividades[i].codtipati + "'>" + data.atividades[i].nomtipati + "</td>" + 
                             "    <td class='codcli' id='" + data.atividades[i].codcli+ "'>" + data.atividades[i].nomcli + "</td>" + 
                             "    <td class='status'>" + ((data.atividades[i].status === "S") ? "Concluído" : "Em andamento")  + "</td>" + 
+                            "    <td class='convite_aceito'>" + data.atividades[i].convite_aceito + "</td>" + 
                             "    <td class='datini'>" + data.atividades[i].datini + "</td>" + 
                             "    <td class='datfin'>" + data.atividades[i].datfin + "</td>" + 
                             "</tr>";
@@ -613,7 +614,8 @@ TelaAtividadeGrid = {
                 "<input id='novo' class='botao' type='button' value='Novo'> " +
                 "<input id='pesquisa' class='botao' type='button' value='Pesquisar'> " +
                 "<input id='editar' class='botao' type='button' value='Editar'> " +
-                "<input id='excluir' class='botao' type='button' value='Excluir'>",
+                "<input id='excluir' class='botao' type='button' value='Excluir'>" + 
+                "<input id='aceitar-convite' class='botao' type='button' value='Aceitar Convite'> ",
 	titulo: "ATIVIDADE",
 	tela: "<table class='tabelaResultado'> " + 
 		"	<thead> " + 
@@ -623,6 +625,7 @@ TelaAtividadeGrid = {
 		"			<th>Tipo</th> " + 
                 "			<th>Cliente</th> " + 
 		"			<th>Status</th> " + 
+                "			<th>Convite Aceito</th> " + 
 		"			<th>Data Fim</th> " + 
 		"			<th>Data Inicio</th> " + 
 		"		</tr> " + 
