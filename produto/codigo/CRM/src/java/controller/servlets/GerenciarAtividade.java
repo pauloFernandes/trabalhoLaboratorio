@@ -141,7 +141,6 @@ public class GerenciarAtividade extends HttpServlet {
             
             while (rs.next()) {
                 JSONObject aux = new JSONObject();
-                Date auxDate = null;
                 
                 aux.put("codati", rs.getString("CODATI"));
                 aux.put("nomati", rs.getString("NOMATI"));
@@ -155,7 +154,7 @@ public class GerenciarAtividade extends HttpServlet {
                 aux.put("codcli", rs.getString("CODCLI"));
                 aux.put("nomcli", rs.getString("RAZSOC"));
                 
-                auxDate = rs.getDate("DATINI");
+                Date auxDate = rs.getDate("DATINI");
                 String date = (auxDate == null) ? null : dateFormat.format(auxDate);
                 aux.put("datini", date);
                 
