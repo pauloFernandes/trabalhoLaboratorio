@@ -9,7 +9,6 @@ import builder.Director;
 import controller.command.Receptor;
 import dao.DaoFuncionario;
 import entity.FuncionarioEntity;
-import entity.IEntity;
 
 /**
  *

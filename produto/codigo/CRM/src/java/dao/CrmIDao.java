@@ -4,7 +4,6 @@
  */
 package dao;
 
-import entity.AbstractEntity;
 import entity.IEntity;
 import java.util.List;
 
