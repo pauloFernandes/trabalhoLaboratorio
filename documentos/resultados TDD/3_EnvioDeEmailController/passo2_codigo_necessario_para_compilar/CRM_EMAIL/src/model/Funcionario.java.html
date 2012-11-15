@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Funcionario.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 22:14:45)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">model</a> &gt; <span class="el_source">Funcionario.java</span></div><h1>Funcionario.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package model;
+
+import controller.Ambiente;
+import db.DbStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L18">public class Funcionario {</span>
+    public static ResultSet obterTodosItensPermissao() {
+<span class="nc" id="L20">        String sql = &quot; SELECT U.CODUSU, &quot; + </span>
+                    &quot;   U.NOMUSU, &quot; + 
+                    &quot;   TF.NOMTIPFUN, &quot; + 
+                    &quot;   CASE WHEN F.DATINI IS NULL &quot; + 
+                    &quot;     THEN 'SIM' &quot; + 
+                    &quot;     ELSE 'NÃƒO' &quot; + 
+                    &quot;   END SOLICITANTE, &quot; + 
+                    &quot;   F.DATINI, &quot; + 
+                    &quot;   F.DATFIM &quot; + 
+                    &quot; FROM USUARIO U, FUNCIONARIO F, TIPOFUNCIONARIO TF &quot; + 
+                    &quot; WHERE U.CODUSU     = F.CODUSU &quot; + 
+                    &quot;   AND TF.CODTIPFUN = F.CODTIPFUN &quot; + 
+<span class="nc" id="L32">                    &quot;   AND F.CODEMP     = &quot; + Ambiente.getInstance().getEmpresaEntity().getCodemp() + </span>
+<span class="nc" id="L33">                    &quot; ORDER BY 3 DESC&quot;;</span>
+        
+        try {
+<span class="nc" id="L36">            return DbStatement.select(sql);</span>
+<span class="nc" id="L37">        } catch (SQLException ex) {</span>
+<span class="nc" id="L38">            Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+        }
+        
+<span class="nc" id="L41">        return null;</span>
+    }
+    
+    public static ResultSet obterTodosItensPermissao(String nome, String datini, String datfim, String solicitante) {
+<span class="nc" id="L45">        String sql = &quot; SELECT U.CODUSU, &quot; +</span>
+                    &quot;   U.NOMUSU, &quot; + 
+                    &quot;   TF.NOMTIPFUN, &quot; + 
+                    &quot;   CASE WHEN F.DATINI IS NULL &quot; + 
+                    &quot;     THEN 'SIM' &quot; + 
+                    &quot;     ELSE 'NÃƒO' &quot; + 
+                    &quot;   END SOLICITANTE, &quot; + 
+                    &quot;   F.DATINI, &quot; + 
+                    &quot;   F.DATFIM &quot; + 
+                    &quot; FROM USUARIO U, FUNCIONARIO F, TIPOFUNCIONARIO TF &quot; + 
+                    &quot; WHERE U.CODUSU     = F.CODUSU &quot; + 
+                    &quot;   AND TF.CODTIPFUN = F.CODTIPFUN &quot; + 
+<span class="nc" id="L57">                    &quot;   AND F.CODEMP     = &quot; + Ambiente.getInstance().getEmpresaEntity().getCodemp();</span>
+        
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (!nome.isEmpty()) {</span>
+<span class="nc" id="L60">            sql += &quot; AND UPPER(U.NOMUSU) LIKE UPPER('%&quot; + nome + &quot;%') &quot;;</span>
+        }
+        
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (!datini.isEmpty()) {</span>
+<span class="nc" id="L64">            sql += &quot; AND F.DATINI = '&quot; + datini + &quot;' &quot;;</span>
+        }
+        
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (!datfim.isEmpty()) {</span>
+<span class="nc" id="L68">            sql += &quot; AND F.DATFIM = '&quot; + datfim + &quot;' &quot;;</span>
+        }
+        
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (solicitante != null) {</span>
+<span class="nc" id="L72">            sql += &quot; AND F.DATINI IS NULL &quot;;</span>
+        }
+        
+<span class="nc" id="L75">        sql += &quot; ORDER BY 3 DESC&quot;;</span>
+        
+        try {
+<span class="nc" id="L78">            return DbStatement.select(sql);</span>
+<span class="nc" id="L79">        } catch (SQLException ex) {</span>
+<span class="nc" id="L80">            Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+        }
+        
+<span class="nc" id="L83">        return null;        </span>
+    }
+    
+    public static ResultSet obterTodosVendedores(int codemp) {
+<span class="nc" id="L87">        String sql = &quot;SELECT F.CODFUN, U.NOMUSU &quot; + </span>
+                        &quot; FROM FUNCIONARIO F, USUARIO U &quot; + 
+                        &quot; WHERE F.CODUSU = U.CODUSU &quot; + 
+<span class="nc" id="L90">                          &quot; AND F.CODEMP =  &quot; + codemp +  </span>
+<span class="nc" id="L91">                          &quot; AND F.DATINI IS NOT NULL &quot; + </span>
+<span class="nc" id="L92">                          &quot; AND F.DATFIM IS NULL&quot;;</span>
+        try {
+<span class="nc" id="L94">            return DbStatement.select(sql);</span>
+<span class="nc" id="L95">        } catch (SQLException ex) {</span>
+<span class="nc" id="L96">            Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+        }
+        
+<span class="nc" id="L99">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 22:14:45)</div></body></html>

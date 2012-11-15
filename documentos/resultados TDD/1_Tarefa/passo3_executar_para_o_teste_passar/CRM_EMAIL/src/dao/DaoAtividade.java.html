@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DaoAtividade.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestTarefa (11/11/2012 18:47:38)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">dao</a> &gt; <span class="el_source">DaoAtividade.java</span></div><h1>DaoAtividade.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package dao;
+
+import entity.AtividadeEntity;
+import entity.IEntity;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L20">public class DaoAtividade extends AbstractDao implements CrmIDao{</span>
+
+<span class="nc" id="L22">    public static final String[] PKS = {&quot;Codati&quot;};</span>
+    
+    public DaoAtividade() {
+<span class="nc" id="L25">        super(&quot;dao.DaoAtividade&quot;, DaoAtividade.PKS);</span>
+<span class="nc" id="L26">    }</span>
+
+    @Override
+    public IEntity obterEntidade(Object[] valorPks) {
+<span class="nc" id="L30">        AtividadeEntity entity = new AtividadeEntity();</span>
+        try {
+<span class="nc" id="L32">            ResultSet resultSet = super.getEntityById(PKS, valorPks);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            while(resultSet.next()) {</span>
+<span class="nc" id="L34">                entity.setCodati(resultSet.getInt(&quot;codati&quot;));</span>
+<span class="nc" id="L35">                entity.setNomati(resultSet.getString(&quot;nomati&quot;));</span>
+<span class="nc" id="L36">                entity.setDesati(resultSet.getString(&quot;desati&quot;));</span>
+<span class="nc" id="L37">                entity.setCodemp(Integer.parseInt(resultSet.getString(&quot;codemp&quot;)));</span>
+<span class="nc" id="L38">                entity.setCodcli(Integer.parseInt(resultSet.getString(&quot;codcli&quot;)));</span>
+<span class="nc" id="L39">                entity.setDatini(resultSet.getDate(&quot;datini&quot;));</span>
+<span class="nc" id="L40">                entity.setDatfin(resultSet.getDate(&quot;datfin&quot;));</span>
+<span class="nc" id="L41">                entity.setCodtipati(resultSet.getInt(&quot;codtipati&quot;));</span>
+<span class="nc" id="L42">                entity.setObsandati(resultSet.getString(&quot;obsandati&quot;));</span>
+<span class="nc" id="L43">                entity.setStatus(resultSet.getString(&quot;status&quot;));</span>
+<span class="nc" id="L44">                entity.setDescon(resultSet.getString(&quot;descon&quot;));</span>
+<span class="nc" id="L45">                entity.setCodfunres(resultSet.getInt(&quot;codfunres&quot;));</span>
+            }
+<span class="nc" id="L47">            entity.setNewRegister(false);</span>
+        }
+<span class="nc" id="L49">        catch (SQLException e) {</span>
+<span class="nc" id="L50">            e.getMessage();</span>
+        }
+        
+<span class="nc" id="L53">        return entity;</span>
+    }
+
+    @Override
+    public List&lt;IEntity&gt; obterTodasEntidades() {
+<span class="nc" id="L58">        List&lt;IEntity&gt; lista = new LinkedList&lt;IEntity&gt;();</span>
+<span class="nc" id="L59">        ResultSet resultSet = super.getAllEntities();</span>
+        
+        try {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            while(resultSet.next()) {</span>
+<span class="nc" id="L63">                AtividadeEntity entity = new AtividadeEntity();</span>
+<span class="nc" id="L64">                entity.setCodati(resultSet.getInt(&quot;codati&quot;));</span>
+<span class="nc" id="L65">                entity.setNomati(resultSet.getString(&quot;nomati&quot;));</span>
+<span class="nc" id="L66">                entity.setDesati(resultSet.getString(&quot;desati&quot;));</span>
+<span class="nc" id="L67">                entity.setCodemp(Integer.parseInt(resultSet.getString(&quot;codemp&quot;)));</span>
+<span class="nc" id="L68">                entity.setCodcli(Integer.parseInt(resultSet.getString(&quot;codcli&quot;)));</span>
+<span class="nc" id="L69">                entity.setDatini(resultSet.getDate(&quot;datini&quot;));</span>
+<span class="nc" id="L70">                entity.setDatfin(resultSet.getDate(&quot;datfin&quot;));</span>
+<span class="nc" id="L71">                entity.setCodtipati(resultSet.getInt(&quot;codtipati&quot;));</span>
+<span class="nc" id="L72">                entity.setObsandati(resultSet.getString(&quot;obsandati&quot;));</span>
+<span class="nc" id="L73">                entity.setDescon(resultSet.getString(&quot;descon&quot;));</span>
+<span class="nc" id="L74">                entity.setStatus(resultSet.getString(&quot;status&quot;));</span>
+<span class="nc" id="L75">                entity.setCodfunres(resultSet.getInt(&quot;codfunres&quot;));</span>
+<span class="nc" id="L76">                entity.setNewRegister(false);</span>
+<span class="nc" id="L77">                lista.add(entity);</span>
+            }
+<span class="nc" id="L79">        } catch (SQLException e) {</span>
+<span class="nc" id="L80">            Logger.getLogger(AbstractDao.class.getName()).log(Level.SEVERE, null, e);</span>
+        }
+        
+<span class="nc" id="L83">        return lista;</span>
+    }
+
+    @Override
+    public List&lt;IEntity&gt; obterEntidadeCondicaoWhere(String whereClause) {
+<span class="nc" id="L88">        List&lt;IEntity&gt; lista = new LinkedList&lt;IEntity&gt;();</span>
+<span class="nc" id="L89">        ResultSet resultSet = super.getEntityByWhere(whereClause);</span>
+        
+        try {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            while(resultSet.next()) {</span>
+<span class="nc" id="L93">                AtividadeEntity entity = new AtividadeEntity();</span>
+<span class="nc" id="L94">                entity.setCodati(resultSet.getInt(&quot;codati&quot;));</span>
+<span class="nc" id="L95">                entity.setNomati(resultSet.getString(&quot;nomati&quot;));</span>
+<span class="nc" id="L96">                entity.setDesati(resultSet.getString(&quot;desati&quot;));</span>
+<span class="nc" id="L97">                entity.setCodemp(Integer.parseInt(resultSet.getString(&quot;codemp&quot;)));</span>
+<span class="nc" id="L98">                entity.setCodcli(Integer.parseInt(resultSet.getString(&quot;codcli&quot;)));</span>
+<span class="nc" id="L99">                entity.setDatini(resultSet.getDate(&quot;datini&quot;));</span>
+<span class="nc" id="L100">                entity.setDatfin(resultSet.getDate(&quot;datfin&quot;));</span>
+<span class="nc" id="L101">                entity.setCodtipati(resultSet.getInt(&quot;codtipati&quot;));</span>
+<span class="nc" id="L102">                entity.setObsandati(resultSet.getString(&quot;obsandati&quot;));</span>
+<span class="nc" id="L103">                entity.setStatus(resultSet.getString(&quot;status&quot;));</span>
+<span class="nc" id="L104">                entity.setDescon(resultSet.getString(&quot;descon&quot;));</span>
+<span class="nc" id="L105">                entity.setCodfunres(resultSet.getInt(&quot;codfunres&quot;));</span>
+<span class="nc" id="L106">                entity.setNewRegister(false);</span>
+<span class="nc" id="L107">                lista.add(entity);</span>
+            }
+<span class="nc" id="L109">        } catch (SQLException e) {</span>
+<span class="nc" id="L110">            Logger.getLogger(AbstractDao.class.getName()).log(Level.SEVERE, null, e);</span>
+        }
+        
+<span class="nc" id="L113">        return lista;</span>
+    }
+    
+    
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestTarefa (11/11/2012 18:47:38)</div></body></html>

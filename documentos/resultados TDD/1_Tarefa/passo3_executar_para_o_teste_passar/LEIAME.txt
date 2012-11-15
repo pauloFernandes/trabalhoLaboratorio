@@ -1,0 +1,6 @@
+Teste executado, mas agora, feito para passar. Como pode ser visto pelo teste de cobertura, quase todo o codigo foi coberto, exceto os codigos de tratamento de excessao, que não havia como ser testados, visto que seria necessário que estas excessões ocorressem.
+
+Caminho para a classe de teste: CRM_EMAIL/testes/test_mail_sender/TestTarefa/TestTarefa
+Caminho para a classe testada : CRM_EMAIL/src/controller.mail/Tarefa/Tarefa()
+
+Como a classe produzida aqui deve ser usada para agendar tarefas, ela extenderá a classe TimerTask. A refatoração final alteração a transformação do método enviar para private e a chamada deste em run (método que deve ser implementado por quem implementa TimerTask).

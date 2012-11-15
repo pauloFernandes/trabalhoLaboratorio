@@ -1,0 +1,5 @@
+Teste executado, mas agora, feito para passar. Como pode ser visto pelo teste de cobertura, quase todo o codigo foi coberto, exceto os codigos de tratamento de excessao, que não havia como ser testados, visto que seria necessário que estas excessões ocorressem.
+O codigo testado utilizando as classes Mock. Na última refatoração incluem-se os passos de re-ajustar o código e remover os métodos Mock, substituindo-os por métodos reais.
+
+Caminho para a classe de teste: CRM_EMAIL/testes/test_mail_sender/TesteAgendador
+Caminho para a classe testada : CRM_EMAIL/src/controller.mail/Agendador.java

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>EnvioDeEmailController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 23:45:42)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">controller.mail</a> &gt; <span class="el_source">EnvioDeEmailController.java</span></div><h1>EnvioDeEmailController.java</h1><pre class="source lang-java linenums">package controller.mail;
+
+import java.util.Date;
+
+import dao.DaoFuncionario;
+import entity.FuncionarioEntity;
+import entity.LembreteEntity;
+
+<span class="fc" id="L9">public class EnvioDeEmailController {</span>
+
+<span class="fc" id="L11">	private String[] listaCaracteresInvalidos = {&quot;!&quot;, &quot;#&quot;, &quot;$&quot;, &quot;$&quot;, &quot;¨&quot;, &quot;&amp;&quot;, &quot;*&quot;, &quot;(&quot;, &quot;)&quot;, &quot;+&quot;};</span>
+	
+	public boolean validaEmail(String email) {
+		try {
+<span class="fc bfc" id="L15" title="All 2 branches covered.">			if (email.startsWith(&quot;@&quot;)) {</span>
+<span class="fc" id="L16">				throw new Exception(&quot;Email não possui usuario de email.&quot;);</span>
+			}
+			
+<span class="fc bfc" id="L19" title="All 2 branches covered.">			if (email.endsWith(&quot;@&quot;)) {</span>
+<span class="fc" id="L20">				throw new Exception(&quot;Email não possui dominio.&quot;);</span>
+			}
+			
+<span class="fc bfc" id="L23" title="All 2 branches covered.">			for (String caractereInvalido : listaCaracteresInvalidos) {</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">				if (email.contains(caractereInvalido)) {</span>
+<span class="fc" id="L25">					throw new Exception(&quot;O caractere &quot; + caractereInvalido + &quot; não pode ser usado &quot; +</span>
+<span class="fc" id="L26">										&quot;para endereço de email&quot;);</span>
+				}
+			}
+<span class="fc" id="L29">		} catch (Exception e) {</span>
+<span class="fc" id="L30">			System.out.println(e.getMessage());</span>
+<span class="fc" id="L31">			return false;</span>
+		}
+
+<span class="fc" id="L34">		return true;</span>
+	}
+	
+	public boolean enviarEmail(LembreteEntity lembrete) {
+<span class="fc" id="L38">		Agendador agendador           = new Agendador();</span>
+<span class="fc" id="L39">		Object[] pkFuncionario        = {lembrete.getCodfun()};</span>
+<span class="fc" id="L40">		DaoFuncionario daoFuncionario = new DaoFuncionario();</span>
+<span class="fc" id="L41">		FuncionarioEntity funcionario = (FuncionarioEntity) daoFuncionario.obterEntidade(pkFuncionario);</span>
+		
+		try {
+<span class="fc" id="L44">			this.validaEnvio(lembrete, funcionario);</span>
+<span class="fc" id="L45">		} catch (Exception e) {</span>
+<span class="fc" id="L46">			System.out.println(e.getMessage());</span>
+<span class="fc" id="L47">			return false;</span>
+		}
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		if (lembrete.getDatfimlem() == null) {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">			if (lembrete.getIdtiplem().equals(LembreteEntity.TIPO_LEMBRETE_EXCETO_FIM_DE_SEMANA)) {</span>
+<span class="fc" id="L52">				return agendador.enviarExcetoFimDeSemana(lembrete.getDatinilem(), funcionario.getMailfun(), lembrete.getTitlem(), lembrete.getTexlem());</span>
+			} else {				
+<span class="fc" id="L54">				return agendador.enviarDia(</span>
+<span class="fc" id="L55">					lembrete.getDatinilem(), funcionario.getMailfun(), lembrete.getTitlem(), lembrete.getTexlem()</span>
+				);
+			}
+		} else {
+<span class="fc" id="L59">			return agendador.enviarNoIntervalo (</span>
+<span class="fc" id="L60">				lembrete.getDatinilem(), lembrete.getDatfimlem(), </span>
+<span class="fc" id="L61">				funcionario.getMailfun(), lembrete.getTitlem(), lembrete.getTexlem(),</span>
+<span class="fc" id="L62">				lembrete.getIdtiplem().equals(LembreteEntity.TIPO_LEMBRETE_EXCETO_FIM_DE_SEMANA)</span>
+			);
+		}
+	}
+	
+	public void validaEnvio(LembreteEntity lembrete, FuncionarioEntity funcionario) throws Exception {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		if (lembrete.getDatinilem() == null) {</span>
+<span class="fc" id="L69">			throw new Exception(&quot;A data de envio do email deve ser definida&quot;);</span>
+		}
+		
+<span class="fc bfc" id="L72" title="All 2 branches covered.">		if (lembrete.getDatinilem().before(new Date())) {</span>
+<span class="fc" id="L73">			throw new Exception(&quot;A data inciial deve ser posterior a data de hoje.&quot;);</span>
+		}
+		
+<span class="fc bfc" id="L76" title="All 4 branches covered.">		if (lembrete.getDatfimlem() != null &amp;&amp; lembrete.getDatfimlem().before(new Date())) {</span>
+<span class="fc" id="L77">			throw new Exception(&quot;A data final deve ser uma data posterior a data inicial.&quot;);</span>
+		}
+		
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		if (lembrete.getTitlem() == null) {</span>
+<span class="fc" id="L81">			throw new Exception(&quot;Nenhum assunto foi informado para o email.&quot;);</span>
+		}
+		
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		if (lembrete.getTexlem() == null) {</span>
+<span class="fc" id="L85">			throw new Exception(&quot;Nenhum texto foi informado para o email.&quot;);</span>
+		}
+		
+<span class="fc bfc" id="L88" title="All 2 branches covered.">		if (funcionario.getMailfun() == null) {</span>
+<span class="fc" id="L89">			throw new Exception(&quot;Nenhum email valido foi adicionado para o envio do email.&quot;);</span>
+		}
+<span class="fc" id="L91">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 23:45:42)</div></body></html>

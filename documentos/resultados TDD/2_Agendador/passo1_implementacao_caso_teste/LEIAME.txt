@@ -1,0 +1,5 @@
+Primeiro passo do TDD para a classe Agendador. Como esperado, a classe de teste não compilou, porque a classe a ser testada ainda nao existia. Abaixo, o backtrace do erro encontrado:
+ 
+Caminho para a classe de teste: CRM_EMAIL/testes/test_mail_sender/TestAgendador/TestAgendador
+Caminho para a classe testada : a classe ainda não existe.
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GerenciarFuncionario.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 23:45:42)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">controller</a> &gt; <span class="el_source">GerenciarFuncionario.java</span></div><h1>GerenciarFuncionario.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controller;
+
+import builder.BuilderFuncionario;
+import builder.Director;
+import controller.command.Receptor;
+import dao.DaoFuncionario;
+import entity.FuncionarioEntity;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L17">public class GerenciarFuncionario {</span>
+    public int incliur(int codusu, int codemp, int tipoFuncionario) {
+<span class="nc" id="L19">        BuilderFuncionario builderFuncionario = new BuilderFuncionario();</span>
+<span class="nc" id="L20">        Director director                     = new Director(builderFuncionario);</span>
+<span class="nc" id="L21">        director.constroiObjeto();</span>
+        
+<span class="nc" id="L23">        DaoFuncionario daoFuncionario = (DaoFuncionario) director.getDao();</span>
+<span class="nc" id="L24">        FuncionarioEntity entity      = (FuncionarioEntity) director.getEntity();</span>
+<span class="nc" id="L25">        Receptor receptor             = new Receptor(daoFuncionario);</span>
+        
+<span class="nc" id="L27">        int codfun = util.Util.getNextValidKey(&quot;funcionario&quot;, &quot;codfun&quot;);</span>
+<span class="nc" id="L28">        entity.setCodfun(codfun);</span>
+<span class="nc" id="L29">        entity.setCodusu(codusu);</span>
+<span class="nc" id="L30">        entity.setCodemp(codemp);</span>
+<span class="nc" id="L31">        entity.setCodtipfun(tipoFuncionario);</span>
+        
+<span class="nc" id="L33">        receptor.call(&quot;incluir&quot;, entity);</span>
+        
+<span class="nc" id="L35">        return codfun;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 23:45:42)</div></body></html>

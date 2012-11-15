@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestEnvioDeEmailController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 23:45:42)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">testes</a> &gt; <a href="index.html" class="el_package">test_mail_sender</a> &gt; <span class="el_source">TestEnvioDeEmailController.java</span></div><h1>TestEnvioDeEmailController.java</h1><pre class="source lang-java linenums">package test_mail_sender;
+
+import static org.junit.Assert.*;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import controller.mail.EnvioDeEmailController;
+
+import entity.LembreteEntity;
+
+<span class="fc" id="L16">public class TestEnvioDeEmailController {</span>
+	private EnvioDeEmailController enviador;
+	private DateFormat format;
+	
+	@Before
+	public void before() {
+<span class="fc" id="L22">		 this.enviador = new EnvioDeEmailController();</span>
+<span class="fc" id="L23">		 this.format   = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;);</span>
+<span class="fc" id="L24">	}</span>
+	
+	@Test
+	public void testValidaEmail() {
+		// Testando um e-mail válido.
+<span class="fc" id="L29">		String email = &quot;paulo.phfp_26@yahoo.com.br&quot;;</span>
+<span class="fc" id="L30">		boolean emailValido = enviador.validaEmail(email);</span>
+<span class="fc" id="L31">		assertTrue(emailValido);</span>
+		
+		// Teste de um e-mail inválido por não possui nome de usuário.
+<span class="fc" id="L34">		email = &quot;@yahoo.com.br&quot;;</span>
+<span class="fc" id="L35">		emailValido = enviador.validaEmail(email);</span>
+<span class="fc" id="L36">		assertFalse(emailValido);</span>
+		
+		// Teste de e-mail inválido por não possui dominio.
+<span class="fc" id="L39">		email = &quot;paulo.phfp_26@&quot;;</span>
+<span class="fc" id="L40">		emailValido = enviador.validaEmail(email);</span>
+<span class="fc" id="L41">		assertFalse(emailValido);</span>
+		
+		// Teste de email com caracteres inválidos.
+<span class="fc" id="L44">		email = &quot;paulo***@yahoo.com&quot;;</span>
+<span class="fc" id="L45">		emailValido = enviador.validaEmail(email);</span>
+<span class="fc" id="L46">		assertFalse(emailValido);</span>
+<span class="fc" id="L47">	}</span>
+
+	@Test
+	public void testEnviarEmailNoDia() {
+		// Teste de um caso de sucesso, onde o e-mail pode ser enviado.
+<span class="fc" id="L52">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L53">		lembrete.setCodati(1);</span>
+<span class="fc" id="L54">		lembrete.setCodfun(1);</span>
+<span class="fc" id="L55">		lembrete.setDatfimlem(null);</span>
+		try {
+<span class="fc" id="L57">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L58">		} catch (ParseException e) {</span>
+<span class="nc" id="L59">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L61">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L62">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L63">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L64">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L65">		assertTrue(lembreteEnviado);</span>
+<span class="fc" id="L66">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoDiaDataDeEnvioAnterior() {
+		// Teste de um caso de falha, onde a data de envio é de um dia anterior a hoje.
+<span class="fc" id="L71">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L72">		lembrete.setCodati(1);</span>
+<span class="fc" id="L73">		lembrete.setCodfun(1);</span>
+<span class="fc" id="L74">		lembrete.setDatfimlem(null);</span>
+		try {
+<span class="fc" id="L76">			lembrete.setDatinilem(this.format.parse(&quot;01/01/2011 00:00:00&quot;));</span>
+<span class="pc" id="L77">		} catch (ParseException e) {</span>
+<span class="nc" id="L78">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L80">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L81">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L82">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L83">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L84">		assertFalse(lembreteEnviado);</span>
+<span class="fc" id="L85">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoDiaSemDataDeEnvio() {
+		// Teste de um caso de falha, onde está faltando o e-mail do destinatário.
+<span class="fc" id="L90">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L91">		lembrete.setCodati(1);</span>
+<span class="fc" id="L92">		lembrete.setCodfun(1);</span>
+<span class="fc" id="L93">		lembrete.setDatfimlem(null);</span>
+<span class="fc" id="L94">		lembrete.setDatinilem(null);</span>
+<span class="fc" id="L95">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L96">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L97">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L98">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L99">		assertFalse(lembreteEnviado);</span>
+<span class="fc" id="L100">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoDiaSemDestinatario() {
+		// Teste de um caso de falha, onde está faltando o e-mail do destinatário.
+<span class="fc" id="L105">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L106">		lembrete.setCodati(1);</span>
+<span class="fc" id="L107">		lembrete.setCodfun(5);</span>
+<span class="fc" id="L108">		lembrete.setDatfimlem(null);</span>
+		try {
+<span class="fc" id="L110">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L111">		} catch (ParseException e) {</span>
+<span class="nc" id="L112">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L114">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L115">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L116">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L117">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L118">		assertFalse(lembreteEnviado);</span>
+		
+<span class="fc" id="L120">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoDiaSemAssunto() {
+		// Teste de um caso de falha, onde está faltando o assunto do e-mail.
+<span class="fc" id="L125">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L126">		lembrete.setCodati(1);</span>
+<span class="fc" id="L127">		lembrete.setCodfun(1);</span>
+<span class="fc" id="L128">		lembrete.setDatfimlem(null);</span>
+		try {
+<span class="fc" id="L130">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L131">		} catch (ParseException e) {</span>
+<span class="nc" id="L132">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L134">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L135">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L136">		lembrete.setTitlem(null);</span>
+<span class="fc" id="L137">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L138">		assertFalse(lembreteEnviado);</span>
+<span class="fc" id="L139">	}	</span>
+	
+	@Test
+	public void testEnviarEmailNoDiaSemTexto() {
+		// Teste de um caso de falha, onde está faltando o texto do e-mail.
+<span class="fc" id="L144">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L145">		lembrete.setCodati(1);</span>
+<span class="fc" id="L146">		lembrete.setCodfun(1);</span>
+<span class="fc" id="L147">		lembrete.setDatfimlem(null);</span>
+		try {
+<span class="fc" id="L149">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L150">		} catch (ParseException e) {</span>
+<span class="nc" id="L151">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L153">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L154">		lembrete.setTexlem(null);</span>
+<span class="fc" id="L155">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L156">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L157">		assertFalse(lembreteEnviado);</span>
+<span class="fc" id="L158">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoIntervalo() {
+		// Teste de sucesso.
+<span class="fc" id="L163">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L164">		lembrete.setCodati(1);</span>
+<span class="fc" id="L165">		lembrete.setCodfun(1);</span>
+		try {
+<span class="fc" id="L167">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="fc" id="L168">			lembrete.setDatfimlem(this.format.parse(&quot;31/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L169">		} catch (ParseException e) {</span>
+<span class="nc" id="L170">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L172">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L173">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L174">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L175">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L176">		assertTrue(lembreteEnviado);</span>
+<span class="fc" id="L177">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoIntervaloDataUltrapassada() {
+		// Teste de falha: A data incial já foi ultrapassada.
+<span class="fc" id="L182">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L183">		lembrete.setCodati(1);</span>
+<span class="fc" id="L184">		lembrete.setCodfun(1);</span>
+		try {
+<span class="fc" id="L186">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2011 00:00:00&quot;));</span>
+<span class="fc" id="L187">			lembrete.setDatfimlem(this.format.parse(&quot;31/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L188">		} catch (ParseException e) {</span>
+<span class="nc" id="L189">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L191">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L192">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L193">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L194">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L195">		System.err.println(lembreteEnviado);</span>
+<span class="fc" id="L196">		assertFalse(lembreteEnviado);</span>
+<span class="fc" id="L197">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoIntervaloDataFinalUltrapassada() {
+		// Teste de falha: A data final é anterior a data inicial. O objetivo é 
+		// verificar se é um intervalo possivel de ser coberto.
+<span class="fc" id="L203">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L204">		lembrete.setCodati(1);</span>
+<span class="fc" id="L205">		lembrete.setCodfun(1);</span>
+		try {
+<span class="fc" id="L207">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="fc" id="L208">			lembrete.setDatfimlem(this.format.parse(&quot;31/12/2011 00:00:00&quot;));</span>
+<span class="pc" id="L209">		} catch (ParseException e) {</span>
+<span class="nc" id="L210">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L212">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_COMUM);</span>
+<span class="fc" id="L213">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L214">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L215">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L216">		assertFalse(lembreteEnviado);</span>
+<span class="fc" id="L217">	}</span>
+	
+	@Test
+	public void testEnviarEmailExcetoFimDeSemana() {
+		// Teste de sucesso.
+<span class="fc" id="L222">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L223">		lembrete.setCodati(1);</span>
+<span class="fc" id="L224">		lembrete.setCodfun(1);</span>
+<span class="fc" id="L225">		lembrete.setDatfimlem(null);</span>
+		try {
+<span class="fc" id="L227">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L228">		} catch (ParseException e) {</span>
+<span class="nc" id="L229">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L231">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_EXCETO_FIM_DE_SEMANA);</span>
+<span class="fc" id="L232">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L233">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L234">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L235">		assertTrue(lembreteEnviado);</span>
+<span class="fc" id="L236">	}</span>
+	
+	@Test
+	public void testEnviarEmailNoIntervaloExcetoFimDeSemana() {
+		// Teste de sucesso.
+<span class="fc" id="L241">		LembreteEntity lembrete= new LembreteEntity();</span>
+<span class="fc" id="L242">		lembrete.setCodati(1);</span>
+<span class="fc" id="L243">		lembrete.setCodfun(1);</span>
+		try {
+<span class="fc" id="L245">			lembrete.setDatfimlem(this.format.parse(&quot;31/12/2012 00:00:00&quot;));</span>
+<span class="fc" id="L246">			lembrete.setDatinilem(this.format.parse(&quot;25/12/2012 00:00:00&quot;));</span>
+<span class="pc" id="L247">		} catch (ParseException e) {</span>
+<span class="nc" id="L248">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L250">		lembrete.setIdtiplem(LembreteEntity.TIPO_LEMBRETE_EXCETO_FIM_DE_SEMANA);</span>
+<span class="fc" id="L251">		lembrete.setTexlem(&quot;teste de envio de email.&quot;);</span>
+<span class="fc" id="L252">		lembrete.setTitlem(&quot;Teste de envio de email.&quot;);</span>
+<span class="fc" id="L253">		boolean lembreteEnviado = this.enviador.enviarEmail(lembrete);</span>
+<span class="fc" id="L254">		assertTrue(lembreteEnviado);</span>
+<span class="fc" id="L255">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 23:45:42)</div></body></html>

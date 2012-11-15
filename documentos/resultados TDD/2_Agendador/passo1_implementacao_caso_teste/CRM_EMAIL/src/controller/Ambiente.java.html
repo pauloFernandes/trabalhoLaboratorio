@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Ambiente.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (11/11/2012 21:09:38)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">controller</a> &gt; <span class="el_source">Ambiente.java</span></div><h1>Ambiente.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controller;
+
+import dao.DaoEmpresa;
+import dao.DaoFuncionario;
+import entity.EmpresaEntity;
+import entity.FuncionarioEntity;
+import entity.IEntity;
+import entity.UsuarioEntity;
+import java.util.List;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+public class Ambiente {
+    private UsuarioEntity     usuarioEntity;
+    private FuncionarioEntity funcionarioEntity;
+    private EmpresaEntity     empresaEntity;
+    
+    public static final int PERMISSAO_USUARIO       = 0;
+    public static final int PERMISSAO_FUNCIONARIO   = 1;
+    public static final int PERMISSAO_ADMINISTRADOR = 2;
+    public static final int PERMISSAO_GERENTE       = 3;
+    
+    private static Ambiente instance;
+    
+<span class="nc" id="L31">    private Ambiente() {</span>
+<span class="nc" id="L32">    }</span>
+    
+    public static Ambiente getInstance() {
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (Ambiente.instance == null) {</span>
+<span class="nc" id="L36">            Ambiente.instance = new Ambiente();</span>
+        }
+        
+<span class="nc" id="L39">        return Ambiente.instance;</span>
+    }
+    
+    public void inicializar(UsuarioEntity entity) {
+<span class="nc" id="L43">        this.usuarioEntity            = entity;</span>
+<span class="nc" id="L44">        DaoFuncionario daoFuncionario = new DaoFuncionario();</span>
+<span class="nc" id="L45">        String where = &quot;CODUSU = &quot; + this.usuarioEntity.getCodusu() +</span>
+<span class="nc" id="L46">                       &quot; AND DATINI IS NOT NULL &quot; + </span>
+<span class="nc" id="L47">                       &quot; AND DATFIM IS NULL&quot;;</span>
+<span class="nc" id="L48">        List&lt;IEntity&gt; entidade        = daoFuncionario.obterEntidadeCondicaoWhere(where);</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (entidade.size() &gt; 0) {</span>
+<span class="nc" id="L50">            this.funcionarioEntity    = (FuncionarioEntity) entidade.get(0);</span>
+<span class="nc" id="L51">            DaoEmpresa daoEmpresa     = new DaoEmpresa();</span>
+<span class="nc" id="L52">            where                     = &quot;CODEMP = &quot; + this.funcionarioEntity.getCodemp();</span>
+<span class="nc" id="L53">            entidade                  = daoEmpresa.obterEntidadeCondicaoWhere(where);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (entidade.size() &gt; 0) {</span>
+<span class="nc" id="L55">                this.empresaEntity    = (EmpresaEntity) entidade.get(0);</span>
+            }
+        }
+<span class="nc" id="L58">    }</span>
+    
+    public static boolean validaPermissaoUsuario(int tipoPermissao) {
+<span class="nc" id="L61">        int permissaoCorrente = 0;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (Ambiente.getInstance().getFuncionarioEntity() != null) {</span>
+<span class="nc" id="L63">            permissaoCorrente = Ambiente.getInstance().getFuncionarioEntity().getCodtipfun();</span>
+        }
+        
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (tipoPermissao == Ambiente.PERMISSAO_GERENTE) {</span>
+            // ValidaÃ§Ã£o de permissÃ£o do Gerente (dono da empresa). Somente ele pode acessar
+            // funÃ§Ãµes de permissÃµes dedicadas somente a ele.
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            return permissaoCorrente == Ambiente.PERMISSAO_GERENTE;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        } else if (tipoPermissao == Ambiente.PERMISSAO_ADMINISTRADOR) {</span>
+            // ValidaÃ§Ã£o de permissÃ£o de administradores.
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            return permissaoCorrente == Ambiente.PERMISSAO_ADMINISTRADOR ||</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                   permissaoCorrente == Ambiente.PERMISSAO_GERENTE;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        } else if (tipoPermissao == Ambiente.PERMISSAO_FUNCIONARIO) {</span>
+            // Valida permissÃ£o para funcionÃ¡rios: Garante que qualquer um que seja
+            // funcionÃ¡rio de determinada empresa tenham permissÃ£o de uso.
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            return Ambiente.getInstance().getFuncionarioEntity() != null;</span>
+        }
+        
+        // Verifica se hÃ¡ um usuÃ¡rio logado.
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        return Ambiente.getInstance().getUsuarioEntity() != null;</span>
+    }
+
+    public static int getTipoPermissao() {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (Ambiente.getInstance().getFuncionarioEntity() == null) {</span>
+<span class="nc" id="L86">            return 0;</span>
+        }
+        
+<span class="nc" id="L89">        return Ambiente.getInstance().getFuncionarioEntity().getCodtipfun();</span>
+    }
+    
+    public UsuarioEntity getUsuarioEntity() {
+<span class="nc" id="L93">        return usuarioEntity;</span>
+    }
+
+    public FuncionarioEntity getFuncionarioEntity() {
+<span class="nc" id="L97">        return funcionarioEntity;</span>
+    }
+
+    public EmpresaEntity getEmpresaEntity() {
+<span class="nc" id="L101">        return empresaEntity;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (11/11/2012 21:09:38)</div></body></html>

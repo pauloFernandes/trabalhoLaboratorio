@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GerenciarUsuario.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 22:14:45)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">controller</a> &gt; <span class="el_source">GerenciarUsuario.java</span></div><h1>GerenciarUsuario.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controller;
+
+
+import builder.BuilderUsuario;
+import builder.Director;
+import controller.command.Receptor;
+import dao.DaoUsuario;
+import entity.IEntity;
+import entity.UsuarioEntity;
+import java.util.List;
+import util.Util;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L21">public class GerenciarUsuario {</span>
+    public boolean validarLogin(String login, String senha) {
+<span class="nc" id="L23">        String where = &quot;LOGUSU = '&quot; + login + &quot;' AND SENUSU = '&quot; + senha + &quot;' AND IDUSUATIV = 'A'&quot;;</span>
+        
+<span class="nc" id="L25">        BuilderUsuario builderUsuario = new BuilderUsuario();</span>
+<span class="nc" id="L26">        Director director             = new Director(builderUsuario);</span>
+<span class="nc" id="L27">        director.constroiObjeto();</span>
+        
+<span class="nc" id="L29">        DaoUsuario daoUsuario         = (DaoUsuario) director.getDao();</span>
+<span class="nc" id="L30">        UsuarioEntity usuarioEntity   = null;</span>
+<span class="nc" id="L31">        List&lt;IEntity&gt; list            = daoUsuario.obterEntidadeCondicaoWhere(where);</span>
+<span class="nc" id="L32">        usuarioEntity                 = (UsuarioEntity) list.get(0); </span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        boolean usuarioValido         = usuarioEntity.getCodusu() != 0;</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (usuarioValido) {</span>
+<span class="nc" id="L35">            Ambiente.getInstance().inicializar(usuarioEntity);</span>
+        }
+        
+<span class="nc" id="L38">        return usuarioValido;</span>
+    }
+    
+    public int incluir(String nome, String login, String senha) {
+<span class="nc" id="L42">        BuilderUsuario builderUsuario = new BuilderUsuario();</span>
+<span class="nc" id="L43">        Director director             = new Director(builderUsuario);</span>
+<span class="nc" id="L44">        director.constroiObjeto();</span>
+        
+<span class="nc" id="L46">        DaoUsuario daoUsuario = (DaoUsuario) director.getDao();</span>
+<span class="nc" id="L47">        UsuarioEntity entity  = (UsuarioEntity) director.getEntity();</span>
+<span class="nc" id="L48">        Receptor receptor     = new Receptor(daoUsuario);</span>
+        
+<span class="nc" id="L50">        int codusu = Util.getNextValidKey(&quot;USUARIO&quot;, &quot;CODUSU&quot;);</span>
+<span class="nc" id="L51">        entity.setCodusu(codusu);</span>
+<span class="nc" id="L52">        entity.setNomusu(nome);</span>
+<span class="nc" id="L53">        entity.setLogusu(login);</span>
+<span class="nc" id="L54">        entity.setSenusu(senha);</span>
+<span class="nc" id="L55">        entity.setIdusuativ(UsuarioEntity.IDSITUATIV_ATIVO);</span>
+<span class="nc" id="L56">        receptor.call(&quot;incluir&quot;, entity);</span>
+        
+<span class="nc" id="L58">        return codusu;</span>
+    }
+    
+    public void editar(int codigo, String nome, String login, String senha, String status) {
+<span class="nc" id="L62">        Object[] pks = {codigo};</span>
+<span class="nc" id="L63">        BuilderUsuario builderUsuario = new BuilderUsuario();</span>
+<span class="nc" id="L64">        Director director = new Director(builderUsuario, pks);</span>
+<span class="nc" id="L65">        director.constroiObjeto();</span>
+        
+<span class="nc" id="L67">        DaoUsuario daoUsuario = (DaoUsuario) director.getDao();</span>
+<span class="nc" id="L68">        UsuarioEntity entity  = (UsuarioEntity) director.getEntity();</span>
+        
+<span class="nc" id="L70">        entity.setNomusu(nome);</span>
+<span class="nc" id="L71">        entity.setLogusu(login);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (!senha.isEmpty()) {</span>
+<span class="nc" id="L73">            entity.setSenusu(senha);</span>
+        }
+<span class="nc bnc" id="L75" title="All 4 branches missed.">        if (status.equals(UsuarioEntity.IDSITUATIV_ATIVO) || status.equals(UsuarioEntity.IDSITUATIV_INATIVO)) {</span>
+<span class="nc" id="L76">            entity.setIdusuativ(status);</span>
+        }
+        
+<span class="nc" id="L79">        daoUsuario.persist(entity);</span>
+<span class="nc" id="L80">    }</span>
+    
+    public void excluir(int codigo) {
+<span class="nc" id="L83">        Object[] pks = {codigo};</span>
+<span class="nc" id="L84">        BuilderUsuario builderUsuario = new BuilderUsuario();</span>
+<span class="nc" id="L85">        Director director = new Director(builderUsuario, pks);</span>
+<span class="nc" id="L86">        director.constroiObjeto();</span>
+        
+<span class="nc" id="L88">        DaoUsuario daoUsuario = (DaoUsuario) director.getDao();</span>
+<span class="nc" id="L89">        UsuarioEntity entity  = (UsuarioEntity) director.getEntity();</span>
+        
+<span class="nc" id="L91">        entity.setIdusuativ(UsuarioEntity.IDSITUATIV_INATIVO);</span>
+<span class="nc" id="L92">        daoUsuario.persist(entity);</span>
+<span class="nc" id="L93">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 22:14:45)</div></body></html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DbStatement.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (11/11/2012 21:09:38)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">db</a> &gt; <span class="el_source">DbStatement.java</span></div><h1>DbStatement.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package db;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L15">public class DbStatement {</span>
+    private Statement statement;
+    
+    public static ResultSet select(String query) throws SQLException {
+        try {
+<span class="nc" id="L20">            Statement statement = DbConnect.getConnection().createStatement();</span>
+<span class="nc" id="L21">            return statement.executeQuery(query);</span>
+<span class="nc" id="L22">        } catch (SQLException e) {</span>
+<span class="nc" id="L23">            String error = e.getMessage();</span>
+<span class="nc" id="L24">            error = &quot;&quot;;</span>
+        }
+<span class="nc" id="L26">        return null;</span>
+    }
+    
+    public static void insert(String query) throws SQLException {
+<span class="nc" id="L30">        Statement statement = DbConnect.getConnection().createStatement();</span>
+<span class="nc" id="L31">        statement.execute(query);</span>
+<span class="nc" id="L32">    }</span>
+    
+    public static void update(String query) throws SQLException {
+<span class="nc" id="L35">        Statement statement = DbConnect.getConnection().createStatement();</span>
+<span class="nc" id="L36">        statement.execute(query);</span>
+<span class="nc" id="L37">    }</span>
+    
+    public static void delete(String query) throws SQLException {
+<span class="nc" id="L40">        Statement statement = DbConnect.getConnection().createStatement();</span>
+<span class="nc" id="L41">        statement.execute(query);</span>
+<span class="nc" id="L42">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (11/11/2012 21:09:38)</div></body></html>

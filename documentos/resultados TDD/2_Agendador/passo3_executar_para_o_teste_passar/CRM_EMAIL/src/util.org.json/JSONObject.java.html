@@ -1,0 +1,1594 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>JSONObject.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (13/11/2012 20:29:13)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">util.org.json</a> &gt; <span class="el_source">JSONObject.java</span></div><h1>JSONObject.java</h1><pre class="source lang-java linenums">package util.org.json;
+
+/*
+Copyright (c) 2002 JSON.org
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+The Software shall be used for Good, not Evil.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+/**
+ * A JSONObject is an unordered collection of name/value pairs. Its external
+ * form is a string wrapped in curly braces with colons between the names and
+ * values, and commas between the values and names. The internal form is an
+ * object having &lt;code&gt;get&lt;/code&gt; and &lt;code&gt;opt&lt;/code&gt; methods for accessing the
+ * values by name, and &lt;code&gt;put&lt;/code&gt; methods for adding or replacing values
+ * by name. The values can be any of these types: &lt;code&gt;Boolean&lt;/code&gt;,
+ * &lt;code&gt;JSONArray&lt;/code&gt;, &lt;code&gt;JSONObject&lt;/code&gt;, &lt;code&gt;Number&lt;/code&gt;,
+ * &lt;code&gt;String&lt;/code&gt;, or the &lt;code&gt;JSONObject.NULL&lt;/code&gt; object. A JSONObject
+ * constructor can be used to convert an external form JSON text into an
+ * internal form whose values can be retrieved with the &lt;code&gt;get&lt;/code&gt; and
+ * &lt;code&gt;opt&lt;/code&gt; methods, or to convert values into a JSON text using the
+ * &lt;code&gt;put&lt;/code&gt; and &lt;code&gt;toString&lt;/code&gt; methods. A &lt;code&gt;get&lt;/code&gt; method
+ * returns a value if one can be found, and throws an exception if one cannot be
+ * found. An &lt;code&gt;opt&lt;/code&gt; method returns a default value instead of throwing
+ * an exception, and so is useful for obtaining optional values.
+ * &lt;p&gt;
+ * The generic &lt;code&gt;get()&lt;/code&gt; and &lt;code&gt;opt()&lt;/code&gt; methods return an
+ * object, which you can cast or query for type. There are also typed
+ * &lt;code&gt;get&lt;/code&gt; and &lt;code&gt;opt&lt;/code&gt; methods that do type checking and type
+ * coercion for you. The opt methods differ from the get methods in that they do
+ * not throw. Instead, they return a specified value, such as null.
+ * &lt;p&gt;
+ * The &lt;code&gt;put&lt;/code&gt; methods add or replace values in an object. For example,
+ *
+ * &lt;pre&gt;
+ * myString = new JSONObject().put(&amp;quot;JSON&amp;quot;, &amp;quot;Hello, World!&amp;quot;).toString();
+ * &lt;/pre&gt;
+ *
+ * produces the string &lt;code&gt;{&quot;JSON&quot;: &quot;Hello, World&quot;}&lt;/code&gt;.
+ * &lt;p&gt;
+ * The texts produced by the &lt;code&gt;toString&lt;/code&gt; methods strictly conform to
+ * the JSON syntax rules. The constructors are more forgiving in the texts they
+ * will accept:
+ * &lt;ul&gt;
+ * &lt;li&gt;An extra &lt;code&gt;,&lt;/code&gt;&amp;nbsp;&lt;small&gt;(comma)&lt;/small&gt; may appear just
+ * before the closing brace.&lt;/li&gt;
+ * &lt;li&gt;Strings may be quoted with &lt;code&gt;'&lt;/code&gt;&amp;nbsp;&lt;small&gt;(single
+ * quote)&lt;/small&gt;.&lt;/li&gt;
+ * &lt;li&gt;Strings do not need to be quoted at all if they do not begin with a quote
+ * or single quote, and if they do not contain leading or trailing spaces, and
+ * if they do not contain any of these characters:
+ * &lt;code&gt;{ } [ ] / \ : , = ; #&lt;/code&gt; and if they do not look like numbers and
+ * if they are not the reserved words &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, or
+ * &lt;code&gt;null&lt;/code&gt;.&lt;/li&gt;
+ * &lt;li&gt;Keys can be followed by &lt;code&gt;=&lt;/code&gt; or &lt;code&gt;=&gt;&lt;/code&gt; as well as by
+ * &lt;code&gt;:&lt;/code&gt;.&lt;/li&gt;
+ * &lt;li&gt;Values can be followed by &lt;code&gt;;&lt;/code&gt; &lt;small&gt;(semicolon)&lt;/small&gt; as
+ * well as by &lt;code&gt;,&lt;/code&gt; &lt;small&gt;(comma)&lt;/small&gt;.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author JSON.org
+ * @version 2012-07-02
+ */
+public class JSONObject {
+
+    /**
+     * JSONObject.NULL is equivalent to the value that JavaScript calls null,
+     * whilst Java's null is equivalent to the value that JavaScript calls
+     * undefined.
+     */
+<span class="nc" id="L102">     private static final class Null {</span>
+
+        /**
+         * There is only intended to be a single instance of the NULL object,
+         * so the clone method returns itself.
+         * @return     NULL.
+         */
+        protected final Object clone() {
+<span class="nc" id="L110">            return this;</span>
+        }
+
+        /**
+         * A Null object is equal to the null value and to itself.
+         * @param object    An object to test for nullness.
+         * @return true if the object parameter is the JSONObject.NULL object
+         *  or null.
+         */
+        public boolean equals(Object object) {
+<span class="nc bnc" id="L120" title="All 4 branches missed.">            return object == null || object == this;</span>
+        }
+
+        /**
+         * Get the &quot;null&quot; string value.
+         * @return The string &quot;null&quot;.
+         */
+        public String toString() {
+<span class="nc" id="L128">            return &quot;null&quot;;</span>
+        }
+    }
+
+
+    /**
+     * The map where the JSONObject's properties are kept.
+     */
+    private final Map map;
+
+
+    /**
+     * It is sometimes more convenient and less ambiguous to have a
+     * &lt;code&gt;NULL&lt;/code&gt; object than to use Java's &lt;code&gt;null&lt;/code&gt; value.
+     * &lt;code&gt;JSONObject.NULL.equals(null)&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;.
+     * &lt;code&gt;JSONObject.NULL.toString()&lt;/code&gt; returns &lt;code&gt;&quot;null&quot;&lt;/code&gt;.
+     */
+<span class="nc" id="L145">    public static final Object NULL = new Null();</span>
+
+
+    /**
+     * Construct an empty JSONObject.
+     */
+<span class="nc" id="L151">    public JSONObject() {</span>
+<span class="nc" id="L152">        this.map = new HashMap();</span>
+<span class="nc" id="L153">    }</span>
+
+
+    /**
+     * Construct a JSONObject from a subset of another JSONObject.
+     * An array of strings is used to identify the keys that should be copied.
+     * Missing keys are ignored.
+     * @param jo A JSONObject.
+     * @param names An array of strings.
+     * @throws JSONException
+     * @exception JSONException If a value is a non-finite number or if a name is duplicated.
+     */
+    public JSONObject(JSONObject jo, String[] names) {
+<span class="nc" id="L166">        this();</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        for (int i = 0; i &lt; names.length; i += 1) {</span>
+            try {
+<span class="nc" id="L169">                this.putOnce(names[i], jo.opt(names[i]));</span>
+<span class="nc" id="L170">            } catch (Exception ignore) {</span>
+            }
+        }
+<span class="nc" id="L173">    }</span>
+
+
+    /**
+     * Construct a JSONObject from a JSONTokener.
+     * @param x A JSONTokener object containing the source string.
+     * @throws JSONException If there is a syntax error in the source string
+     *  or a duplicated key.
+     */
+    public JSONObject(JSONTokener x) throws JSONException {
+<span class="nc" id="L183">        this();</span>
+        char c;
+        String key;
+
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if (x.nextClean() != '{') {</span>
+<span class="nc" id="L188">            throw x.syntaxError(&quot;A JSONObject text must begin with '{'&quot;);</span>
+        }
+        for (;;) {
+<span class="nc" id="L191">            c = x.nextClean();</span>
+<span class="nc bnc" id="L192" title="All 3 branches missed.">            switch (c) {</span>
+            case 0:
+<span class="nc" id="L194">                throw x.syntaxError(&quot;A JSONObject text must end with '}'&quot;);</span>
+            case '}':
+<span class="nc" id="L196">                return;</span>
+            default:
+<span class="nc" id="L198">                x.back();</span>
+<span class="nc" id="L199">                key = x.nextValue().toString();</span>
+            }
+
+// The key is followed by ':'. We will also tolerate '=' or '=&gt;'.
+
+<span class="nc" id="L204">            c = x.nextClean();</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">            if (c == '=') {</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                if (x.next() != '&gt;') {</span>
+<span class="nc" id="L207">                    x.back();</span>
+                }
+<span class="nc bnc" id="L209" title="All 2 branches missed.">            } else if (c != ':') {</span>
+<span class="nc" id="L210">                throw x.syntaxError(&quot;Expected a ':' after a key&quot;);</span>
+            }
+<span class="nc" id="L212">            this.putOnce(key, x.nextValue());</span>
+
+// Pairs are separated by ','. We will also tolerate ';'.
+
+<span class="nc bnc" id="L216" title="All 3 branches missed.">            switch (x.nextClean()) {</span>
+            case ';':
+            case ',':
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                if (x.nextClean() == '}') {</span>
+<span class="nc" id="L220">                    return;</span>
+                }
+<span class="nc" id="L222">                x.back();</span>
+<span class="nc" id="L223">                break;</span>
+            case '}':
+<span class="nc" id="L225">                return;</span>
+            default:
+<span class="nc" id="L227">                throw x.syntaxError(&quot;Expected a ',' or '}'&quot;);</span>
+            }
+        }
+    }
+
+
+    /**
+     * Construct a JSONObject from a Map.
+     *
+     * @param map A map object that can be used to initialize the contents of
+     *  the JSONObject.
+     * @throws JSONException
+     */
+<span class="nc" id="L240">    public JSONObject(Map map) {</span>
+<span class="nc" id="L241">        this.map = new HashMap();</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (map != null) {</span>
+<span class="nc" id="L243">            Iterator i = map.entrySet().iterator();</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">            while (i.hasNext()) {</span>
+<span class="nc" id="L245">                Map.Entry e = (Map.Entry)i.next();</span>
+<span class="nc" id="L246">                Object value = e.getValue();</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">                if (value != null) {</span>
+<span class="nc" id="L248">                    this.map.put(e.getKey(), wrap(value));</span>
+                }
+            }
+        }
+<span class="nc" id="L252">    }</span>
+
+
+    /**
+     * Construct a JSONObject from an Object using bean getters.
+     * It reflects on all of the public methods of the object.
+     * For each of the methods with no parameters and a name starting
+     * with &lt;code&gt;&quot;get&quot;&lt;/code&gt; or &lt;code&gt;&quot;is&quot;&lt;/code&gt; followed by an uppercase letter,
+     * the method is invoked, and a key and the value returned from the getter method
+     * are put into the new JSONObject.
+     *
+     * The key is formed by removing the &lt;code&gt;&quot;get&quot;&lt;/code&gt; or &lt;code&gt;&quot;is&quot;&lt;/code&gt; prefix.
+     * If the second remaining character is not upper case, then the first
+     * character is converted to lower case.
+     *
+     * For example, if an object has a method named &lt;code&gt;&quot;getName&quot;&lt;/code&gt;, and
+     * if the result of calling &lt;code&gt;object.getName()&lt;/code&gt; is &lt;code&gt;&quot;Larry Fine&quot;&lt;/code&gt;,
+     * then the JSONObject will contain &lt;code&gt;&quot;name&quot;: &quot;Larry Fine&quot;&lt;/code&gt;.
+     *
+     * @param bean An object that has getter methods that should be used
+     * to make a JSONObject.
+     */
+    public JSONObject(Object bean) {
+<span class="nc" id="L275">        this();</span>
+<span class="nc" id="L276">        this.populateMap(bean);</span>
+<span class="nc" id="L277">    }</span>
+
+
+    /**
+     * Construct a JSONObject from an Object, using reflection to find the
+     * public members. The resulting JSONObject's keys will be the strings
+     * from the names array, and the values will be the field values associated
+     * with those keys in the object. If a key is not found or not visible,
+     * then it will not be copied into the new JSONObject.
+     * @param object An object that has fields that should be used to make a
+     * JSONObject.
+     * @param names An array of strings, the names of the fields to be obtained
+     * from the object.
+     */
+    public JSONObject(Object object, String names[]) {
+<span class="nc" id="L292">        this();</span>
+<span class="nc" id="L293">        Class c = object.getClass();</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">        for (int i = 0; i &lt; names.length; i += 1) {</span>
+<span class="nc" id="L295">            String name = names[i];</span>
+            try {
+<span class="nc" id="L297">                this.putOpt(name, c.getField(name).get(object));</span>
+<span class="nc" id="L298">            } catch (Exception ignore) {</span>
+            }
+        }
+<span class="nc" id="L301">    }</span>
+
+
+    /**
+     * Construct a JSONObject from a source JSON text string.
+     * This is the most commonly used JSONObject constructor.
+     * @param source    A string beginning
+     *  with &lt;code&gt;{&lt;/code&gt;&amp;nbsp;&lt;small&gt;(left brace)&lt;/small&gt; and ending
+     *  with &lt;code&gt;}&lt;/code&gt;&amp;nbsp;&lt;small&gt;(right brace)&lt;/small&gt;.
+     * @exception JSONException If there is a syntax error in the source
+     *  string or a duplicated key.
+     */
+    public JSONObject(String source) throws JSONException {
+<span class="nc" id="L314">        this(new JSONTokener(source));</span>
+<span class="nc" id="L315">    }</span>
+
+
+    /**
+     * Construct a JSONObject from a ResourceBundle.
+     * @param baseName The ResourceBundle base name.
+     * @param locale The Locale to load the ResourceBundle for.
+     * @throws JSONException If any JSONExceptions are detected.
+     */
+    public JSONObject(String baseName, Locale locale) throws JSONException {
+<span class="nc" id="L325">        this();</span>
+<span class="nc" id="L326">        ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale,</span>
+<span class="nc" id="L327">                Thread.currentThread().getContextClassLoader());</span>
+
+// Iterate through the keys in the bundle.
+
+<span class="nc" id="L331">        Enumeration keys = bundle.getKeys();</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">        while (keys.hasMoreElements()) {</span>
+<span class="nc" id="L333">            Object key = keys.nextElement();</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">            if (key instanceof String) {</span>
+
+// Go through the path, ensuring that there is a nested JSONObject for each
+// segment except the last. Add the value using the last segment's name into
+// the deepest nested JSONObject.
+
+<span class="nc" id="L340">                String[] path = ((String)key).split(&quot;\\.&quot;);</span>
+<span class="nc" id="L341">                int last = path.length - 1;</span>
+<span class="nc" id="L342">                JSONObject target = this;</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">                for (int i = 0; i &lt; last; i += 1) {</span>
+<span class="nc" id="L344">                    String segment = path[i];</span>
+<span class="nc" id="L345">                    JSONObject nextTarget = target.optJSONObject(segment);</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">                    if (nextTarget == null) {</span>
+<span class="nc" id="L347">                        nextTarget = new JSONObject();</span>
+<span class="nc" id="L348">                        target.put(segment, nextTarget);</span>
+                    }
+<span class="nc" id="L350">                    target = nextTarget;</span>
+                }
+<span class="nc" id="L352">                target.put(path[last], bundle.getString((String)key));</span>
+            }
+        }
+<span class="nc" id="L355">    }</span>
+
+
+    /**
+     * Accumulate values under a key. It is similar to the put method except
+     * that if there is already an object stored under the key then a
+     * JSONArray is stored under the key to hold all of the accumulated values.
+     * If there is already a JSONArray, then the new value is appended to it.
+     * In contrast, the put method replaces the previous value.
+     *
+     * If only one value is accumulated that is not a JSONArray, then the
+     * result will be the same as using put. But if multiple values are
+     * accumulated, then the result will be like append.
+     * @param key   A key string.
+     * @param value An object to be accumulated under the key.
+     * @return this.
+     * @throws JSONException If the value is an invalid number
+     *  or if the key is null.
+     */
+    public JSONObject accumulate(
+        String key,
+        Object value
+    ) throws JSONException {
+<span class="nc" id="L378">        testValidity(value);</span>
+<span class="nc" id="L379">        Object object = this.opt(key);</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">        if (object == null) {</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">            this.put(key, value instanceof JSONArray</span>
+<span class="nc" id="L382">                    ? new JSONArray().put(value)</span>
+<span class="nc" id="L383">                    : value);</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">        } else if (object instanceof JSONArray) {</span>
+<span class="nc" id="L385">            ((JSONArray)object).put(value);</span>
+<span class="nc" id="L386">        } else {</span>
+<span class="nc" id="L387">            this.put(key, new JSONArray().put(object).put(value));</span>
+        }
+<span class="nc" id="L389">        return this;</span>
+    }
+
+
+    /**
+     * Append values to the array under a key. If the key does not exist in the
+     * JSONObject, then the key is put in the JSONObject with its value being a
+     * JSONArray containing the value parameter. If the key was already
+     * associated with a JSONArray, then the value parameter is appended to it.
+     * @param key   A key string.
+     * @param value An object to be accumulated under the key.
+     * @return this.
+     * @throws JSONException If the key is null or if the current value
+     *  associated with the key is not a JSONArray.
+     */
+    public JSONObject append(String key, Object value) throws JSONException {
+<span class="nc" id="L405">        testValidity(value);</span>
+<span class="nc" id="L406">        Object object = this.opt(key);</span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L408">            this.put(key, new JSONArray().put(value));</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">        } else if (object instanceof JSONArray) {</span>
+<span class="nc" id="L410">            this.put(key, ((JSONArray)object).put(value));</span>
+<span class="nc" id="L411">        } else {</span>
+<span class="nc" id="L412">            throw new JSONException(&quot;JSONObject[&quot; + key +</span>
+<span class="nc" id="L413">                    &quot;] is not a JSONArray.&quot;);</span>
+        }
+<span class="nc" id="L415">        return this;</span>
+    }
+
+
+    /**
+     * Produce a string from a double. The string &quot;null&quot; will be returned if
+     * the number is not finite.
+     * @param  d A double.
+     * @return A String.
+     */
+    public static String doubleToString(double d) {
+<span class="nc bnc" id="L426" title="All 4 branches missed.">        if (Double.isInfinite(d) || Double.isNaN(d)) {</span>
+<span class="nc" id="L427">            return &quot;null&quot;;</span>
+        }
+
+// Shave off trailing zeros and decimal point, if possible.
+
+<span class="nc" id="L432">        String string = Double.toString(d);</span>
+<span class="nc bnc" id="L433" title="All 4 branches missed.">        if (string.indexOf('.') &gt; 0 &amp;&amp; string.indexOf('e') &lt; 0 &amp;&amp;</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">                string.indexOf('E') &lt; 0) {</span>
+<span class="nc bnc" id="L435" title="All 2 branches missed.">            while (string.endsWith(&quot;0&quot;)) {</span>
+<span class="nc" id="L436">                string = string.substring(0, string.length() - 1);</span>
+            }
+<span class="nc bnc" id="L438" title="All 2 branches missed.">            if (string.endsWith(&quot;.&quot;)) {</span>
+<span class="nc" id="L439">                string = string.substring(0, string.length() - 1);</span>
+            }
+        }
+<span class="nc" id="L442">        return string;</span>
+    }
+
+
+    /**
+     * Get the value object associated with a key.
+     *
+     * @param key   A key string.
+     * @return      The object associated with the key.
+     * @throws      JSONException if the key is not found.
+     */
+    public Object get(String key) throws JSONException {
+<span class="nc bnc" id="L454" title="All 2 branches missed.">        if (key == null) {</span>
+<span class="nc" id="L455">            throw new JSONException(&quot;Null key.&quot;);</span>
+        }
+<span class="nc" id="L457">        Object object = this.opt(key);</span>
+<span class="nc bnc" id="L458" title="All 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L459">            throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L460">                    &quot;] not found.&quot;);</span>
+        }
+<span class="nc" id="L462">        return object;</span>
+    }
+
+
+    /**
+     * Get the boolean value associated with a key.
+     *
+     * @param key   A key string.
+     * @return      The truth.
+     * @throws      JSONException
+     *  if the value is not a Boolean or the String &quot;true&quot; or &quot;false&quot;.
+     */
+    public boolean getBoolean(String key) throws JSONException {
+<span class="nc" id="L475">        Object object = this.get(key);</span>
+<span class="nc bnc" id="L476" title="All 2 branches missed.">        if (object.equals(Boolean.FALSE) ||</span>
+<span class="nc bnc" id="L477" title="All 2 branches missed.">                (object instanceof String &amp;&amp;</span>
+<span class="nc bnc" id="L478" title="All 2 branches missed.">                ((String)object).equalsIgnoreCase(&quot;false&quot;))) {</span>
+<span class="nc" id="L479">            return false;</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">        } else if (object.equals(Boolean.TRUE) ||</span>
+<span class="nc bnc" id="L481" title="All 2 branches missed.">                (object instanceof String &amp;&amp;</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">                ((String)object).equalsIgnoreCase(&quot;true&quot;))) {</span>
+<span class="nc" id="L483">            return true;</span>
+        }
+<span class="nc" id="L485">        throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L486">                &quot;] is not a Boolean.&quot;);</span>
+    }
+
+
+    /**
+     * Get the double value associated with a key.
+     * @param key   A key string.
+     * @return      The numeric value.
+     * @throws JSONException if the key is not found or
+     *  if the value is not a Number object and cannot be converted to a number.
+     */
+    public double getDouble(String key) throws JSONException {
+<span class="nc" id="L498">        Object object = this.get(key);</span>
+        try {
+<span class="nc bnc" id="L500" title="All 2 branches missed.">            return object instanceof Number</span>
+<span class="nc" id="L501">                ? ((Number)object).doubleValue()</span>
+<span class="nc" id="L502">                : Double.parseDouble((String)object);</span>
+<span class="nc" id="L503">        } catch (Exception e) {</span>
+<span class="nc" id="L504">            throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L505">                &quot;] is not a number.&quot;);</span>
+        }
+    }
+
+
+    /**
+     * Get the int value associated with a key.
+     *
+     * @param key   A key string.
+     * @return      The integer value.
+     * @throws   JSONException if the key is not found or if the value cannot
+     *  be converted to an integer.
+     */
+    public int getInt(String key) throws JSONException {
+<span class="nc" id="L519">        Object object = this.get(key);</span>
+        try {
+<span class="nc bnc" id="L521" title="All 2 branches missed.">            return object instanceof Number</span>
+<span class="nc" id="L522">                ? ((Number)object).intValue()</span>
+<span class="nc" id="L523">                : Integer.parseInt((String)object);</span>
+<span class="nc" id="L524">        } catch (Exception e) {</span>
+<span class="nc" id="L525">            throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L526">                &quot;] is not an int.&quot;);</span>
+        }
+    }
+
+
+    /**
+     * Get the JSONArray value associated with a key.
+     *
+     * @param key   A key string.
+     * @return      A JSONArray which is the value.
+     * @throws      JSONException if the key is not found or
+     *  if the value is not a JSONArray.
+     */
+    public JSONArray getJSONArray(String key) throws JSONException {
+<span class="nc" id="L540">        Object object = this.get(key);</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">        if (object instanceof JSONArray) {</span>
+<span class="nc" id="L542">            return (JSONArray)object;</span>
+        }
+<span class="nc" id="L544">        throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L545">                &quot;] is not a JSONArray.&quot;);</span>
+    }
+
+
+    /**
+     * Get the JSONObject value associated with a key.
+     *
+     * @param key   A key string.
+     * @return      A JSONObject which is the value.
+     * @throws      JSONException if the key is not found or
+     *  if the value is not a JSONObject.
+     */
+    public JSONObject getJSONObject(String key) throws JSONException {
+<span class="nc" id="L558">        Object object = this.get(key);</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">        if (object instanceof JSONObject) {</span>
+<span class="nc" id="L560">            return (JSONObject)object;</span>
+        }
+<span class="nc" id="L562">        throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L563">                &quot;] is not a JSONObject.&quot;);</span>
+    }
+
+
+    /**
+     * Get the long value associated with a key.
+     *
+     * @param key   A key string.
+     * @return      The long value.
+     * @throws   JSONException if the key is not found or if the value cannot
+     *  be converted to a long.
+     */
+    public long getLong(String key) throws JSONException {
+<span class="nc" id="L576">        Object object = this.get(key);</span>
+        try {
+<span class="nc bnc" id="L578" title="All 2 branches missed.">            return object instanceof Number</span>
+<span class="nc" id="L579">                ? ((Number)object).longValue()</span>
+<span class="nc" id="L580">                : Long.parseLong((String)object);</span>
+<span class="nc" id="L581">        } catch (Exception e) {</span>
+<span class="nc" id="L582">            throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L583">                &quot;] is not a long.&quot;);</span>
+        }
+    }
+
+
+    /**
+     * Get an array of field names from a JSONObject.
+     *
+     * @return An array of field names, or null if there are no names.
+     */
+    public static String[] getNames(JSONObject jo) {
+<span class="nc" id="L594">        int length = jo.length();</span>
+<span class="nc bnc" id="L595" title="All 2 branches missed.">        if (length == 0) {</span>
+<span class="nc" id="L596">            return null;</span>
+        }
+<span class="nc" id="L598">        Iterator iterator = jo.keys();</span>
+<span class="nc" id="L599">        String[] names = new String[length];</span>
+<span class="nc" id="L600">        int i = 0;</span>
+<span class="nc bnc" id="L601" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L602">            names[i] = (String)iterator.next();</span>
+<span class="nc" id="L603">            i += 1;</span>
+        }
+<span class="nc" id="L605">        return names;</span>
+    }
+
+
+    /**
+     * Get an array of field names from an Object.
+     *
+     * @return An array of field names, or null if there are no names.
+     */
+    public static String[] getNames(Object object) {
+<span class="nc bnc" id="L615" title="All 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L616">            return null;</span>
+        }
+<span class="nc" id="L618">        Class klass = object.getClass();</span>
+<span class="nc" id="L619">        Field[] fields = klass.getFields();</span>
+<span class="nc" id="L620">        int length = fields.length;</span>
+<span class="nc bnc" id="L621" title="All 2 branches missed.">        if (length == 0) {</span>
+<span class="nc" id="L622">            return null;</span>
+        }
+<span class="nc" id="L624">        String[] names = new String[length];</span>
+<span class="nc bnc" id="L625" title="All 2 branches missed.">        for (int i = 0; i &lt; length; i += 1) {</span>
+<span class="nc" id="L626">            names[i] = fields[i].getName();</span>
+        }
+<span class="nc" id="L628">        return names;</span>
+    }
+
+
+    /**
+     * Get the string associated with a key.
+     *
+     * @param key   A key string.
+     * @return      A string which is the value.
+     * @throws   JSONException if there is no string value for the key.
+     */
+    public String getString(String key) throws JSONException {
+<span class="nc" id="L640">        Object object = this.get(key);</span>
+<span class="nc bnc" id="L641" title="All 2 branches missed.">        if (object instanceof String) {</span>
+<span class="nc" id="L642">            return (String)object;</span>
+        }
+<span class="nc" id="L644">        throw new JSONException(&quot;JSONObject[&quot; + quote(key) +</span>
+<span class="nc" id="L645">            &quot;] not a string.&quot;);</span>
+    }
+
+
+    /**
+     * Determine if the JSONObject contains a specific key.
+     * @param key   A key string.
+     * @return      true if the key exists in the JSONObject.
+     */
+    public boolean has(String key) {
+<span class="nc" id="L655">        return this.map.containsKey(key);</span>
+    }
+
+
+    /**
+     * Increment a property of a JSONObject. If there is no such property,
+     * create one with a value of 1. If there is such a property, and if
+     * it is an Integer, Long, Double, or Float, then add one to it.
+     * @param key  A key string.
+     * @return this.
+     * @throws JSONException If there is already a property with this name
+     * that is not an Integer, Long, Double, or Float.
+     */
+    public JSONObject increment(String key) throws JSONException {
+<span class="nc" id="L669">        Object value = this.opt(key);</span>
+<span class="nc bnc" id="L670" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L671">            this.put(key, 1);</span>
+<span class="nc bnc" id="L672" title="All 2 branches missed.">        } else if (value instanceof Integer) {</span>
+<span class="nc" id="L673">            this.put(key, ((Integer)value).intValue() + 1);</span>
+<span class="nc bnc" id="L674" title="All 2 branches missed.">        } else if (value instanceof Long) {</span>
+<span class="nc" id="L675">            this.put(key, ((Long)value).longValue() + 1);</span>
+<span class="nc bnc" id="L676" title="All 2 branches missed.">        } else if (value instanceof Double) {</span>
+<span class="nc" id="L677">            this.put(key, ((Double)value).doubleValue() + 1);</span>
+<span class="nc bnc" id="L678" title="All 2 branches missed.">        } else if (value instanceof Float) {</span>
+<span class="nc" id="L679">            this.put(key, ((Float)value).floatValue() + 1);</span>
+<span class="nc" id="L680">        } else {</span>
+<span class="nc" id="L681">            throw new JSONException(&quot;Unable to increment [&quot; + quote(key) + &quot;].&quot;);</span>
+        }
+<span class="nc" id="L683">        return this;</span>
+    }
+
+
+    /**
+     * Determine if the value associated with the key is null or if there is
+     *  no value.
+     * @param key   A key string.
+     * @return      true if there is no value associated with the key or if
+     *  the value is the JSONObject.NULL object.
+     */
+    public boolean isNull(String key) {
+<span class="nc" id="L695">        return JSONObject.NULL.equals(this.opt(key));</span>
+    }
+
+
+    /**
+     * Get an enumeration of the keys of the JSONObject.
+     *
+     * @return An iterator of the keys.
+     */
+    public Iterator keys() {
+<span class="nc" id="L705">        return this.map.keySet().iterator();</span>
+    }
+
+
+    /**
+     * Get the number of keys stored in the JSONObject.
+     *
+     * @return The number of keys in the JSONObject.
+     */
+    public int length() {
+<span class="nc" id="L715">        return this.map.size();</span>
+    }
+
+
+    /**
+     * Produce a JSONArray containing the names of the elements of this
+     * JSONObject.
+     * @return A JSONArray containing the key strings, or null if the JSONObject
+     * is empty.
+     */
+    public JSONArray names() {
+<span class="nc" id="L726">        JSONArray ja = new JSONArray();</span>
+<span class="nc" id="L727">        Iterator  keys = this.keys();</span>
+<span class="nc bnc" id="L728" title="All 2 branches missed.">        while (keys.hasNext()) {</span>
+<span class="nc" id="L729">            ja.put(keys.next());</span>
+        }
+<span class="nc bnc" id="L731" title="All 2 branches missed.">        return ja.length() == 0 ? null : ja;</span>
+    }
+
+    /**
+     * Produce a string from a Number.
+     * @param  number A Number
+     * @return A String.
+     * @throws JSONException If n is a non-finite number.
+     */
+    public static String numberToString(Number number)
+            throws JSONException {
+<span class="nc bnc" id="L742" title="All 2 branches missed.">        if (number == null) {</span>
+<span class="nc" id="L743">            throw new JSONException(&quot;Null pointer&quot;);</span>
+        }
+<span class="nc" id="L745">        testValidity(number);</span>
+
+// Shave off trailing zeros and decimal point, if possible.
+
+<span class="nc" id="L749">        String string = number.toString();</span>
+<span class="nc bnc" id="L750" title="All 4 branches missed.">        if (string.indexOf('.') &gt; 0 &amp;&amp; string.indexOf('e') &lt; 0 &amp;&amp;</span>
+<span class="nc bnc" id="L751" title="All 2 branches missed.">                string.indexOf('E') &lt; 0) {</span>
+<span class="nc bnc" id="L752" title="All 2 branches missed.">            while (string.endsWith(&quot;0&quot;)) {</span>
+<span class="nc" id="L753">                string = string.substring(0, string.length() - 1);</span>
+            }
+<span class="nc bnc" id="L755" title="All 2 branches missed.">            if (string.endsWith(&quot;.&quot;)) {</span>
+<span class="nc" id="L756">                string = string.substring(0, string.length() - 1);</span>
+            }
+        }
+<span class="nc" id="L759">        return string;</span>
+    }
+
+
+    /**
+     * Get an optional value associated with a key.
+     * @param key   A key string.
+     * @return      An object which is the value, or null if there is no value.
+     */
+    public Object opt(String key) {
+<span class="nc bnc" id="L769" title="All 2 branches missed.">        return key == null ? null : this.map.get(key);</span>
+    }
+
+
+    /**
+     * Get an optional boolean associated with a key.
+     * It returns false if there is no such key, or if the value is not
+     * Boolean.TRUE or the String &quot;true&quot;.
+     *
+     * @param key   A key string.
+     * @return      The truth.
+     */
+    public boolean optBoolean(String key) {
+<span class="nc" id="L782">        return this.optBoolean(key, false);</span>
+    }
+
+
+    /**
+     * Get an optional boolean associated with a key.
+     * It returns the defaultValue if there is no such key, or if it is not
+     * a Boolean or the String &quot;true&quot; or &quot;false&quot; (case insensitive).
+     *
+     * @param key              A key string.
+     * @param defaultValue     The default.
+     * @return      The truth.
+     */
+    public boolean optBoolean(String key, boolean defaultValue) {
+        try {
+<span class="nc" id="L797">            return this.getBoolean(key);</span>
+<span class="nc" id="L798">        } catch (Exception e) {</span>
+<span class="nc" id="L799">            return defaultValue;</span>
+        }
+    }
+
+
+    /**
+     * Get an optional double associated with a key,
+     * or NaN if there is no such key or if its value is not a number.
+     * If the value is a string, an attempt will be made to evaluate it as
+     * a number.
+     *
+     * @param key   A string which is the key.
+     * @return      An object which is the value.
+     */
+    public double optDouble(String key) {
+<span class="nc" id="L814">        return this.optDouble(key, Double.NaN);</span>
+    }
+
+
+    /**
+     * Get an optional double associated with a key, or the
+     * defaultValue if there is no such key or if its value is not a number.
+     * If the value is a string, an attempt will be made to evaluate it as
+     * a number.
+     *
+     * @param key   A key string.
+     * @param defaultValue     The default.
+     * @return      An object which is the value.
+     */
+    public double optDouble(String key, double defaultValue) {
+        try {
+<span class="nc" id="L830">            return this.getDouble(key);</span>
+<span class="nc" id="L831">        } catch (Exception e) {</span>
+<span class="nc" id="L832">            return defaultValue;</span>
+        }
+    }
+
+
+    /**
+     * Get an optional int value associated with a key,
+     * or zero if there is no such key or if the value is not a number.
+     * If the value is a string, an attempt will be made to evaluate it as
+     * a number.
+     *
+     * @param key   A key string.
+     * @return      An object which is the value.
+     */
+    public int optInt(String key) {
+<span class="nc" id="L847">        return this.optInt(key, 0);</span>
+    }
+
+
+    /**
+     * Get an optional int value associated with a key,
+     * or the default if there is no such key or if the value is not a number.
+     * If the value is a string, an attempt will be made to evaluate it as
+     * a number.
+     *
+     * @param key   A key string.
+     * @param defaultValue     The default.
+     * @return      An object which is the value.
+     */
+    public int optInt(String key, int defaultValue) {
+        try {
+<span class="nc" id="L863">            return this.getInt(key);</span>
+<span class="nc" id="L864">        } catch (Exception e) {</span>
+<span class="nc" id="L865">            return defaultValue;</span>
+        }
+    }
+
+
+    /**
+     * Get an optional JSONArray associated with a key.
+     * It returns null if there is no such key, or if its value is not a
+     * JSONArray.
+     *
+     * @param key   A key string.
+     * @return      A JSONArray which is the value.
+     */
+    public JSONArray optJSONArray(String key) {
+<span class="nc" id="L879">        Object o = this.opt(key);</span>
+<span class="nc bnc" id="L880" title="All 2 branches missed.">        return o instanceof JSONArray ? (JSONArray)o : null;</span>
+    }
+
+
+    /**
+     * Get an optional JSONObject associated with a key.
+     * It returns null if there is no such key, or if its value is not a
+     * JSONObject.
+     *
+     * @param key   A key string.
+     * @return      A JSONObject which is the value.
+     */
+    public JSONObject optJSONObject(String key) {
+<span class="nc" id="L893">        Object object = this.opt(key);</span>
+<span class="nc bnc" id="L894" title="All 2 branches missed.">        return object instanceof JSONObject ? (JSONObject)object : null;</span>
+    }
+
+
+    /**
+     * Get an optional long value associated with a key,
+     * or zero if there is no such key or if the value is not a number.
+     * If the value is a string, an attempt will be made to evaluate it as
+     * a number.
+     *
+     * @param key   A key string.
+     * @return      An object which is the value.
+     */
+    public long optLong(String key) {
+<span class="nc" id="L908">        return this.optLong(key, 0);</span>
+    }
+
+
+    /**
+     * Get an optional long value associated with a key,
+     * or the default if there is no such key or if the value is not a number.
+     * If the value is a string, an attempt will be made to evaluate it as
+     * a number.
+     *
+     * @param key          A key string.
+     * @param defaultValue The default.
+     * @return             An object which is the value.
+     */
+    public long optLong(String key, long defaultValue) {
+        try {
+<span class="nc" id="L924">            return this.getLong(key);</span>
+<span class="nc" id="L925">        } catch (Exception e) {</span>
+<span class="nc" id="L926">            return defaultValue;</span>
+        }
+    }
+
+
+    /**
+     * Get an optional string associated with a key.
+     * It returns an empty string if there is no such key. If the value is not
+     * a string and is not null, then it is converted to a string.
+     *
+     * @param key   A key string.
+     * @return      A string which is the value.
+     */
+    public String optString(String key) {
+<span class="nc" id="L940">        return this.optString(key, &quot;&quot;);</span>
+    }
+
+
+    /**
+     * Get an optional string associated with a key.
+     * It returns the defaultValue if there is no such key.
+     *
+     * @param key   A key string.
+     * @param defaultValue     The default.
+     * @return      A string which is the value.
+     */
+    public String optString(String key, String defaultValue) {
+<span class="nc" id="L953">        Object object = this.opt(key);</span>
+<span class="nc bnc" id="L954" title="All 2 branches missed.">        return NULL.equals(object) ? defaultValue : object.toString();</span>
+    }
+
+
+    private void populateMap(Object bean) {
+<span class="nc" id="L959">        Class klass = bean.getClass();</span>
+
+// If klass is a System class then set includeSuperClass to false.
+
+<span class="nc bnc" id="L963" title="All 2 branches missed.">        boolean includeSuperClass = klass.getClassLoader() != null;</span>
+
+<span class="nc bnc" id="L965" title="All 2 branches missed.">        Method[] methods = includeSuperClass</span>
+<span class="nc" id="L966">                ? klass.getMethods()</span>
+<span class="nc" id="L967">                : klass.getDeclaredMethods();</span>
+<span class="nc bnc" id="L968" title="All 2 branches missed.">        for (int i = 0; i &lt; methods.length; i += 1) {</span>
+            try {
+<span class="nc" id="L970">                Method method = methods[i];</span>
+<span class="nc bnc" id="L971" title="All 2 branches missed.">                if (Modifier.isPublic(method.getModifiers())) {</span>
+<span class="nc" id="L972">                    String name = method.getName();</span>
+<span class="nc" id="L973">                    String key = &quot;&quot;;</span>
+<span class="nc bnc" id="L974" title="All 2 branches missed.">                    if (name.startsWith(&quot;get&quot;)) {</span>
+<span class="nc bnc" id="L975" title="All 2 branches missed.">                        if (&quot;getClass&quot;.equals(name) ||</span>
+<span class="nc bnc" id="L976" title="All 2 branches missed.">                                &quot;getDeclaringClass&quot;.equals(name)) {</span>
+<span class="nc" id="L977">                            key = &quot;&quot;;</span>
+<span class="nc" id="L978">                        } else {</span>
+<span class="nc" id="L979">                            key = name.substring(3);</span>
+                        }
+<span class="nc bnc" id="L981" title="All 2 branches missed.">                    } else if (name.startsWith(&quot;is&quot;)) {</span>
+<span class="nc" id="L982">                        key = name.substring(2);</span>
+                    }
+<span class="nc bnc" id="L984" title="All 2 branches missed.">                    if (key.length() &gt; 0 &amp;&amp;</span>
+<span class="nc bnc" id="L985" title="All 2 branches missed.">                            Character.isUpperCase(key.charAt(0)) &amp;&amp;</span>
+<span class="nc bnc" id="L986" title="All 2 branches missed.">                            method.getParameterTypes().length == 0) {</span>
+<span class="nc bnc" id="L987" title="All 2 branches missed.">                        if (key.length() == 1) {</span>
+<span class="nc" id="L988">                            key = key.toLowerCase();</span>
+<span class="nc bnc" id="L989" title="All 2 branches missed.">                        } else if (!Character.isUpperCase(key.charAt(1))) {</span>
+<span class="nc" id="L990">                            key = key.substring(0, 1).toLowerCase() +</span>
+<span class="nc" id="L991">                                key.substring(1);</span>
+                        }
+
+<span class="nc" id="L994">                        Object result = method.invoke(bean, (Object[])null);</span>
+<span class="nc bnc" id="L995" title="All 2 branches missed.">                        if (result != null) {</span>
+<span class="nc" id="L996">                            this.map.put(key, wrap(result));</span>
+                        }
+                    }
+                }
+<span class="nc" id="L1000">            } catch (Exception ignore) {</span>
+            }
+        }
+<span class="nc" id="L1003">    }</span>
+
+
+    /**
+     * Put a key/boolean pair in the JSONObject.
+     *
+     * @param key   A key string.
+     * @param value A boolean which is the value.
+     * @return this.
+     * @throws JSONException If the key is null.
+     */
+    public JSONObject put(String key, boolean value) throws JSONException {
+<span class="nc bnc" id="L1015" title="All 2 branches missed.">        this.put(key, value ? Boolean.TRUE : Boolean.FALSE);</span>
+<span class="nc" id="L1016">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/value pair in the JSONObject, where the value will be a
+     * JSONArray which is produced from a Collection.
+     * @param key   A key string.
+     * @param value A Collection value.
+     * @return      this.
+     * @throws JSONException
+     */
+    public JSONObject put(String key, Collection value) throws JSONException {
+<span class="nc" id="L1029">        this.put(key, new JSONArray(value));</span>
+<span class="nc" id="L1030">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/double pair in the JSONObject.
+     *
+     * @param key   A key string.
+     * @param value A double which is the value.
+     * @return this.
+     * @throws JSONException If the key is null or if the number is invalid.
+     */
+    public JSONObject put(String key, double value) throws JSONException {
+<span class="nc" id="L1043">        this.put(key, new Double(value));</span>
+<span class="nc" id="L1044">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/int pair in the JSONObject.
+     *
+     * @param key   A key string.
+     * @param value An int which is the value.
+     * @return this.
+     * @throws JSONException If the key is null.
+     */
+    public JSONObject put(String key, int value) throws JSONException {
+<span class="nc" id="L1057">        this.put(key, new Integer(value));</span>
+<span class="nc" id="L1058">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/long pair in the JSONObject.
+     *
+     * @param key   A key string.
+     * @param value A long which is the value.
+     * @return this.
+     * @throws JSONException If the key is null.
+     */
+    public JSONObject put(String key, long value) throws JSONException {
+<span class="nc" id="L1071">        this.put(key, new Long(value));</span>
+<span class="nc" id="L1072">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/value pair in the JSONObject, where the value will be a
+     * JSONObject which is produced from a Map.
+     * @param key   A key string.
+     * @param value A Map value.
+     * @return      this.
+     * @throws JSONException
+     */
+    public JSONObject put(String key, Map value) throws JSONException {
+<span class="nc" id="L1085">        this.put(key, new JSONObject(value));</span>
+<span class="nc" id="L1086">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/value pair in the JSONObject. If the value is null,
+     * then the key will be removed from the JSONObject if it is present.
+     * @param key   A key string.
+     * @param value An object which is the value. It should be of one of these
+     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
+     *  or the JSONObject.NULL object.
+     * @return this.
+     * @throws JSONException If the value is non-finite number
+     *  or if the key is null.
+     */
+    public JSONObject put(String key, Object value) throws JSONException {
+<span class="nc bnc" id="L1102" title="All 2 branches missed.">        if (key == null) {</span>
+<span class="nc" id="L1103">            throw new JSONException(&quot;Null key.&quot;);</span>
+        }
+<span class="nc bnc" id="L1105" title="All 2 branches missed.">        if (value != null) {</span>
+<span class="nc" id="L1106">            testValidity(value);</span>
+<span class="nc" id="L1107">            this.map.put(key, value);</span>
+<span class="nc" id="L1108">        } else {</span>
+<span class="nc" id="L1109">            this.remove(key);</span>
+        }
+<span class="nc" id="L1111">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/value pair in the JSONObject, but only if the key and the
+     * value are both non-null, and only if there is not already a member
+     * with that name.
+     * @param key
+     * @param value
+     * @return his.
+     * @throws JSONException if the key is a duplicate
+     */
+    public JSONObject putOnce(String key, Object value) throws JSONException {
+<span class="nc bnc" id="L1125" title="All 4 branches missed.">        if (key != null &amp;&amp; value != null) {</span>
+<span class="nc bnc" id="L1126" title="All 2 branches missed.">            if (this.opt(key) != null) {</span>
+<span class="nc" id="L1127">                throw new JSONException(&quot;Duplicate key \&quot;&quot; + key + &quot;\&quot;&quot;);</span>
+            }
+<span class="nc" id="L1129">            this.put(key, value);</span>
+        }
+<span class="nc" id="L1131">        return this;</span>
+    }
+
+
+    /**
+     * Put a key/value pair in the JSONObject, but only if the
+     * key and the value are both non-null.
+     * @param key   A key string.
+     * @param value An object which is the value. It should be of one of these
+     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
+     *  or the JSONObject.NULL object.
+     * @return this.
+     * @throws JSONException If the value is a non-finite number.
+     */
+    public JSONObject putOpt(String key, Object value) throws JSONException {
+<span class="nc bnc" id="L1146" title="All 4 branches missed.">        if (key != null &amp;&amp; value != null) {</span>
+<span class="nc" id="L1147">            this.put(key, value);</span>
+        }
+<span class="nc" id="L1149">        return this;</span>
+    }
+
+
+    /**
+     * Produce a string in double quotes with backslash sequences in all the
+     * right places. A backslash will be inserted within &lt;/, producing &lt;\/,
+     * allowing JSON text to be delivered in HTML. In JSON text, a string
+     * cannot contain a control character or an unescaped quote or backslash.
+     * @param string A String
+     * @return  A String correctly formatted for insertion in a JSON text.
+     */
+    public static String quote(String string) {
+<span class="nc" id="L1162">        StringWriter sw = new StringWriter();</span>
+<span class="nc" id="L1163">        synchronized (sw.getBuffer()) {</span>
+            try {
+<span class="nc" id="L1165">                return quote(string, sw).toString();</span>
+<span class="nc" id="L1166">            } catch (IOException ignored) {</span>
+                // will never happen - we are writing to a string writer
+<span class="nc" id="L1168">                return &quot;&quot;;</span>
+            }
+        }
+    }
+
+    public static Writer quote(String string, Writer w) throws IOException {
+<span class="nc bnc" id="L1174" title="All 4 branches missed.">        if (string == null || string.length() == 0) {</span>
+<span class="nc" id="L1175">            w.write(&quot;\&quot;\&quot;&quot;);</span>
+<span class="nc" id="L1176">            return w;</span>
+        }
+
+        char b;
+<span class="nc" id="L1180">        char c = 0;</span>
+        String hhhh;
+        int i;
+<span class="nc" id="L1183">        int len = string.length();</span>
+
+<span class="nc" id="L1185">        w.write('&quot;');</span>
+<span class="nc bnc" id="L1186" title="All 2 branches missed.">        for (i = 0; i &lt; len; i += 1) {</span>
+<span class="nc" id="L1187">            b = c;</span>
+<span class="nc" id="L1188">            c = string.charAt(i);</span>
+<span class="nc bnc" id="L1189" title="All 8 branches missed.">            switch (c) {</span>
+            case '\\':
+            case '&quot;':
+<span class="nc" id="L1192">                w.write('\\');</span>
+<span class="nc" id="L1193">                w.write(c);</span>
+<span class="nc" id="L1194">                break;</span>
+            case '/':
+<span class="nc bnc" id="L1196" title="All 2 branches missed.">                if (b == '&lt;') {</span>
+<span class="nc" id="L1197">                    w.write('\\');</span>
+                }
+<span class="nc" id="L1199">                w.write(c);</span>
+<span class="nc" id="L1200">                break;</span>
+            case '\b':
+<span class="nc" id="L1202">                w.write(&quot;\\b&quot;);</span>
+<span class="nc" id="L1203">                break;</span>
+            case '\t':
+<span class="nc" id="L1205">                w.write(&quot;\\t&quot;);</span>
+<span class="nc" id="L1206">                break;</span>
+            case '\n':
+<span class="nc" id="L1208">                w.write(&quot;\\n&quot;);</span>
+<span class="nc" id="L1209">                break;</span>
+            case '\f':
+<span class="nc" id="L1211">                w.write(&quot;\\f&quot;);</span>
+<span class="nc" id="L1212">                break;</span>
+            case '\r':
+<span class="nc" id="L1214">                w.write(&quot;\\r&quot;);</span>
+<span class="nc" id="L1215">                break;</span>
+            default:
+<span class="nc bnc" id="L1217" title="All 6 branches missed.">                if (c &lt; ' ' || (c &gt;= '\u0080' &amp;&amp; c &lt; '\u00a0')</span>
+<span class="nc bnc" id="L1218" title="All 4 branches missed.">                        || (c &gt;= '\u2000' &amp;&amp; c &lt; '\u2100')) {</span>
+<span class="nc" id="L1219">                    hhhh = &quot;000&quot; + Integer.toHexString(c);</span>
+<span class="nc" id="L1220">                    w.write(&quot;\\u&quot; + hhhh.substring(hhhh.length() - 4));</span>
+<span class="nc" id="L1221">                } else {</span>
+<span class="nc" id="L1222">                    w.write(c);</span>
+                }
+            }
+        }
+<span class="nc" id="L1226">        w.write('&quot;');</span>
+<span class="nc" id="L1227">        return w;</span>
+    }
+
+    /**
+     * Remove a name and its value, if present.
+     * @param key The name to be removed.
+     * @return The value that was associated with the name,
+     * or null if there was no value.
+     */
+    public Object remove(String key) {
+<span class="nc" id="L1237">        return this.map.remove(key);</span>
+    }
+
+    /**
+     * Try to convert a string into a number, boolean, or null. If the string
+     * can't be converted, return the string.
+     * @param string A String.
+     * @return A simple JSON value.
+     */
+    public static Object stringToValue(String string) {
+        Double d;
+<span class="nc bnc" id="L1248" title="All 2 branches missed.">        if (string.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L1249">            return string;</span>
+        }
+<span class="nc bnc" id="L1251" title="All 2 branches missed.">        if (string.equalsIgnoreCase(&quot;true&quot;)) {</span>
+<span class="nc" id="L1252">            return Boolean.TRUE;</span>
+        }
+<span class="nc bnc" id="L1254" title="All 2 branches missed.">        if (string.equalsIgnoreCase(&quot;false&quot;)) {</span>
+<span class="nc" id="L1255">            return Boolean.FALSE;</span>
+        }
+<span class="nc bnc" id="L1257" title="All 2 branches missed.">        if (string.equalsIgnoreCase(&quot;null&quot;)) {</span>
+<span class="nc" id="L1258">            return JSONObject.NULL;</span>
+        }
+
+        /*
+         * If it might be a number, try converting it.
+         * If a number cannot be produced, then the value will just
+         * be a string. Note that the plus and implied string
+         * conventions are non-standard. A JSON parser may accept
+         * non-JSON forms as long as it accepts all correct JSON forms.
+         */
+
+<span class="nc" id="L1269">        char b = string.charAt(0);</span>
+<span class="nc bnc" id="L1270" title="All 10 branches missed.">        if ((b &gt;= '0' &amp;&amp; b &lt;= '9') || b == '.' || b == '-' || b == '+') {</span>
+            try {
+<span class="nc bnc" id="L1272" title="All 2 branches missed.">                if (string.indexOf('.') &gt; -1 ||</span>
+<span class="nc bnc" id="L1273" title="All 4 branches missed.">                        string.indexOf('e') &gt; -1 || string.indexOf('E') &gt; -1) {</span>
+<span class="nc" id="L1274">                    d = Double.valueOf(string);</span>
+<span class="nc bnc" id="L1275" title="All 4 branches missed.">                    if (!d.isInfinite() &amp;&amp; !d.isNaN()) {</span>
+<span class="nc" id="L1276">                        return d;</span>
+                    }
+                } else {
+<span class="nc" id="L1279">                    Long myLong = new Long(string);</span>
+<span class="nc bnc" id="L1280" title="All 2 branches missed.">                    if (myLong.longValue() == myLong.intValue()) {</span>
+<span class="nc" id="L1281">                        return new Integer(myLong.intValue());</span>
+                    } else {
+<span class="nc" id="L1283">                        return myLong;</span>
+                    }
+                }
+<span class="nc" id="L1286">            }  catch (Exception ignore) {</span>
+            }
+        }
+<span class="nc" id="L1289">        return string;</span>
+    }
+
+
+    /**
+     * Throw an exception if the object is a NaN or infinite number.
+     * @param o The object to test.
+     * @throws JSONException If o is a non-finite number.
+     */
+    public static void testValidity(Object o) throws JSONException {
+<span class="nc bnc" id="L1299" title="All 2 branches missed.">        if (o != null) {</span>
+<span class="nc bnc" id="L1300" title="All 2 branches missed.">            if (o instanceof Double) {</span>
+<span class="nc bnc" id="L1301" title="All 4 branches missed.">                if (((Double)o).isInfinite() || ((Double)o).isNaN()) {</span>
+<span class="nc" id="L1302">                    throw new JSONException(</span>
+<span class="nc" id="L1303">                        &quot;JSON does not allow non-finite numbers.&quot;);</span>
+                }
+<span class="nc bnc" id="L1305" title="All 2 branches missed.">            } else if (o instanceof Float) {</span>
+<span class="nc bnc" id="L1306" title="All 4 branches missed.">                if (((Float)o).isInfinite() || ((Float)o).isNaN()) {</span>
+<span class="nc" id="L1307">                    throw new JSONException(</span>
+<span class="nc" id="L1308">                        &quot;JSON does not allow non-finite numbers.&quot;);</span>
+                }
+            }
+        }
+<span class="nc" id="L1312">    }</span>
+
+
+    /**
+     * Produce a JSONArray containing the values of the members of this
+     * JSONObject.
+     * @param names A JSONArray containing a list of key strings. This
+     * determines the sequence of the values in the result.
+     * @return A JSONArray of values.
+     * @throws JSONException If any of the values are non-finite numbers.
+     */
+    public JSONArray toJSONArray(JSONArray names) throws JSONException {
+<span class="nc bnc" id="L1324" title="All 4 branches missed.">        if (names == null || names.length() == 0) {</span>
+<span class="nc" id="L1325">            return null;</span>
+        }
+<span class="nc" id="L1327">        JSONArray ja = new JSONArray();</span>
+<span class="nc bnc" id="L1328" title="All 2 branches missed.">        for (int i = 0; i &lt; names.length(); i += 1) {</span>
+<span class="nc" id="L1329">            ja.put(this.opt(names.getString(i)));</span>
+        }
+<span class="nc" id="L1331">        return ja;</span>
+    }
+
+    /**
+     * Make a JSON text of this JSONObject. For compactness, no whitespace
+     * is added. If this would not result in a syntactically correct JSON text,
+     * then null will be returned instead.
+     * &lt;p&gt;
+     * Warning: This method assumes that the data structure is acyclical.
+     *
+     * @return a printable, displayable, portable, transmittable
+     *  representation of the object, beginning
+     *  with &lt;code&gt;{&lt;/code&gt;&amp;nbsp;&lt;small&gt;(left brace)&lt;/small&gt; and ending
+     *  with &lt;code&gt;}&lt;/code&gt;&amp;nbsp;&lt;small&gt;(right brace)&lt;/small&gt;.
+     */
+    public String toString() {
+        try {
+<span class="nc" id="L1348">            return this.toString(0);</span>
+<span class="nc" id="L1349">        } catch (Exception e) {</span>
+<span class="nc" id="L1350">            return null;</span>
+        }
+    }
+
+
+    /**
+     * Make a prettyprinted JSON text of this JSONObject.
+     * &lt;p&gt;
+     * Warning: This method assumes that the data structure is acyclical.
+     * @param indentFactor The number of spaces to add to each level of
+     *  indentation.
+     * @return a printable, displayable, portable, transmittable
+     *  representation of the object, beginning
+     *  with &lt;code&gt;{&lt;/code&gt;&amp;nbsp;&lt;small&gt;(left brace)&lt;/small&gt; and ending
+     *  with &lt;code&gt;}&lt;/code&gt;&amp;nbsp;&lt;small&gt;(right brace)&lt;/small&gt;.
+     * @throws JSONException If the object contains an invalid number.
+     */
+    public String toString(int indentFactor) throws JSONException {
+<span class="nc" id="L1368">        StringWriter w = new StringWriter();</span>
+<span class="nc" id="L1369">        synchronized (w.getBuffer()) {</span>
+<span class="nc" id="L1370">            return this.write(w, indentFactor, 0).toString();</span>
+        }
+    }
+
+    /**
+     * Make a JSON text of an Object value. If the object has an
+     * value.toJSONString() method, then that method will be used to produce
+     * the JSON text. The method is required to produce a strictly
+     * conforming text. If the object does not contain a toJSONString
+     * method (which is the most common case), then a text will be
+     * produced by other means. If the value is an array or Collection,
+     * then a JSONArray will be made from it and its toJSONString method
+     * will be called. If the value is a MAP, then a JSONObject will be made
+     * from it and its toJSONString method will be called. Otherwise, the
+     * value's toString method will be called, and the result will be quoted.
+     *
+     * &lt;p&gt;
+     * Warning: This method assumes that the data structure is acyclical.
+     * @param value The value to be serialized.
+     * @return a printable, displayable, transmittable
+     *  representation of the object, beginning
+     *  with &lt;code&gt;{&lt;/code&gt;&amp;nbsp;&lt;small&gt;(left brace)&lt;/small&gt; and ending
+     *  with &lt;code&gt;}&lt;/code&gt;&amp;nbsp;&lt;small&gt;(right brace)&lt;/small&gt;.
+     * @throws JSONException If the value is or contains an invalid number.
+     */
+    public static String valueToString(Object value) throws JSONException {
+<span class="nc bnc" id="L1396" title="All 4 branches missed.">        if (value == null || value.equals(null)) {</span>
+<span class="nc" id="L1397">            return &quot;null&quot;;</span>
+        }
+<span class="nc bnc" id="L1399" title="All 2 branches missed.">        if (value instanceof JSONString) {</span>
+            Object object;
+            try {
+<span class="nc" id="L1402">                object = ((JSONString)value).toJSONString();</span>
+<span class="nc" id="L1403">            } catch (Exception e) {</span>
+<span class="nc" id="L1404">                throw new JSONException(e);</span>
+            }
+<span class="nc bnc" id="L1406" title="All 2 branches missed.">            if (object instanceof String) {</span>
+<span class="nc" id="L1407">                return (String)object;</span>
+            }
+<span class="nc" id="L1409">            throw new JSONException(&quot;Bad value from toJSONString: &quot; + object);</span>
+        }
+<span class="nc bnc" id="L1411" title="All 2 branches missed.">        if (value instanceof Number) {</span>
+<span class="nc" id="L1412">            return numberToString((Number) value);</span>
+        }
+<span class="nc bnc" id="L1414" title="All 4 branches missed.">        if (value instanceof Boolean || value instanceof JSONObject ||</span>
+<span class="nc bnc" id="L1415" title="All 2 branches missed.">                value instanceof JSONArray) {</span>
+<span class="nc" id="L1416">            return value.toString();</span>
+        }
+<span class="nc bnc" id="L1418" title="All 2 branches missed.">        if (value instanceof Map) {</span>
+<span class="nc" id="L1419">            return new JSONObject((Map)value).toString();</span>
+        }
+<span class="nc bnc" id="L1421" title="All 2 branches missed.">        if (value instanceof Collection) {</span>
+<span class="nc" id="L1422">            return new JSONArray((Collection)value).toString();</span>
+        }
+<span class="nc bnc" id="L1424" title="All 2 branches missed.">        if (value.getClass().isArray()) {</span>
+<span class="nc" id="L1425">            return new JSONArray(value).toString();</span>
+        }
+<span class="nc" id="L1427">        return quote(value.toString());</span>
+    }
+
+     /**
+      * Wrap an object, if necessary. If the object is null, return the NULL
+      * object. If it is an array or collection, wrap it in a JSONArray. If
+      * it is a map, wrap it in a JSONObject. If it is a standard property
+      * (Double, String, et al) then it is already wrapped. Otherwise, if it
+      * comes from one of the java packages, turn it into a string. And if
+      * it doesn't, try to wrap it in a JSONObject. If the wrapping fails,
+      * then null is returned.
+      *
+      * @param object The object to wrap
+      * @return The wrapped value
+      */
+     public static Object wrap(Object object) {
+         try {
+<span class="nc bnc" id="L1444" title="All 2 branches missed.">             if (object == null) {</span>
+<span class="nc" id="L1445">                 return NULL;</span>
+             }
+<span class="nc bnc" id="L1447" title="All 4 branches missed.">             if (object instanceof JSONObject || object instanceof JSONArray  ||</span>
+<span class="nc bnc" id="L1448" title="All 4 branches missed.">                     NULL.equals(object)      || object instanceof JSONString ||</span>
+<span class="nc bnc" id="L1449" title="All 4 branches missed.">                     object instanceof Byte   || object instanceof Character  ||</span>
+<span class="nc bnc" id="L1450" title="All 4 branches missed.">                     object instanceof Short  || object instanceof Integer    ||</span>
+<span class="nc bnc" id="L1451" title="All 4 branches missed.">                     object instanceof Long   || object instanceof Boolean    ||</span>
+<span class="nc bnc" id="L1452" title="All 4 branches missed.">                     object instanceof Float  || object instanceof Double     ||</span>
+<span class="nc bnc" id="L1453" title="All 4 branches missed.">                     object instanceof String || object instanceof Enum) {</span>
+<span class="nc" id="L1454">                 return object;</span>
+             }
+
+<span class="nc bnc" id="L1457" title="All 2 branches missed.">             if (object instanceof Collection) {</span>
+<span class="nc" id="L1458">                 return new JSONArray((Collection)object);</span>
+             }
+<span class="nc bnc" id="L1460" title="All 2 branches missed.">             if (object.getClass().isArray()) {</span>
+<span class="nc" id="L1461">                 return new JSONArray(object);</span>
+             }
+<span class="nc bnc" id="L1463" title="All 2 branches missed.">             if (object instanceof Map) {</span>
+<span class="nc" id="L1464">                 return new JSONObject((Map)object);</span>
+             }
+<span class="nc" id="L1466">             Package objectPackage = object.getClass().getPackage();</span>
+<span class="nc bnc" id="L1467" title="All 2 branches missed.">             String objectPackageName = objectPackage != null</span>
+<span class="nc" id="L1468">                 ? objectPackage.getName()</span>
+<span class="nc" id="L1469">                 : &quot;&quot;;</span>
+             if (
+<span class="nc bnc" id="L1471" title="All 2 branches missed.">                 objectPackageName.startsWith(&quot;java.&quot;) ||</span>
+<span class="nc bnc" id="L1472" title="All 2 branches missed.">                 objectPackageName.startsWith(&quot;javax.&quot;) ||</span>
+<span class="nc bnc" id="L1473" title="All 2 branches missed.">                 object.getClass().getClassLoader() == null</span>
+             ) {
+<span class="nc" id="L1475">                 return object.toString();</span>
+             }
+<span class="nc" id="L1477">             return new JSONObject(object);</span>
+<span class="nc" id="L1478">         } catch(Exception exception) {</span>
+<span class="nc" id="L1479">             return null;</span>
+         }
+     }
+
+
+     /**
+      * Write the contents of the JSONObject as JSON text to a writer.
+      * For compactness, no whitespace is added.
+      * &lt;p&gt;
+      * Warning: This method assumes that the data structure is acyclical.
+      *
+      * @return The writer.
+      * @throws JSONException
+      */
+     public Writer write(Writer writer) throws JSONException {
+<span class="nc" id="L1494">        return this.write(writer, 0, 0);</span>
+    }
+
+
+    static final Writer writeValue(Writer writer, Object value,
+            int indentFactor, int indent) throws JSONException, IOException {
+<span class="nc bnc" id="L1500" title="All 4 branches missed.">        if (value == null || value.equals(null)) {</span>
+<span class="nc" id="L1501">            writer.write(&quot;null&quot;);</span>
+<span class="nc bnc" id="L1502" title="All 2 branches missed.">        } else if (value instanceof JSONObject) {</span>
+<span class="nc" id="L1503">            ((JSONObject) value).write(writer, indentFactor, indent);</span>
+<span class="nc bnc" id="L1504" title="All 2 branches missed.">        } else if (value instanceof JSONArray) {</span>
+<span class="nc" id="L1505">            ((JSONArray) value).write(writer, indentFactor, indent);</span>
+<span class="nc bnc" id="L1506" title="All 2 branches missed.">        } else if (value instanceof Map) {</span>
+<span class="nc" id="L1507">            new JSONObject((Map) value).write(writer, indentFactor, indent);</span>
+<span class="nc bnc" id="L1508" title="All 2 branches missed.">        } else if (value instanceof Collection) {</span>
+<span class="nc" id="L1509">            new JSONArray((Collection) value).write(writer, indentFactor,</span>
+<span class="nc" id="L1510">                    indent);</span>
+<span class="nc bnc" id="L1511" title="All 2 branches missed.">        } else if (value.getClass().isArray()) {</span>
+<span class="nc" id="L1512">            new JSONArray(value).write(writer, indentFactor, indent);</span>
+<span class="nc bnc" id="L1513" title="All 2 branches missed.">        } else if (value instanceof Number) {</span>
+<span class="nc" id="L1514">            writer.write(numberToString((Number) value));</span>
+<span class="nc bnc" id="L1515" title="All 2 branches missed.">        } else if (value instanceof Boolean) {</span>
+<span class="nc" id="L1516">            writer.write(value.toString());</span>
+<span class="nc bnc" id="L1517" title="All 2 branches missed.">        } else if (value instanceof JSONString) {</span>
+            Object o;
+            try {
+<span class="nc" id="L1520">                o = ((JSONString) value).toJSONString();</span>
+<span class="nc" id="L1521">            } catch (Exception e) {</span>
+<span class="nc" id="L1522">                throw new JSONException(e);</span>
+            }
+<span class="nc bnc" id="L1524" title="All 2 branches missed.">            writer.write(o != null ? o.toString() : quote(value.toString()));</span>
+<span class="nc" id="L1525">        } else {</span>
+<span class="nc" id="L1526">            quote(value.toString(), writer);</span>
+        }
+<span class="nc" id="L1528">        return writer;</span>
+    }
+
+    static final void indent(Writer writer, int indent) throws IOException {
+<span class="nc bnc" id="L1532" title="All 2 branches missed.">        for (int i = 0; i &lt; indent; i += 1) {</span>
+<span class="nc" id="L1533">            writer.write(' ');</span>
+        }
+<span class="nc" id="L1535">    }</span>
+
+    /**
+     * Write the contents of the JSONObject as JSON text to a writer. For
+     * compactness, no whitespace is added.
+     * &lt;p&gt;
+     * Warning: This method assumes that the data structure is acyclical.
+     *
+     * @return The writer.
+     * @throws JSONException
+     */
+    Writer write(Writer writer, int indentFactor, int indent)
+            throws JSONException {
+        try {
+<span class="nc" id="L1549">            boolean commanate = false;</span>
+<span class="nc" id="L1550">            final int length = this.length();</span>
+<span class="nc" id="L1551">            Iterator keys = this.keys();</span>
+<span class="nc" id="L1552">            writer.write('{');</span>
+
+<span class="nc bnc" id="L1554" title="All 2 branches missed.">            if (length == 1) {</span>
+<span class="nc" id="L1555">                Object key = keys.next();</span>
+<span class="nc" id="L1556">                writer.write(quote(key.toString()));</span>
+<span class="nc" id="L1557">                writer.write(':');</span>
+<span class="nc bnc" id="L1558" title="All 2 branches missed.">                if (indentFactor &gt; 0) {</span>
+<span class="nc" id="L1559">                    writer.write(' ');</span>
+                }
+<span class="nc" id="L1561">                writeValue(writer, this.map.get(key), indentFactor, indent);</span>
+<span class="nc bnc" id="L1562" title="All 2 branches missed.">            } else if (length != 0) {</span>
+<span class="nc" id="L1563">                final int newindent = indent + indentFactor;</span>
+<span class="nc bnc" id="L1564" title="All 2 branches missed.">                while (keys.hasNext()) {</span>
+<span class="nc" id="L1565">                    Object key = keys.next();</span>
+<span class="nc bnc" id="L1566" title="All 2 branches missed.">                    if (commanate) {</span>
+<span class="nc" id="L1567">                        writer.write(',');</span>
+                    }
+<span class="nc bnc" id="L1569" title="All 2 branches missed.">                    if (indentFactor &gt; 0) {</span>
+<span class="nc" id="L1570">                        writer.write('\n');</span>
+                    }
+<span class="nc" id="L1572">                    indent(writer, newindent);</span>
+<span class="nc" id="L1573">                    writer.write(quote(key.toString()));</span>
+<span class="nc" id="L1574">                    writer.write(':');</span>
+<span class="nc bnc" id="L1575" title="All 2 branches missed.">                    if (indentFactor &gt; 0) {</span>
+<span class="nc" id="L1576">                        writer.write(' ');</span>
+                    }
+<span class="nc" id="L1578">                    writeValue(writer, this.map.get(key), indentFactor,</span>
+<span class="nc" id="L1579">                            newindent);</span>
+<span class="nc" id="L1580">                    commanate = true;</span>
+                }
+<span class="nc bnc" id="L1582" title="All 2 branches missed.">                if (indentFactor &gt; 0) {</span>
+<span class="nc" id="L1583">                    writer.write('\n');</span>
+                }
+<span class="nc" id="L1585">                indent(writer, indent);</span>
+            }
+<span class="nc" id="L1587">            writer.write('}');</span>
+<span class="nc" id="L1588">            return writer;</span>
+<span class="nc" id="L1589">        } catch (IOException exception) {</span>
+<span class="nc" id="L1590">            throw new JSONException(exception);</span>
+        }
+     }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (13/11/2012 20:29:13)</div></body></html>

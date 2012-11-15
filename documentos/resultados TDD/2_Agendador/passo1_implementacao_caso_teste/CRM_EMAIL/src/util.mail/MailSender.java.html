@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MailSender.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (11/11/2012 21:09:38)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">util.mail</a> &gt; <span class="el_source">MailSender.java</span></div><h1>MailSender.java</h1><pre class="source lang-java linenums">package util.mail;
+
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+
+/**
+ * Classe para envio de e-mail
+ * 
+ * @see http://www.rgagnon.com/javadetails/java-0570.html
+ * 
+ * 
+ * @author PauloHenrique
+ *
+ */
+public class MailSender {
+
+	// Constantes para conexao ao Servidor de e-mail.
+	private static final String SMTP_HOST_NAME = &quot;smtp.gmail.com&quot;;
+    private static final int SMTP_HOST_PORT    = 465;
+    private static final String SMTP_AUTH_USER = &quot;phfernandespereira@gmail.com&quot;;
+    private static final String SMTP_AUTH_PWD  = &quot;15071850&quot;;
+    
+    // Objetos necessários para o envio de e-mail.
+    private Properties properties;
+    private Session session;
+    private Transport transport;
+    private MimeMessage message;
+
+    private String mailTo;
+    private String assunto;
+    private String texto;
+    
+    /**
+     * 
+     * @throws NoSuchProviderException
+     */
+<span class="nc" id="L45">    public MailSender() throws NoSuchProviderException </span>
+    {
+<span class="nc" id="L47">    	this.prepareProperties();</span>
+<span class="nc" id="L48">    	this.prepareSendSession();</span>
+<span class="nc" id="L49">    }</span>
+
+    /**
+     * 
+     * @param mailTo
+     * @throws NoSuchProviderException
+     */
+    public MailSender(String mailTo) throws NoSuchProviderException {
+<span class="nc" id="L57">    	this();</span>
+<span class="nc" id="L58">    	this.mailTo = mailTo;</span>
+<span class="nc" id="L59">    }</span>
+    
+    /**
+     * Metodo auxiliar do construtor. Inicializa o objeto de properties.
+     */
+    private void prepareProperties() 
+    {
+<span class="nc" id="L66">    	this.properties = new Properties();</span>
+<span class="nc" id="L67">    	this.properties.put(&quot;mail.transport.protocol&quot;, &quot;smtps&quot;);</span>
+<span class="nc" id="L68">    	this.properties.put(&quot;mail.smtps.host&quot;, SMTP_HOST_NAME);</span>
+<span class="nc" id="L69">    	this.properties.put(&quot;mail.smtps.auth&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L70">    }</span>
+    
+    /**
+     * Metodo auxiliar do construtor: Inicializa a sessão usada para o envio do email.
+     * 
+     * @throws NoSuchProviderException
+     */
+    private void prepareSendSession() throws NoSuchProviderException 
+    {
+<span class="nc" id="L79">    	this.session   = Session.getDefaultInstance(properties);</span>
+<span class="nc" id="L80">    	this.transport = this.session.getTransport();</span>
+<span class="nc" id="L81">    	this.message   = new MimeMessage(session);</span>
+<span class="nc" id="L82">    }</span>
+
+    /**
+     * 
+     * @return
+     */
+	public String getMailTo() {
+<span class="nc" id="L89">		return mailTo;</span>
+	}
+
+	/**
+	 * 
+	 * @param mailTo
+	 */
+	public void setMailTo(String mailTo) {
+<span class="nc" id="L97">		this.mailTo = mailTo;</span>
+<span class="nc" id="L98">	}</span>
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getAssunto() {
+<span class="nc" id="L105">		return assunto;</span>
+	}
+
+	/**
+	 * 
+	 * @param assunto
+	 */
+	public void setAssunto(String assunto) {
+<span class="nc" id="L113">		this.assunto = assunto;</span>
+<span class="nc" id="L114">	}</span>
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getTexto() {
+<span class="nc" id="L121">		return texto;</span>
+	}
+
+	/**
+	 * 
+	 * @param texto
+	 */
+	public void setTexto(String texto) {
+<span class="nc" id="L129">		this.texto = texto;</span>
+<span class="nc" id="L130">	}</span>
+
+	/**
+	 * 
+	 * @throws MessagingException
+	 */
+	public void send() throws MessagingException 
+	{
+<span class="nc" id="L138">		this.message.setSubject(this.getAssunto());</span>
+<span class="nc" id="L139">		this.message.setText(this.getTexto());</span>
+<span class="nc" id="L140">		this.message.addRecipient(Message.RecipientType.TO, new InternetAddress(this.getMailTo()));</span>
+<span class="nc" id="L141">		this.transport.connect(</span>
+<span class="nc" id="L142">			MailSender.SMTP_HOST_NAME, MailSender.SMTP_HOST_PORT, MailSender.SMTP_AUTH_USER, MailSender.SMTP_AUTH_PWD</span>
+		);
+<span class="nc" id="L144">		this.transport.sendMessage(this.message, message.getRecipients(Message.RecipientType.TO));</span>
+<span class="nc" id="L145">		this.transport.close();</span>
+<span class="nc" id="L146">	}</span>
+
+	/**
+	 * 
+	 * @param args
+	 * @throws MessagingException
+	 */
+//	public static void main(String[] args) throws MessagingException 
+//	{
+//		MailSender sender = new MailSender();
+//		sender.setMailTo(&quot;paulo.phfp_26@yahoo.com.br&quot;);
+//		sender.setAssunto(&quot;Teste de envio de email&quot;);
+//		sender.setTexto(&quot;TEste de envio de email&quot;);
+//		sender.send();
+//		System.out.println(&quot;Mensagem enviada com sucesso.&quot;);
+//	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (11/11/2012 21:09:38)</div></body></html>

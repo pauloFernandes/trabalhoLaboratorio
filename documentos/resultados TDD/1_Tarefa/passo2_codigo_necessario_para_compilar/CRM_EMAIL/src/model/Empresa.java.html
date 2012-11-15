@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Empresa.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestTarefa (11/11/2012 18:30:41)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">model</a> &gt; <span class="el_source">Empresa.java</span></div><h1>Empresa.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package model;
+
+import db.DbStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L17">public class Empresa {</span>
+    public static ResultSet obterTodosClientes(int codemp) {
+<span class="nc" id="L19">        String sql = &quot; SELECT CL.CODCLI, CL.NOMFAN, CL.RAZSOC, CL.NUMINSJUR, CL.CELEMP, CL.TELEMP, FR.CODFUN, U.NOMUSU &quot; + </span>
+                     &quot;   FROM CLIENTE CL &quot; + 
+                     &quot;   LEFT JOIN FUN_RESPONSAVEL FR &quot; + 
+                     &quot;     ON FR.CODCLI  = CL.CODCLI &quot; + 
+                     &quot;     AND FR.DATINI IS NOT NULL &quot; + 
+                     &quot;     AND FR.DATFIM IS NULL &quot; + 
+                     &quot;   LEFT JOIN FUNCIONARIO F &quot; + 
+                     &quot;     ON F.CODFUN   = FR.CODFUN &quot; + 
+                     &quot;   LEFT JOIN USUARIO U &quot; + 
+                     &quot;     ON U.CODUSU = F.CODUSU &quot; + 
+<span class="nc" id="L29">                     &quot;   WHERE CL.CODEMP  = &quot; + codemp;</span>
+        try {
+<span class="nc" id="L31">            return DbStatement.select(sql);</span>
+<span class="nc" id="L32">        } catch (SQLException ex) {</span>
+<span class="nc" id="L33">            Logger.getLogger(Empresa.class.getName()).log(Level.SEVERE, null, ex);</span>
+        }
+        
+<span class="nc" id="L36">        return null;</span>
+    }
+    
+    public static ResultSet obterClientes(int codemp, String nomfan, String razsoc, String insjur, String nomven) {
+<span class="nc" id="L40">        String sql = &quot; SELECT CL.CODCLI, CL.NOMFAN, CL.RAZSOC, CL.NUMINSJUR, CL.CELEMP, CL.TELEMP, FR.CODFUN, U.NOMUSU &quot; +</span>
+                        &quot; FROM CLIENTE CL, FUN_RESPONSAVEL FR, FUNCIONARIO F, USUARIO U &quot; +
+                        &quot; WHERE U.CODUSU  = F.CODUSU  &quot; +
+                          &quot; AND F.CODFUN  = FR.CODFUN &quot; +
+                          &quot; AND FR.CODCLI = CL.CODCLI &quot; +
+<span class="nc" id="L45">                          &quot; AND CL.CODEMP =  &quot; + codemp +</span>
+<span class="nc" id="L46">                          &quot; AND FR.DATINI IS NOT NULL &quot; +</span>
+<span class="nc" id="L47">                          &quot; AND FR.DATFIM IS NULL&quot;;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (!nomfan.isEmpty()) {</span>
+<span class="nc" id="L49">            sql += &quot; AND UPPER(CL.NOMFAN) LIKE UPPER('&quot; + nomfan + &quot;%')&quot;;</span>
+        }
+        
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!razsoc.isEmpty()) {</span>
+<span class="nc" id="L53">            sql += &quot; AND UPPER(CL.RAZSOC) LIKE  UPPER('&quot; + razsoc + &quot;%') &quot;;</span>
+        }
+        
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (!insjur.isEmpty()) {</span>
+<span class="nc" id="L57">            sql += &quot; AND UPPER(CL.NUMINSJUR) LIKE  UPPER('&quot; + insjur + &quot;%') &quot;;</span>
+        }
+        
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (!nomven.isEmpty()) {</span>
+<span class="nc" id="L61">            sql += &quot; AND UPPER(U.NOMUSU) LIKE UPPER('&quot; + nomven + &quot;%') &quot;;</span>
+        }
+        
+        try {
+<span class="nc" id="L65">            return DbStatement.select(sql);</span>
+<span class="nc" id="L66">        } catch (SQLException ex) {</span>
+<span class="nc" id="L67">            Logger.getLogger(Empresa.class.getName()).log(Level.SEVERE, null, ex);</span>
+        }
+        
+<span class="nc" id="L70">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestTarefa (11/11/2012 18:30:41)</div></body></html>

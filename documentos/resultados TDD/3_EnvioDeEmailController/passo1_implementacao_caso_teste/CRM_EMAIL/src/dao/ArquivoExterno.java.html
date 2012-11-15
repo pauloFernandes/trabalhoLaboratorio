@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ArquivoExterno.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 22:01:46)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">dao</a> &gt; <span class="el_source">ArquivoExterno.java</span></div><h1>ArquivoExterno.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package dao;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+<span class="nc" id="L14">public class ArquivoExterno {</span>
+	public static void salvar(String arquivo, String conteudo, boolean adicionar) throws IOException{
+<span class="nc" id="L16">		FileWriter writer = new FileWriter(arquivo, adicionar);		</span>
+<span class="nc" id="L17">		writer.write(conteudo+&quot;\n&quot;);</span>
+<span class="nc" id="L18">                writer.write(&quot;-----------------------------------------------------------\n&quot;);</span>
+<span class="nc" id="L19">		writer.close();</span>
+<span class="nc" id="L20">	}</span>
+	
+	
+	public static String carregar(String arquivo) throws FileNotFoundException, IOException {
+<span class="nc" id="L24">        BufferedReader reader = new BufferedReader(new FileReader(arquivo));</span>
+<span class="nc" id="L25">        String conteudo = null;</span>
+        
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        while (reader.ready()) {</span>
+<span class="nc" id="L28">        	conteudo += reader.readLine();</span>
+        }
+        
+<span class="nc" id="L31">        reader.close();</span>
+<span class="nc" id="L32">        return conteudo;</span>
+    }
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 22:01:46)</div></body></html>

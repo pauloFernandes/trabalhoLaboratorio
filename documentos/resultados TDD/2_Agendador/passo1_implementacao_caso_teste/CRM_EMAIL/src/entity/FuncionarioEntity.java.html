@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>FuncionarioEntity.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (11/11/2012 21:09:38)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">entity</a> &gt; <span class="el_source">FuncionarioEntity.java</span></div><h1>FuncionarioEntity.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity;
+
+import java.util.Date;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L13">public class FuncionarioEntity extends AbstractEntity {</span>
+    private int codfun;
+    private int codusu;
+    private int codemp;
+    private String mailfun;
+    
+    public String getMailfun() {
+<span class="nc" id="L20">		return mailfun;</span>
+	}
+
+	public void setMailfun(String mailfun) {
+<span class="nc" id="L24">		this.mailfun = mailfun;</span>
+<span class="nc" id="L25">	}</span>
+
+	private int codtipfun;
+    private Date datini;
+    private Date datfim;
+
+    public int getCodfun() {
+<span class="nc" id="L32">        return codfun;</span>
+    }
+
+    public void setCodfun(int codfun) {
+<span class="nc" id="L36">        this.codfun = codfun;</span>
+<span class="nc" id="L37">    }</span>
+
+    public int getCodusu() {
+<span class="nc" id="L40">        return codusu;</span>
+    }
+
+    public void setCodusu(int codusu) {
+<span class="nc" id="L44">        this.codusu = codusu;</span>
+<span class="nc" id="L45">    }</span>
+
+    public int getCodemp() {
+<span class="nc" id="L48">        return codemp;</span>
+    }
+
+    public void setCodemp(int codemp) {
+<span class="nc" id="L52">        this.codemp = codemp;</span>
+<span class="nc" id="L53">    }</span>
+
+    public int getCodtipfun() {
+<span class="nc" id="L56">        return codtipfun;</span>
+    }
+
+    public void setCodtipfun(int codtipfun) {
+<span class="nc" id="L60">        this.codtipfun = codtipfun;</span>
+<span class="nc" id="L61">    }</span>
+
+    public Date getDatini() {
+<span class="nc" id="L64">        return datini;</span>
+    }
+
+    public void setDatini(Date datini) {
+<span class="nc" id="L68">        this.datini = datini;</span>
+<span class="nc" id="L69">    }</span>
+
+    public Date getDatfim() {
+<span class="nc" id="L72">        return datfim;</span>
+    }
+
+    public void setDatfim(Date datfim) {
+<span class="nc" id="L76">        this.datfim = datfim;</span>
+<span class="nc" id="L77">    }</span>
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (11/11/2012 21:09:38)</div></body></html>

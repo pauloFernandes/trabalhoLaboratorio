@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>BuilderFun_Responsavel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestEnvioDeEmailController (13/11/2012 22:14:45)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">builder</a> &gt; <span class="el_source">BuilderFun_Responsavel.java</span></div><h1>BuilderFun_Responsavel.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package builder;
+
+import dao.DaoFactory;
+import entity.Fun_ResponsavelEntity;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L14">public class BuilderFun_Responsavel extends AbstractBuilder  {</span>
+
+    @Override
+    public void createDao() {
+<span class="nc" id="L18">        this.dao = DaoFactory.getInstance(DaoFactory.FUN_RESPONSAVEL);</span>
+<span class="nc" id="L19">    }</span>
+
+    @Override
+    public void createEntity() {
+<span class="nc" id="L23">        this.entity = new Fun_ResponsavelEntity();</span>
+<span class="nc" id="L24">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestEnvioDeEmailController (13/11/2012 22:14:45)</div></body></html>

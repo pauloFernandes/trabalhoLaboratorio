@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestAgendador.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (13/11/2012 20:29:13)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">testes</a> &gt; <a href="index.html" class="el_package">test_mail_sender</a> &gt; <span class="el_source">TestAgendador.java</span></div><h1>TestAgendador.java</h1><pre class="source lang-java linenums">package test_mail_sender;
+
+import static org.junit.Assert.*;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import controller.mail.Agendador;
+
+<span class="fc" id="L15">public class TestAgendador {</span>
+	
+	private Agendador agendador;
+	private Date dataInicial;
+	private Date dataFinal;
+	private String email;
+	private String assunto;
+	private String texto;
+	
+	@Before
+	public void before() 
+	{
+<span class="fc" id="L27">		this.agendador = new Agendador();</span>
+		
+		try {
+<span class="fc" id="L30">			this.dataInicial = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;).parse(&quot;01/01/2013 00:00:00&quot;);</span>
+<span class="pc" id="L31">		} catch (ParseException e) {</span>
+<span class="nc" id="L32">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L34">		this.dataFinal   = null;</span>
+<span class="fc" id="L35">		this.email       = &quot;paulo.phfp_26@yahoo.com.br&quot;;</span>
+<span class="fc" id="L36">		this.assunto     = &quot;Teste de Envio de E-mail&quot;;</span>
+<span class="fc" id="L37">		this.texto       = &quot;Corpo do E-mail&quot;;</span>
+<span class="fc" id="L38">	}</span>
+	
+	@Test
+	public void testEnviarDia() 
+	{
+		// Testar caso normal, onde a data agendada é atingivel.
+<span class="fc" id="L44">		boolean enviado = this.agendador.enviarDia(this.dataInicial, this.email, this.assunto, this.texto);</span>
+<span class="fc" id="L45">		assertTrue(enviado);</span>
+		
+		// Testar casos onde a data já tenha passado, ou seja, o evento agendado não pode ser disparado. Isto é necessário
+		// porque, a classe Timer, ao capturar uma data já passada para o evento, ele dispara este evento imediatamente.
+		try {
+<span class="fc" id="L50">			this.dataInicial = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;).parse(&quot;13/01/2010 00:00:00&quot;);</span>
+<span class="pc" id="L51">		} catch (ParseException e) {</span>
+<span class="nc" id="L52">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L54">		enviado = this.agendador.enviarDia(this.dataInicial, this.email, this.assunto, this.texto);</span>
+<span class="fc" id="L55">		assertFalse(enviado);</span>
+<span class="fc" id="L56">	}</span>
+	
+	@Test
+	public void enviarExcetoFimDeSemana() 
+	{
+		try {
+			// data para testar o caso de sábado.
+<span class="fc" id="L63">			this.dataInicial = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;).parse(&quot;10/11/2012 00:00:00&quot;);</span>
+<span class="fc" id="L64">			this.agendador.enviarExcetoFimDeSemana(this.dataInicial, this.email, this.assunto, this.texto);</span>
+			
+			// data para testar o caso de domingo.
+<span class="fc" id="L67">			this.dataInicial = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;).parse(&quot;11/11/2012 00:00:00&quot;);</span>
+<span class="fc" id="L68">			this.agendador.enviarExcetoFimDeSemana(this.dataInicial, this.email, this.assunto, this.texto);</span>
+<span class="pc" id="L69">		} catch (ParseException e) {</span>
+<span class="nc" id="L70">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L72">	}</span>
+	
+	@Test
+	public void testEnviarNoIntervalo() 
+	{
+		try {
+<span class="fc" id="L78">			this.dataFinal = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;).parse(&quot;13/01/2013 00:00:00&quot;);</span>
+<span class="pc" id="L79">		} catch (ParseException e) {</span>
+<span class="nc" id="L80">			e.printStackTrace();</span>
+		}
+		
+<span class="fc" id="L83">		boolean enviado = this.agendador.enviarNoIntervalo(</span>
+<span class="fc" id="L84">			this.dataInicial, this.dataFinal, this.email, this.assunto, this.texto, false</span>
+		);
+<span class="fc" id="L86">		assertTrue(enviado);</span>
+<span class="fc" id="L87">	}</span>
+	
+	@Test
+	public void testEnviarNoIntervaloExcetoFimDeSemana() 
+	{
+		try {
+<span class="fc" id="L93">			this.dataFinal = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;).parse(&quot;13/01/2013 00:00:00&quot;);</span>
+<span class="pc" id="L94">		} catch (ParseException e) {</span>
+<span class="nc" id="L95">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L97">		boolean enviado = this.agendador.enviarNoIntervalo(</span>
+<span class="fc" id="L98">			this.dataInicial, this.dataFinal, this.email, this.assunto, this.texto, true</span>
+		);
+<span class="fc" id="L100">		assertTrue(enviado);</span>
+<span class="fc" id="L101">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (13/11/2012 20:29:13)</div></body></html>

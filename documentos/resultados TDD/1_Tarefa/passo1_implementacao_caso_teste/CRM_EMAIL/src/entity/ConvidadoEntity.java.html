@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ConvidadoEntity.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestTarefa (11/11/2012 18:19:56)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">entity</a> &gt; <span class="el_source">ConvidadoEntity.java</span></div><h1>ConvidadoEntity.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L11">public class ConvidadoEntity extends AbstractEntity {</span>
+    private int codcon;
+    private int codfun;
+    private int codati;
+    private String idconace;
+
+    public static final String CONVITE_ACEITO     = &quot;S&quot;;
+    public static final String CONVITE_NAO_ACEITO = &quot;N&quot;;
+    
+    public int getCodati() {
+<span class="nc" id="L21">        return codati;</span>
+    }
+
+    public void setCodati(int codati) {
+<span class="nc" id="L25">        this.codati = codati;</span>
+<span class="nc" id="L26">    }</span>
+
+    public String getIdconace() {
+<span class="nc" id="L29">        return idconace;</span>
+    }
+
+    public void setIdconace(String idconace) {
+<span class="nc" id="L33">        this.idconace = idconace;</span>
+<span class="nc" id="L34">    }</span>
+
+    public int getCodcon() {
+<span class="nc" id="L37">        return codcon;</span>
+    }
+
+    public void setCodcon(int codcon) {
+<span class="nc" id="L41">        this.codcon = codcon;</span>
+<span class="nc" id="L42">    }</span>
+
+    public int getCodfun() {
+<span class="nc" id="L45">        return codfun;</span>
+    }
+
+    public void setCodfun(int codfun) {
+<span class="nc" id="L49">        this.codfun = codfun;</span>
+<span class="nc" id="L50">    }</span>
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestTarefa (11/11/2012 18:19:56)</div></body></html>

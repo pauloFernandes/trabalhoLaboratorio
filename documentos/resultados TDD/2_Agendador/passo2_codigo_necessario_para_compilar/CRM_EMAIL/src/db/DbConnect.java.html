@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DbConnect.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (11/11/2012 21:25:25)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">db</a> &gt; <span class="el_source">DbConnect.java</span></div><h1>DbConnect.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+public class DbConnect {
+    private static final String URL  = &quot;jdbc:oracle:thin:@127.0.0.1:1521:XE&quot;;
+    private static final String USER = &quot;CRM&quot;;
+    private static final String PASS = &quot;CRM&quot;;
+    private static DbConnect instance;
+    private static Connection connection;
+    
+<span class="nc" id="L22">    private DbConnect() throws SQLException {</span>
+<span class="nc" id="L23">        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());</span>
+<span class="nc" id="L24">        this.connection = DriverManager.getConnection(</span>
+<span class="nc" id="L25">            DbConnect.URL, DbConnect.USER, DbConnect.PASS</span>
+        );
+<span class="nc" id="L27">    }</span>
+    
+    public static Connection getConnection() throws SQLException {
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (DbConnect.instance == null) {</span>
+<span class="nc" id="L31">            DbConnect.instance = new DbConnect();</span>
+        }
+        
+<span class="nc" id="L34">        return DbConnect.instance.connection;</span>
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+<span class="nc" id="L39">        throw new CloneNotSupportedException();</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (11/11/2012 21:25:25)</div></body></html>

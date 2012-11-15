@@ -1,0 +1,5 @@
+Segundo passo do TDD para a classe Agendador. O arquivo de teste foi compilado, porem, quase todos os metodos foram reprovados, pois o metodo retornou o que era esperado (todos os metodos incialmente retornam falso.)
+ 
+Caminho para a classe de teste: CRM_EMAIL/testes/test_mail_sender/TestAgendador/TestAgendador
+Caminho para a classe testada : CRM_EMAIL/src/controller.mail/Agendador/Agendador()
+

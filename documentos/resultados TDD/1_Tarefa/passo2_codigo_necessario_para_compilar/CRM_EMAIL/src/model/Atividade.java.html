@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Atividade.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestTarefa (11/11/2012 18:30:41)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">model</a> &gt; <span class="el_source">Atividade.java</span></div><h1>Atividade.java</h1><pre class="source lang-java linenums">/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package model;
+
+import db.DbStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author PauloHenrique
+ */
+<span class="nc" id="L15">public class Atividade {</span>
+    public static ResultSet obterAtividades(int codemp, int codfunres, int codati, int codcli, String nomati, String status, 
+                                            String datini, String datfim) throws SQLException {
+<span class="nc" id="L18">        String sql = &quot; SELECT * FROM (&quot; + </span>
+                        &quot; SELECT A.CODATI, A.NOMATI, A.DESATI, A.CODTIPATI, TA.NOMTIPATI, A.STATUS, F.CODEMP, &quot; + 
+                        &quot;   A.CODFUNRES, F.CODFUN, U.NOMUSU, A.DATINI, A.DATFIN, A.OBSANDATI, A.CODCLI, C.RAZSOC, &quot; + 
+                        &quot;   CASE &quot; + 
+                        &quot;     WHEN CONV.IDCONACE = 'N' &quot; + 
+                        &quot;     THEN 'NÃ£o' &quot; + 
+                        &quot;     ELSE 'Sim' &quot; + 
+                        &quot;   END CONVITE_ACEITO &quot; + 
+                        &quot; FROM ATIVIDADE A &quot; + 
+                        &quot; INNER JOIN TIPO_ATIVIDADE TA &quot; + 
+                        &quot;   ON TA.CODTIPATI = A.CODTIPATI &quot; + 
+                        &quot; INNER JOIN FUNCIONARIO F &quot; + 
+                        &quot;   ON A.CODFUNRES = F.CODFUN &quot; + 
+                        &quot;   AND F.DATINI  IS NOT NULL &quot; + 
+                        &quot;   AND F.DATFIM  IS NULL &quot; + 
+                        &quot; INNER JOIN USUARIO U &quot; + 
+                        &quot;   ON F.CODUSU = U.CODUSU &quot; + 
+                        &quot; INNER JOIN CLIENTE C &quot; + 
+                        &quot;   ON A.CODCLI = C.CODCLI &quot; + 
+                        &quot; LEFT JOIN CONVIDADO CONV &quot; + 
+                        &quot;   ON CONV.CODFUN  = A.CODFUNRES &quot; + 
+                        &quot;   AND CONV.CODATI = A.CODATI &quot; + 
+                        &quot;  &quot; + 
+                        &quot; UNION &quot; + 
+                        &quot;  &quot; + 
+                        &quot; SELECT A.CODATI, A.NOMATI, A.DESATI, A.CODTIPATI, TA.NOMTIPATI, A.STATUS, FUN.CODEMP, &quot; + 
+                        &quot;   A.CODFUNRES, FUN.CODFUN, U.NOMUSU, A.DATINI, A.DATFIN, A.OBSANDATI, A.CODCLI, C.RAZSOC,  &quot; + 
+                        &quot;   CASE &quot; + 
+                        &quot;     WHEN CON.IDCONACE = 'N' &quot; + 
+                        &quot;     THEN 'NÃ£o' &quot; + 
+                        &quot;     ELSE 'Sim' &quot; + 
+                        &quot;   END CONVITE_ACEITO &quot; + 
+                        &quot;   FROM ATIVIDADE A &quot; + 
+                        &quot;   INNER JOIN CONVIDADO CON &quot; + 
+                        &quot;     ON CON.CODATI = A.CODATI &quot; + 
+                        &quot;   INNER JOIN FUNCIONARIO FUN &quot; + 
+                        &quot;     ON fun.codfun = con.codfun &quot; + 
+                        &quot;     AND FUN.DATINI IS NOT NULL &quot; + 
+                        &quot;     AND FUN.DATFIM IS NULL &quot; + 
+                        &quot;   INNER JOIN USUARIO U &quot; + 
+                        &quot;     ON FUN.CODFUN = U.CODUSU &quot; + 
+                        &quot;   INNER JOIN CLIENTE C &quot; + 
+                        &quot;     ON C.CODCLI = A.CODCLI &quot; + 
+                        &quot;   INNER JOIN TIPO_ATIVIDADE TA &quot; + 
+                        &quot;     ON TA.CODTIPATI = A.CODTIPATI &quot; + 
+                    &quot;) &quot; + 
+<span class="nc" id="L64">                    &quot; WHERE CODFUN = &quot; + codfunres + </span>
+<span class="nc" id="L65">                    &quot;  AND CODEMP = &quot; + codemp;</span>
+        
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (codati != 0) {</span>
+<span class="nc" id="L68">            sql += &quot; AND CODATI = &quot; + codati;</span>
+        }
+        
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (codcli != 0) {</span>
+<span class="nc" id="L72">            sql += &quot; AND CODCLI = &quot; + codcli;</span>
+        }
+        
+<span class="nc bnc" id="L75" title="All 4 branches missed.">        if (status != null &amp;&amp; !status.isEmpty()) {</span>
+<span class="nc" id="L76">            sql += &quot; AND STATUS = '&quot; + status + &quot;' &quot;;</span>
+        }
+        
+<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (datini != null &amp;&amp; !datini.isEmpty()) {</span>
+<span class="nc" id="L80">            sql += &quot; AND TO_CHAR(DATINI, 'DD/MM/YYYY') &gt;= TO_CHAR(&quot; + datini + &quot;, 'DD/MM/YYYY')&quot;;</span>
+        }
+        
+<span class="nc bnc" id="L83" title="All 4 branches missed.">        if (datfim != null &amp;&amp; !datfim.isEmpty()) {</span>
+<span class="nc" id="L84">            sql += &quot; AND TO_CHAR(DATFIN, 'DD/MM/YYYY') =&lt; TO_CHAR(&quot; + datfim + &quot;, 'DD/MM/YYYY')&quot;;</span>
+        }
+        
+<span class="nc bnc" id="L87" title="All 4 branches missed.">        if (nomati != null &amp;&amp; !nomati.isEmpty()) {</span>
+<span class="nc" id="L88">            sql += &quot; AND NOMATI LIKE '%&quot;+nomati+&quot;%' &quot;;</span>
+        }
+        
+        
+<span class="nc" id="L92">        return DbStatement.select(sql);</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestTarefa (11/11/2012 18:30:41)</div></body></html>

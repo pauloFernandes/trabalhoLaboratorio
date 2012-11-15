@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestTarefa.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">TestAgendador (11/11/2012 21:25:25)</a> &gt; <a href="../../index.html" class="el_group">CRM_EMAIL</a> &gt; <a href="../index.html" class="el_bundle">testes</a> &gt; <a href="index.html" class="el_package">test_mail_sender</a> &gt; <span class="el_source">TestTarefa.java</span></div><h1>TestTarefa.java</h1><pre class="source lang-java linenums">package test_mail_sender;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import controller.mail.Tarefa;
+
+/**
+ * Teste da classe Tarefa
+ * 
+ * A classe tarefa é responsavel pelo agendamento do envio dos emails, para cada lembrete que
+ * seja cadastrado. Inicialmente, a classe deveria ter somente apenas um metodo pulbico: preparaEmail,
+ * que é responsavel por settar as informacoes do email a ser enviado. Mas, para que o teste seja executado,
+ * o metodo de chamada ao envio de email deve ser publico, para que seja acessivel pela classe de teste. Apos
+ * os testes, este metodo deve voltar ser privado (ele somente deve ser chamado pelo metodo run, quem realmente
+ * deve fazer o envio de email).
+ * 
+ * @author PauloHenrique
+ *
+ */
+<span class="nc" id="L22">public class TestTarefa {</span>
+
+	@Test
+	public void test() {
+<span class="nc" id="L26">		Tarefa tarefa = new Tarefa();</span>
+<span class="nc" id="L27">		tarefa.preparaEmail(&quot;paulo.phfp_26@yahoo.com.br&quot;, &quot;teste de envio de email&quot;, &quot;corpo do teste&quot;);</span>
+//		boolean enviado = tarefa.enviar();
+//		assertTrue(enviado);
+<span class="nc" id="L30">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.9.201207300726</span>TestAgendador (11/11/2012 21:25:25)</div></body></html>
