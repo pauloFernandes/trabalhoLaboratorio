@@ -8,6 +8,8 @@ Camila Luana de Andrade
 Jéssica Braga da Cruz Lopes 
 Paulo Henrique Fernandes Pereira
 Renan Martins da Costa Pullig
+William Alvarenga Paiva 
+Gleidson Robert de Souza 
 
 15 de Novembro de 2012
 Foi feita a inclusão dos arquivos referentes ao trabalho de desenvolvimento dirigido por testes. Os seguintes diretórios foram incluídos na configuração:
